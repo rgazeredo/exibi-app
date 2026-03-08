@@ -1,0 +1,50 @@
+{
+    # Global options
+    auto_https off
+    admin off
+
+    # FrankenPHP configuration
+    frankenphp {
+        # Number of PHP threads (adjust based on your server resources)
+        num_threads 4
+    }
+
+    # Logging
+    log {
+        output stdout
+        format console
+        level INFO
+    }
+}
+
+:8000 {
+    # Set the root directory
+    root * /app/public
+
+    # Enable compression
+    encode zstd gzip
+
+    # Serve static files directly
+    @static {
+        file
+        path *.css *.js *.ico *.gif *.jpg *.jpeg *.png *.svg *.webp *.woff *.woff2 *.ttf *.eot
+    }
+    handle @static {
+        file_server
+    }
+
+    # Health check endpoint
+    handle /up {
+        php_server
+    }
+
+    # Handle all other requests through Laravel
+    handle {
+        php_server
+    }
+
+    # Request timeouts
+    request_body {
+        max_size 2GB
+    }
+}

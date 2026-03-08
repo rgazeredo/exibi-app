@@ -1,0 +1,170 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: exibi-app
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "80:8000"
+      - "5173:5173"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=exibi
+      - DB_USERNAME=exibi
+      - DB_PASSWORD=secret
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CACHE_STORE=redis
+      - QUEUE_CONNECTION=redis
+      - SESSION_DRIVER=redis
+    networks:
+      - exibi-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: exibi-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: exibi
+      POSTGRES_USER: exibi
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres/init-test-db.sh:/docker-entrypoint-initdb.d/init-test-db.sh
+    ports:
+      - "5432:5432"
+    networks:
+      - exibi-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U exibi"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: exibi-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - exibi-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Horizon - Queue management with multiple workers
+  horizon:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: exibi-horizon
+    restart: unless-stopped
+    command: php artisan horizon
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=exibi
+      - DB_USERNAME=exibi
+      - DB_PASSWORD=secret
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - QUEUE_CONNECTION=redis
+      # S3/Backblaze B2 Storage - uses values from .env
+      - FILESYSTEM_DISK=s3
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+      - AWS_BUCKET=${AWS_BUCKET}
+      - AWS_ENDPOINT=${AWS_ENDPOINT}
+      - AWS_USE_PATH_STYLE_ENDPOINT=${AWS_USE_PATH_STYLE_ENDPOINT}
+      - AWS_URL=${AWS_URL}
+    networks:
+      - exibi-network
+
+  soketi:
+    image: quay.io/soketi/soketi:1.6-16-debian
+    container_name: exibi-soketi
+    restart: unless-stopped
+    environment:
+      SOKETI_DEBUG: '1'
+      SOKETI_HOST: '0.0.0.0'
+      SOKETI_DEFAULT_APP_ID: 'exibi'
+      SOKETI_DEFAULT_APP_KEY: 'exibi-key'
+      SOKETI_DEFAULT_APP_SECRET: 'exibi-secret'
+      SOKETI_DEFAULT_APP_ENABLE_CLIENT_MESSAGES: 'true'
+      # Webhooks para notificar Laravel quando players conectam/desconectam
+      SOKETI_DEFAULT_APP_WEBHOOKS: '[{"url":"http://app:8000/api/webhooks/soketi","event_types":["channel_occupied","channel_vacated","client_event"]}]'
+    ports:
+      - "6001:6001"
+      - "9601:9601"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:6001"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - exibi-network
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: exibi-scheduler
+    restart: unless-stopped
+    command: sh -c "while true; do php artisan schedule:run --verbose --no-interaction & sleep 60; done"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=exibi
+      - DB_USERNAME=exibi
+      - DB_PASSWORD=secret
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    networks:
+      - exibi-network
+
+networks:
+  exibi-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
