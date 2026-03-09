@@ -28,7 +28,11 @@ class PlayerPolicy
 
     public function create(User $user): bool
     {
-        return $user->canEditInTenant();
+        $tenant = $user->currentTenant();
+
+        return $user->canEditInTenant()
+            && $tenant !== null
+            && ! $tenant->hasReachedPlayersLimit();
     }
 
     public function update(User $user, Player $player): bool

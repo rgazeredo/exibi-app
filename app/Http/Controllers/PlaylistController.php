@@ -146,7 +146,6 @@ class PlaylistController extends Controller
                 'name' => $playlist->name,
                 'description' => $playlist->description,
                 'is_active' => $playlist->is_active,
-                'playback_mode' => $playlist->playback_mode ?? 'sequential',
                 'total_duration' => $playlist->getTotalDuration(),
                 'total_media_count' => $playlistService->getTotalMediaCount($playlist),
                 'can_contain_subplaylists' => $playlist->canContainSubPlaylists(),

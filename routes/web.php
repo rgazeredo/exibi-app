@@ -157,6 +157,8 @@ $adminRoutes = function () {
             ->name('players.currently-playing');
         Route::get('players/{player}/downloads', [PlayerController::class, 'downloads'])
             ->name('players.downloads');
+        Route::get('players/{player}/playback-logs', [PlayerController::class, 'playbackLogs'])
+            ->name('players.playback-logs');
         Route::post('players/{player}/replace', [PlayerController::class, 'replacePlayer'])
             ->name('players.replace');
 

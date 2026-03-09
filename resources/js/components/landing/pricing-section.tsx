@@ -1,7 +1,12 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Check, Monitor, HardDrive, Sparkles } from 'lucide-react';
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+} from '@/components/ui/card';
+import { Check, HardDrive, Monitor, Sparkles } from 'lucide-react';
 
 const plans = [
     {
@@ -49,18 +54,18 @@ export default function PricingSection() {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="mb-12 text-center lg:mb-16">
-                    <Badge className="mb-4 border-blue-200 bg-blue-100 text-xs font-semibold tracking-wider text-blue-700 uppercase">
+                    <Badge className="mb-4 border-green-200 bg-green-100 text-xs font-semibold tracking-wider text-green-700 uppercase">
                         Planos
                     </Badge>
                     <h2 className="mb-4 text-3xl font-bold text-slate-900 lg:text-4xl xl:text-5xl">
                         Escolha o plano{' '}
-                        <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-green-600 to-green-400 bg-clip-text text-transparent">
                             ideal para você
                         </span>
                     </h2>
                     <p className="mx-auto max-w-2xl text-lg text-slate-600">
-                        Planos flexíveis que crescem com o seu negócio. Sem taxas
-                        ocultas, cancele quando quiser.
+                        Planos flexíveis que crescem com o seu negócio. Sem
+                        taxas ocultas, cancele quando quiser.
                     </p>
                 </div>
 
@@ -71,20 +76,20 @@ export default function PricingSection() {
                             key={index}
                             className={`relative flex flex-col ${
                                 plan.popular
-                                    ? 'z-10 border-2 border-blue-600 shadow-xl lg:scale-105'
+                                    ? 'z-10 border-2 border-green-600 shadow-xl lg:scale-105'
                                     : 'border-slate-200 shadow-sm transition-shadow hover:shadow-lg'
                             }`}
                         >
                             {plan.popular && (
                                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                    <Badge className="bg-blue-600 px-3 py-0.5 text-xs text-white">
+                                    <Badge className="bg-green-600 px-3 py-0.5 text-xs text-white">
                                         <Sparkles className="mr-1 h-3 w-3" />
                                         Popular
                                     </Badge>
                                 </div>
                             )}
 
-                            <CardHeader className="pb-2 pt-6 text-center">
+                            <CardHeader className="pt-6 pb-2 text-center">
                                 <h3 className="text-lg font-bold text-slate-900">
                                     {plan.name}
                                 </h3>
@@ -107,7 +112,7 @@ export default function PricingSection() {
                                 {/* Specs */}
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-center gap-2 text-sm">
-                                        <Monitor className="h-4 w-4 text-blue-600" />
+                                        <Monitor className="h-4 w-4 text-green-600" />
                                         <span className="font-medium text-slate-700">
                                             {plan.screens}
                                         </span>
@@ -131,10 +136,12 @@ export default function PricingSection() {
                                 <Button
                                     className={`w-full ${
                                         plan.popular
-                                            ? 'bg-blue-600 hover:bg-blue-700'
+                                            ? 'bg-green-600 hover:bg-green-700'
                                             : ''
                                     }`}
-                                    variant={plan.popular ? 'default' : 'outline'}
+                                    variant={
+                                        plan.popular ? 'default' : 'outline'
+                                    }
                                     size="sm"
                                     asChild
                                 >
@@ -147,7 +154,7 @@ export default function PricingSection() {
 
                 {/* Features included in all plans */}
                 <div className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-slate-50 p-6 lg:p-8">
-                    <h3 className="mb-4 text-center text-sm font-semibold uppercase tracking-wide text-slate-500">
+                    <h3 className="mb-4 text-center text-sm font-semibold tracking-wide text-slate-500 uppercase">
                         Incluído em todos os planos
                     </h3>
                     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -169,7 +176,7 @@ export default function PricingSection() {
                         Precisa de mais telas ou armazenamento?{' '}
                         <a
                             href="#contato"
-                            className="font-medium text-blue-600 hover:text-blue-700"
+                            className="font-medium text-green-600 hover:text-green-700"
                         >
                             Monte um plano personalizado
                         </a>

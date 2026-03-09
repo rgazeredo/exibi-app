@@ -30,7 +30,6 @@ import type {
     ContentEditorProps,
     ContentItem,
     ContentType,
-    PlaybackMode,
     TabsConfig,
 } from './types';
 import {
@@ -67,9 +66,6 @@ export function ContentEditor({
     widgets = [],
     tabs = { media: true, playlists: true, widgets: true },
     rightPanelTitle,
-    showPlaybackMode = false,
-    playbackMode: initialPlaybackMode = 'sequential',
-    onPlaybackModeChange,
     showDurationEditor = true,
     showGroupPlacement = false,
     canContainSubplaylists = true,
@@ -83,7 +79,6 @@ export function ContentEditor({
 }: ContentEditorProps) {
     // Items state (controlled by parent via onItemsChange)
     const [items, setItems] = useState<ContentItem[]>(initialItems);
-    const [playbackMode, setPlaybackMode] = useState(initialPlaybackMode);
 
     // Modal states
     const [scheduleModalIndex, setScheduleModalIndex] = useState<number | null>(
@@ -92,8 +87,6 @@ export function ContentEditor({
     const [durationModalIndex, setDurationModalIndex] = useState<number | null>(
         null,
     );
-    const [playbackModeHelpOpen, setPlaybackModeHelpOpen] = useState(false);
-
     // Tab and selection state
     const [activeTab, setActiveTab] = useState<ContentType>(() => {
         if (tabs.media) return 'media';
@@ -135,10 +128,6 @@ export function ContentEditor({
     useEffect(() => {
         setItems(initialItems);
     }, [initialItems]);
-
-    useEffect(() => {
-        setPlaybackMode(initialPlaybackMode);
-    }, [initialPlaybackMode]);
 
     // Detect schedule conflicts
     const scheduleConflicts = useMemo(
@@ -373,14 +362,6 @@ export function ContentEditor({
         [items, handleItemsChange],
     );
 
-    const handlePlaybackModeChange = useCallback(
-        (mode: typeof playbackMode) => {
-            setPlaybackMode(mode);
-            onPlaybackModeChange?.(mode);
-        },
-        [onPlaybackModeChange],
-    );
-
     const handleUploadComplete = useCallback(() => {
         setMediaRefreshKey((prev) => prev + 1);
         onUploadComplete?.();
@@ -599,12 +580,6 @@ export function ContentEditor({
                                     : undefined
                             }
                             onOpenSchedule={setScheduleModalIndex}
-                            showPlaybackMode={showPlaybackMode}
-                            playbackMode={playbackMode}
-                            onPlaybackModeChange={handlePlaybackModeChange}
-                            onPlaybackModeHelpClick={() =>
-                                setPlaybackModeHelpOpen(true)
-                            }
                             saving={saving}
                             saved={saved}
                             hasChanges={hasChanges}
@@ -774,6 +749,5 @@ export type {
     ContentEditorProps,
     ContentItem,
     ContentType,
-    PlaybackMode,
     TabsConfig,
 };

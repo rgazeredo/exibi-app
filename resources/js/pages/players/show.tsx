@@ -30,24 +30,21 @@ import {
     ArrowLeft,
     Camera,
     CheckCircle2,
-    Clock,
     Download,
     Edit,
-    Eye,
-    Film,
-    Image,
+    History as HistoryIcon,
     Keyboard,
+    LayoutGrid,
     ListRestart,
     Loader2,
     MonitorPlay,
-    Play,
     Power,
     Replace,
     Trash2,
     Wifi,
     WifiOff,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface Tag {
     id: string;
@@ -93,34 +90,15 @@ interface Diagnostics {
     last_update_human: string | null;
 }
 
-interface CurrentlyPlayingMedia {
+interface PlaybackLogEntry {
     id: string;
-    title: string;
-    type: 'video' | 'image';
-    url: string | null;
-    thumbnail_url: string | null;
-    duration_seconds: number | null;
-    duration_formatted: string | null;
-}
-
-interface RegionPlayback {
-    region_id: string;
-    region_name: string;
-    is_main: boolean;
-    media: CurrentlyPlayingMedia | null;
+    media_title: string | null;
+    media_type: 'video' | 'image' | null;
+    media_thumbnail_url: string | null;
     playlist_name: string | null;
-}
-
-interface CurrentlyPlaying {
-    media: CurrentlyPlayingMedia | null;
-    confidence: 'high' | 'medium' | 'low' | 'none';
-    source: 'heartbeat' | 'playback_log' | 'estimated' | 'unknown';
-    position: number | null;
-    total_items: number | null;
     started_at: string | null;
-    started_at_human: string | null;
-    playlist_name: string | null;
-    regions?: RegionPlayback[];
+    duration_played_seconds: number | null;
+    completed: boolean;
 }
 
 interface OperatingHoursStatus {
@@ -136,7 +114,6 @@ interface Player {
     name: string;
     description: string | null;
     api_token: string;
-    is_active: boolean;
     is_online: boolean;
     last_seen_at: string | null;
     last_seen_at_full: string | null;
@@ -195,7 +172,6 @@ interface Player {
     } | null;
     device_info: DeviceInfo | null;
     diagnostics: Diagnostics | null;
-    currently_playing: CurrentlyPlaying | null;
 }
 
 interface PlayerShowProps {
@@ -276,122 +252,15 @@ export default function PlayerShow({
     const [screenshotLoading, setScreenshotLoading] = useState(false);
     const [screenshotUrl, setScreenshotUrl] = useState<string | null>(null);
     const [screenshotModalOpen, setScreenshotModalOpen] = useState(false);
-    const [mediaPreviewOpen, setMediaPreviewOpen] = useState(false);
-    const [previewMedia, setPreviewMedia] =
-        useState<CurrentlyPlayingMedia | null>(null);
+    // Playback history states
+    const [playbackHistoryOpen, setPlaybackHistoryOpen] = useState(false);
+    const [playbackLogs, setPlaybackLogs] = useState<PlaybackLogEntry[]>([]);
+    const [playbackLogsLoading, setPlaybackLogsLoading] = useState(false);
 
     // Replace player states
     const [replaceDialogOpen, setReplaceDialogOpen] = useState(false);
     const [activationCode, setActivationCode] = useState('');
     const [replaceLoading, setReplaceLoading] = useState(false);
-
-    // Currently playing state (with WebSocket)
-    const [currentlyPlaying, setCurrentlyPlaying] =
-        useState<CurrentlyPlaying | null>(player.currently_playing);
-    const [playerOnline, setPlayerOnline] = useState(player.is_online);
-    const [lastSeenAt, setLastSeenAt] = useState(player.last_seen_at);
-    const [lastSeenTimestamp, setLastSeenTimestamp] = useState<Date | null>(
-        player.last_seen_at_full ? new Date(player.last_seen_at_full) : null,
-    );
-    const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
-    const [wsConnected, setWsConnected] = useState(false);
-    const [wsState, setWsState] = useState<string>('connecting');
-
-    // Check if player went offline (no heartbeat in 5 minutes)
-    useEffect(() => {
-        const checkOnlineStatus = () => {
-            if (lastSeenTimestamp) {
-                const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-                const isStillOnline = lastSeenTimestamp > fiveMinutesAgo;
-                setPlayerOnline(isStillOnline);
-            }
-        };
-
-        // Check immediately
-        checkOnlineStatus();
-
-        // Check every 30 seconds
-        const interval = setInterval(checkOnlineStatus, 30000);
-
-        return () => clearInterval(interval);
-    }, [lastSeenTimestamp]);
-
-    // Listen for WebSocket updates (100% real-time, no polling)
-    useEffect(() => {
-        let channel: ReturnType<typeof window.Echo.channel> | null = null;
-
-        if (!window.Echo) {
-            setWsState('unavailable');
-            return;
-        }
-
-        try {
-            // Get Pusher instance for connection state management
-            const pusher = window.Echo.connector?.pusher;
-
-            if (pusher) {
-                // Bind to connection state changes
-                pusher.connection.bind(
-                    'state_change',
-                    (states: { current: string; previous: string }) => {
-                        setWsState(states.current);
-                        setWsConnected(states.current === 'connected');
-                    },
-                );
-
-                // Check initial state
-                const initialState = pusher.connection.state;
-                setWsState(initialState);
-                setWsConnected(initialState === 'connected');
-
-                // Pusher has built-in reconnection with exponential backoff
-                // but we can configure it for more aggressive reconnection
-                pusher.connection.bind('disconnected', () => {
-                    // Pusher will auto-reconnect, but we track state
-                    setWsConnected(false);
-                });
-
-                pusher.connection.bind('connected', () => {
-                    setWsConnected(true);
-                    setLastUpdate(new Date());
-                });
-            }
-
-            // Subscribe to player channel
-            channel = window.Echo.channel(`player.${player.id}`);
-
-            // Listen for media change events
-            channel.listen(
-                '.media.changed',
-                (data: {
-                    player_id: string;
-                    is_online: boolean;
-                    last_seen_at: string | null;
-                    currently_playing: CurrentlyPlaying | null;
-                }) => {
-                    setCurrentlyPlaying(data.currently_playing);
-                    setPlayerOnline(data.is_online);
-                    setLastSeenAt(data.last_seen_at);
-                    // Update timestamp when we receive an event (player is communicating)
-                    if (data.is_online) {
-                        setLastSeenTimestamp(new Date());
-                    }
-                    setLastUpdate(new Date());
-                },
-            );
-        } catch (error) {
-            console.error('WebSocket setup failed:', error);
-            setWsState('failed');
-            setWsConnected(false);
-        }
-
-        return () => {
-            if (channel) {
-                channel.stopListening('.media.changed');
-                window.Echo?.leave(`player.${player.id}`);
-            }
-        };
-    }, [player.id]);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: t('nav.dashboard'), href: '/dashboard' },
@@ -553,6 +422,20 @@ export default function PlayerShow({
         }
     };
 
+    const fetchPlaybackLogs = async () => {
+        setPlaybackLogsLoading(true);
+        try {
+            const response = await axios.get(
+                `/players/${player.id}/playback-logs`,
+            );
+            setPlaybackLogs(response.data.logs);
+        } catch {
+            // ignore
+        } finally {
+            setPlaybackLogsLoading(false);
+        }
+    };
+
     // Format activation code as user types (XXX-XXX)
     const handleActivationCodeChange = (value: string) => {
         // Remove non-alphanumeric and convert to uppercase
@@ -618,17 +501,6 @@ export default function PlayerShow({
                                 <h1 className="text-2xl font-bold tracking-tight">
                                     {player.name}
                                 </h1>
-                                <Badge
-                                    variant={
-                                        player.is_active
-                                            ? 'default'
-                                            : 'secondary'
-                                    }
-                                >
-                                    {player.is_active
-                                        ? t('players.status.active')
-                                        : t('players.status.inactive')}
-                                </Badge>
                                 <Badge
                                     variant={
                                         player.is_online ? 'default' : 'outline'
@@ -1058,43 +930,86 @@ export default function PlayerShow({
                     </DialogContent>
                 </Dialog>
 
-                {/* Media Preview Modal */}
+                {/* Playback History Modal */}
                 <Dialog
-                    open={mediaPreviewOpen}
-                    onOpenChange={(open) => {
-                        setMediaPreviewOpen(open);
-                        if (!open) setPreviewMedia(null);
-                    }}
+                    open={playbackHistoryOpen}
+                    onOpenChange={setPlaybackHistoryOpen}
                 >
-                    <DialogContent className="max-h-[90vh] max-w-4xl">
+                    <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
                         <DialogHeader>
                             <DialogTitle className="flex items-center gap-2">
-                                {previewMedia?.type === 'video' ? (
-                                    <Film className="h-5 w-5" />
-                                ) : (
-                                    <Image className="h-5 w-5" />
-                                )}
-                                {previewMedia?.title ||
-                                    t('players.mediaPreview')}
+                                <HistoryIcon className="h-5 w-5" />
+                                {t('players.playbackHistory')}
                             </DialogTitle>
+                            <DialogDescription>{player.name}</DialogDescription>
                         </DialogHeader>
-                        <div className="flex items-center justify-center">
-                            {previewMedia?.url &&
-                                (previewMedia.type === 'video' ? (
-                                    <video
-                                        src={previewMedia.url}
-                                        controls
-                                        autoPlay
-                                        className="max-h-[70vh] max-w-full rounded-lg"
-                                    />
-                                ) : (
-                                    <img
-                                        src={previewMedia.url}
-                                        alt={previewMedia.title}
-                                        className="max-h-[70vh] max-w-full rounded-lg object-contain"
-                                    />
+                        {playbackLogsLoading ? (
+                            <div className="flex h-40 items-center justify-center">
+                                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                            </div>
+                        ) : playbackLogs.length === 0 ? (
+                            <p className="py-8 text-center text-sm text-muted-foreground">
+                                {t('players.playbackHistoryEmpty')}
+                            </p>
+                        ) : (
+                            <div className="space-y-1">
+                                {playbackLogs.map((log) => (
+                                    <div
+                                        key={log.id}
+                                        className="flex items-center gap-3 rounded-md border p-3 text-sm"
+                                    >
+                                        <div className="h-10 w-16 shrink-0 overflow-hidden rounded bg-muted">
+                                            {log.media_thumbnail_url ? (
+                                                <img
+                                                    src={
+                                                        log.media_thumbnail_url
+                                                    }
+                                                    alt={log.media_title || ''}
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            ) : (
+                                                <div className="flex h-full w-full items-center justify-center">
+                                                    <MonitorPlay className="h-4 w-4 text-muted-foreground" />
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                            <p className="truncate font-medium">
+                                                {log.media_title || '-'}
+                                            </p>
+                                            <p className="text-xs text-muted-foreground">
+                                                {log.playlist_name ||
+                                                    t('players.noneAssigned')}
+                                            </p>
+                                        </div>
+                                        <div className="shrink-0 text-right text-xs text-muted-foreground">
+                                            <p>{log.started_at}</p>
+                                            {log.duration_played_seconds !==
+                                                null && (
+                                                <p>
+                                                    {Math.floor(
+                                                        log.duration_played_seconds /
+                                                            60,
+                                                    )}
+                                                    :
+                                                    {String(
+                                                        log.duration_played_seconds %
+                                                            60,
+                                                    ).padStart(2, '0')}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
                                 ))}
-                        </div>
+                            </div>
+                        )}
+                        <DialogFooter>
+                            <Button
+                                onClick={() => setPlaybackHistoryOpen(false)}
+                            >
+                                {t('common.close')}
+                            </Button>
+                        </DialogFooter>
                     </DialogContent>
                 </Dialog>
 
@@ -1109,97 +1024,6 @@ export default function PlayerShow({
                         </CardHeader>
                         <CardContent>
                             <dl className="space-y-3">
-                                <div className="flex justify-between">
-                                    <dt className="text-sm text-muted-foreground">
-                                        {t('players.layout')}
-                                    </dt>
-                                    <dd className="text-right text-sm font-medium">
-                                        {player.effective_layout ? (
-                                            <div className="flex flex-col items-end gap-1">
-                                                <div>
-                                                    <span className="hover:underline">
-                                                        {
-                                                            player
-                                                                .effective_layout
-                                                                .name
-                                                        }
-                                                    </span>
-                                                    {player.effective_layout
-                                                        .source === 'player' ? (
-                                                        <span className="ml-1 font-normal text-primary">
-                                                            (
-                                                            {t(
-                                                                'players.ownLayout',
-                                                            )}
-                                                            )
-                                                        </span>
-                                                    ) : (
-                                                        player.effective_layout
-                                                            .group_name && (
-                                                            <span className="font-normal text-muted-foreground">
-                                                                {' '}
-                                                                (
-                                                                {t(
-                                                                    'players.inheritedFrom',
-                                                                )}{' '}
-                                                                {
-                                                                    player
-                                                                        .effective_layout
-                                                                        .group_name
-                                                                }
-                                                                )
-                                                            </span>
-                                                        )
-                                                    )}
-                                                </div>
-                                                {/* Show region playlists */}
-                                                {player.effective_layout
-                                                    .region_playlists.length >
-                                                    0 && (
-                                                    <div className="mt-1 space-y-0.5 text-xs text-muted-foreground">
-                                                        {player.effective_layout.region_playlists.map(
-                                                            (rp, idx) => (
-                                                                <div
-                                                                    key={idx}
-                                                                    className="flex items-center gap-1"
-                                                                >
-                                                                    <span className="text-muted-foreground/70">
-                                                                        {
-                                                                            rp.region_name
-                                                                        }
-                                                                        :
-                                                                    </span>
-                                                                    {rp.playlist ? (
-                                                                        <Link
-                                                                            href={`/playlists/${rp.playlist.id}`}
-                                                                            className="text-foreground hover:underline"
-                                                                        >
-                                                                            {
-                                                                                rp
-                                                                                    .playlist
-                                                                                    .name
-                                                                            }
-                                                                        </Link>
-                                                                    ) : (
-                                                                        <span className="italic">
-                                                                            {t(
-                                                                                'players.noneAssigned',
-                                                                            )}
-                                                                        </span>
-                                                                    )}
-                                                                </div>
-                                                            ),
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ) : (
-                                            <span className="font-normal text-muted-foreground italic">
-                                                {t('players.noneAssigned')}
-                                            </span>
-                                        )}
-                                    </dd>
-                                </div>
                                 <div className="flex justify-between">
                                     <dt className="text-sm text-muted-foreground">
                                         {t('players.lastSeen')}
@@ -1270,321 +1094,78 @@ export default function PlayerShow({
                         </CardContent>
                     </Card>
 
-                    {/* Now Playing & Remote Commands */}
+                    {/* Layout Atual & Remote Commands */}
                     <Card className="gap-2">
-                        {/* Now Playing Section */}
+                        {/* Layout Atual Section */}
                         <CardHeader className="pb-2">
-                            <div className="flex items-center justify-between">
-                                <CardTitle className="flex items-center gap-2">
-                                    <Play className="h-5 w-5" />
-                                    {t('players.nowPlaying')}
-                                    {playerOnline ? (
-                                        <span
-                                            className={`ml-2 flex items-center gap-1 text-sm font-normal ${
-                                                wsConnected
-                                                    ? 'text-green-600 dark:text-green-400'
-                                                    : wsState === 'connecting'
-                                                      ? 'text-blue-600 dark:text-blue-400'
-                                                      : 'text-red-600 dark:text-red-400'
-                                            }`}
-                                        >
-                                            <span
-                                                className={`inline-block h-2 w-2 rounded-full ${
-                                                    wsConnected
-                                                        ? 'bg-green-500'
-                                                        : wsState ===
-                                                            'connecting'
-                                                          ? 'animate-pulse bg-blue-500'
-                                                          : 'bg-red-500'
-                                                }`}
-                                            />
-                                            {wsConnected
-                                                ? t('players.wsConnected')
-                                                : wsState === 'connecting'
-                                                  ? t('players.wsConnecting')
-                                                  : t('players.wsDisconnected')}
-                                        </span>
-                                    ) : (
-                                        <span className="ml-2 flex items-center gap-1 text-sm font-normal text-muted-foreground">
-                                            <span className="inline-block h-2 w-2 rounded-full bg-gray-400" />
-                                            {t('players.playerOffline')}
-                                        </span>
-                                    )}
-                                </CardTitle>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={requestScreenshot}
-                                    disabled={
-                                        !player.is_online ||
-                                        screenshotLoading ||
-                                        sendingCommand !== null
-                                    }
-                                >
-                                    {screenshotLoading ? (
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    ) : (
-                                        <Camera className="mr-2 h-4 w-4" />
-                                    )}
-                                    {t('players.screenshot')}
-                                </Button>
-                            </div>
+                            <CardTitle className="flex items-center gap-2">
+                                <LayoutGrid className="h-5 w-5" />
+                                {t('players.currentLayout')}
+                            </CardTitle>
                         </CardHeader>
                         <CardContent className="pt-0 pb-3">
-                            {/* Multi-region display when layout has multiple regions */}
-                            {currentlyPlaying?.regions &&
-                            currentlyPlaying.regions.length > 1 ? (
-                                <div className="space-y-3">
-                                    {currentlyPlaying.regions.map((region) => (
-                                        <div
-                                            key={region.region_id}
-                                            className="flex gap-3 rounded-lg border p-2"
-                                        >
-                                            {/* Region thumbnail */}
-                                            <div
-                                                className="group relative h-16 w-24 flex-shrink-0 cursor-pointer overflow-hidden rounded bg-muted"
-                                                onClick={() => {
-                                                    if (region.media?.url) {
-                                                        setPreviewMedia(
-                                                            region.media,
-                                                        );
-                                                        setMediaPreviewOpen(
-                                                            true,
-                                                        );
-                                                    }
-                                                }}
-                                            >
-                                                {region.media?.thumbnail_url ? (
-                                                    <img
-                                                        src={
-                                                            region.media
-                                                                .thumbnail_url
-                                                        }
-                                                        alt={region.media.title}
-                                                        className="h-full w-full object-cover"
-                                                    />
-                                                ) : (
-                                                    <div className="flex h-full w-full items-center justify-center">
-                                                        {region.media ? (
-                                                            region.media
-                                                                .type ===
-                                                            'video' ? (
-                                                                <Film className="h-6 w-6 text-muted-foreground" />
-                                                            ) : (
-                                                                <Image className="h-6 w-6 text-muted-foreground" />
-                                                            )
-                                                        ) : (
-                                                            <MonitorPlay className="h-6 w-6 text-muted-foreground" />
-                                                        )}
-                                                    </div>
-                                                )}
-                                                {region.media?.url && (
-                                                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
-                                                        <Eye className="h-5 w-5 text-white" />
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* Region info */}
-                                            <div className="min-w-0 flex-1">
-                                                <span className="text-sm font-medium">
-                                                    {region.region_name
-                                                        .replace(/_/g, ' ')
-                                                        .replace(/\b\w/g, (c) =>
-                                                            c.toUpperCase(),
-                                                        )}
-                                                </span>
-                                                {region.media ? (
-                                                    <div className="mt-0.5">
-                                                        <p className="truncate text-sm">
-                                                            {region.media.title}
-                                                        </p>
-                                                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                                            <Badge
-                                                                variant="secondary"
-                                                                className="px-1 py-0 text-xs"
-                                                            >
-                                                                {region.media
-                                                                    .type ===
-                                                                'video' ? (
-                                                                    <>
-                                                                        <Film className="mr-0.5 h-2.5 w-2.5" />
-                                                                        {t(
-                                                                            'media.video',
-                                                                        )}
-                                                                    </>
-                                                                ) : (
-                                                                    <>
-                                                                        <Image className="mr-0.5 h-2.5 w-2.5" />
-                                                                        {t(
-                                                                            'media.image',
-                                                                        )}
-                                                                    </>
-                                                                )}
-                                                            </Badge>
-                                                            {region.playlist_name && (
-                                                                <span className="truncate">
-                                                                    {
-                                                                        region.playlist_name
-                                                                    }
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                ) : (
-                                                    <p className="mt-0.5 text-xs text-muted-foreground">
-                                                        {t(
-                                                            'players.noMediaPlaying',
-                                                        ) ||
-                                                            'Nenhuma mídia reproduzindo'}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : currentlyPlaying?.media ? (
-                                <div className="flex gap-4">
-                                    {/* Thumbnail with preview button */}
-                                    <div
-                                        className="group relative h-20 w-32 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg bg-muted"
-                                        onClick={() => {
-                                            if (currentlyPlaying.media?.url) {
-                                                setPreviewMedia(
-                                                    currentlyPlaying.media,
-                                                );
-                                                setMediaPreviewOpen(true);
-                                            }
-                                        }}
-                                    >
-                                        {currentlyPlaying.media
-                                            .thumbnail_url ? (
-                                            <img
-                                                src={
-                                                    currentlyPlaying.media
-                                                        .thumbnail_url
+                            {player.effective_layout ? (
+                                <div className="space-y-2">
+                                    <div className="flex flex-wrap items-center gap-1">
+                                        <span className="font-medium">
+                                            {player.effective_layout.name}
+                                        </span>
+                                        {player.effective_layout.source ===
+                                        'player' ? (
+                                            <span className="text-xs text-primary">
+                                                ({t('players.ownLayout')})
+                                            </span>
+                                        ) : player.effective_layout
+                                              .group_name ? (
+                                            <span className="text-xs text-muted-foreground">
+                                                ({t('players.inheritedFrom')}{' '}
+                                                {
+                                                    player.effective_layout
+                                                        .group_name
                                                 }
-                                                alt={
-                                                    currentlyPlaying.media.title
-                                                }
-                                                className="h-full w-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className="flex h-full w-full items-center justify-center">
-                                                {currentlyPlaying.media.type ===
-                                                'video' ? (
-                                                    <Film className="h-8 w-8 text-muted-foreground" />
-                                                ) : (
-                                                    <Image className="h-8 w-8 text-muted-foreground" />
-                                                )}
-                                            </div>
-                                        )}
-                                        {/* Preview overlay on hover */}
-                                        {currentlyPlaying.media.url && (
-                                            <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
-                                                <Eye className="h-6 w-6 text-white" />
-                                            </div>
-                                        )}
-                                        {/* Type badge */}
-                                        <div className="absolute bottom-1 left-1">
-                                            <Badge
-                                                variant="secondary"
-                                                className="px-1.5 py-0 text-xs"
-                                            >
-                                                {currentlyPlaying.media.type ===
-                                                'video' ? (
-                                                    <>
-                                                        <Film className="mr-1 h-3 w-3" />
-                                                        {t('media.video')}
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Image className="mr-1 h-3 w-3" />
-                                                        {t('media.image')}
-                                                    </>
-                                                )}
-                                            </Badge>
-                                        </div>
+                                                )
+                                            </span>
+                                        ) : null}
                                     </div>
-
-                                    {/* Media info */}
-                                    <div className="min-w-0 flex-1">
-                                        <h4 className="truncate font-medium">
-                                            {currentlyPlaying.media.title}
-                                        </h4>
-                                        <div className="mt-1 flex flex-col gap-1 text-sm text-muted-foreground">
-                                            <div className="flex items-center gap-4">
-                                                <span className="flex items-center gap-1">
-                                                    <Clock className="h-3.5 w-3.5" />
-                                                    {t('players.mediaDuration')}
-                                                    :{' '}
-                                                    {currentlyPlaying.media
-                                                        .duration_formatted ||
-                                                        (currentlyPlaying.media
-                                                            .type === 'image'
-                                                            ? '0:10'
-                                                            : '-')}
-                                                </span>
-                                                {currentlyPlaying.position &&
-                                                    currentlyPlaying.total_items && (
-                                                        <span>
-                                                            {t(
-                                                                'players.itemOf',
-                                                                {
-                                                                    position:
-                                                                        currentlyPlaying.position,
-                                                                    total: currentlyPlaying.total_items,
-                                                                },
-                                                            )}
+                                    {player.effective_layout.region_playlists
+                                        .length > 0 && (
+                                        <div className="space-y-1">
+                                            {player.effective_layout.region_playlists.map(
+                                                (rp, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        className="flex items-center gap-1.5 text-sm"
+                                                    >
+                                                        <span className="shrink-0 text-muted-foreground">
+                                                            {rp.region_name}:
                                                         </span>
-                                                    )}
-                                            </div>
-                                            {/* Timestamp when media was played */}
-                                            {currentlyPlaying.started_at && (
-                                                <span className="flex items-center gap-1">
-                                                    <Activity className="h-3.5 w-3.5" />
-                                                    {t('players.playedAt')}:{' '}
-                                                    {formatDate(
-                                                        currentlyPlaying.started_at,
-                                                    )}
-                                                </span>
-                                            )}
-                                            {/* Playlist name if available */}
-                                            {currentlyPlaying.playlist_name && (
-                                                <span className="flex items-center gap-1">
-                                                    <ListRestart className="h-3.5 w-3.5" />
-                                                    {t('players.playlist')}:{' '}
-                                                    {
-                                                        currentlyPlaying.playlist_name
-                                                    }
-                                                </span>
+                                                        {rp.playlist ? (
+                                                            <Link
+                                                                href={`/playlists/${rp.playlist.id}`}
+                                                                className="truncate hover:underline"
+                                                            >
+                                                                {
+                                                                    rp.playlist
+                                                                        .name
+                                                                }
+                                                            </Link>
+                                                        ) : (
+                                                            <span className="text-muted-foreground italic">
+                                                                {t(
+                                                                    'players.noneAssigned',
+                                                                )}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                ),
                                             )}
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
                             ) : (
-                                <div className="flex items-center gap-3 text-muted-foreground">
-                                    <div className="flex h-20 w-32 items-center justify-center rounded-lg bg-muted">
-                                        <MonitorPlay className="h-8 w-8" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm">
-                                            {playerOnline
-                                                ? t('players.nowPlayingEmpty')
-                                                : t(
-                                                      'players.nowPlayingOffline',
-                                                  )}
-                                        </p>
-                                        {currentlyPlaying?.total_items ===
-                                            0 && (
-                                            <p className="mt-1 text-xs">
-                                                {t(
-                                                    'players.noPlaylistAssigned',
-                                                )}
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
+                                <p className="text-sm text-muted-foreground italic">
+                                    {t('players.noneAssigned')}
+                                </p>
                             )}
                         </CardContent>
 
@@ -1610,24 +1191,6 @@ export default function PlayerShow({
                                     )}
                                     {t('players.refreshPlaylist')}
                                 </Button>
-                                {/* <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() =>
-                                        sendCommand(
-                                            'refresh-app',
-                                            t('players.checkForUpdates'),
-                                        )
-                                    }
-                                    disabled={sendingCommand !== null}
-                                >
-                                    {sendingCommand === 'refresh-app' ? (
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    ) : (
-                                        <RotateCcw className="mr-2 h-4 w-4" />
-                                    )}
-                                    {t('players.checkForUpdates')}
-                                </Button> */}
                                 <Button
                                     variant="outline"
                                     size="sm"
@@ -1646,6 +1209,23 @@ export default function PlayerShow({
                                     )}
                                     {t('players.reboot')}
                                 </Button>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={requestScreenshot}
+                                    disabled={
+                                        !player.is_online ||
+                                        screenshotLoading ||
+                                        sendingCommand !== null
+                                    }
+                                >
+                                    {screenshotLoading ? (
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    ) : (
+                                        <Camera className="mr-2 h-4 w-4" />
+                                    )}
+                                    {t('players.screenshot')}
+                                </Button>
 
                                 {/* Separator */}
                                 <div className="mx-1 h-8 w-px bg-border" />
@@ -1662,6 +1242,17 @@ export default function PlayerShow({
                                         </Button>
                                     }
                                 />
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => {
+                                        setPlaybackHistoryOpen(true);
+                                        fetchPlaybackLogs();
+                                    }}
+                                >
+                                    <HistoryIcon className="mr-2 h-4 w-4" />
+                                    {t('players.playbackHistory')}
+                                </Button>
                             </div>
                             {commandFeedback && (
                                 <div

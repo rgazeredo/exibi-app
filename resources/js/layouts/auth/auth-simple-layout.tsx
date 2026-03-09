@@ -22,7 +22,7 @@ export default function AuthSimpleLayout({
                             className="flex flex-col items-center gap-2 font-medium"
                         >
                             <img
-                                src="/images/exibi.png"
+                                src="/images/exibi-vertical.png"
                                 alt="Exibi"
                                 className="h-28 w-auto"
                             />

@@ -66,7 +66,7 @@ const features = [
         title: 'Backup automático',
         description:
             'Seus dados e mídias sempre seguros com backups automáticos na nuvem.',
-        iconBg: 'bg-blue-500',
+        iconBg: 'bg-green-600',
     },
 ];
 
@@ -76,12 +76,12 @@ export default function FeaturesSection() {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="mb-12 text-center lg:mb-16">
-                    <Badge className="mb-4 border-blue-200 bg-blue-100 text-xs font-semibold tracking-wider text-blue-600 uppercase">
+                    <Badge className="mb-4 border-green-200 bg-green-100 text-xs font-semibold tracking-wider text-green-600 uppercase">
                         Funcionalidades
                     </Badge>
                     <h2 className="mb-4 text-3xl font-bold text-slate-900 lg:text-4xl xl:text-5xl">
                         Recursos poderosos,{' '}
-                        <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-green-600 to-green-400 bg-clip-text text-transparent">
                             uso simples
                         </span>
                     </h2>

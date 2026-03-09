@@ -1,5 +1,4 @@
 import { LayoutPreview } from '@/components/layout-preview';
-import { Button } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -17,7 +16,6 @@ import {
 import { useT } from '@/hooks/use-translations';
 import type { LayoutRegion } from '@/types';
 import { Loader2 } from 'lucide-react';
-import { useState } from 'react';
 
 interface LayoutOption {
     id: string;
@@ -44,6 +42,7 @@ interface Props {
     onLayoutChange: (layoutId: string) => void;
     onRegionPlaylistChange: (regionId: string, playlistId: string) => void;
     loading?: boolean;
+    regionError?: string | null;
 }
 
 export function PlayerLayoutEditor({
@@ -54,9 +53,9 @@ export function PlayerLayoutEditor({
     onLayoutChange,
     onRegionPlaylistChange,
     loading = false,
+    regionError,
 }: Props) {
     const { t } = useT();
-    const [showPreview, setShowPreview] = useState(true);
 
     const selectedLayout = layouts.find((l) => l.id === selectedLayoutId);
 
@@ -73,60 +72,40 @@ export function PlayerLayoutEditor({
                     {t('players.layoutDescription')}
                 </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="space-y-2">
-                    <label className="text-sm font-medium">
-                        {t('players.selectLayout')}
-                    </label>
-                    <Select
-                        value={selectedLayoutId || ''}
-                        onValueChange={(value) => onLayoutChange(value)}
-                        disabled={loading}
-                    >
-                        <SelectTrigger>
-                            <SelectValue
-                                placeholder={t('players.selectLayout')}
-                            />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {layouts.map((layout) => (
-                                <SelectItem key={layout.id} value={layout.id}>
-                                    {layout.name} ({layout.orientation})
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                </div>
+            <CardContent>
+                <div className="grid grid-cols-2 gap-8">
+                    {/* Left: layout selector + regions */}
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium">
+                                {t('players.selectLayout')}
+                            </label>
+                            <Select
+                                value={selectedLayoutId || ''}
+                                onValueChange={(value) => onLayoutChange(value)}
+                                disabled={loading}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue
+                                        placeholder={t('players.selectLayout')}
+                                    />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {layouts.map((layout) => (
+                                        <SelectItem
+                                            key={layout.id}
+                                            value={layout.id}
+                                        >
+                                            {layout.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
 
-                {selectedLayout &&
-                    selectedLayout.regions &&
-                    selectedLayout.regions.length > 0 && (
-                        <>
-                            <div className="flex gap-2">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => setShowPreview(!showPreview)}
-                                >
-                                    {showPreview
-                                        ? t('common.hide')
-                                        : t('common.show')}{' '}
-                                    {t('players.preview')}
-                                </Button>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-6">
-                                {/* Preview */}
-                                {showPreview && (
-                                    <div className="flex justify-center rounded-lg border bg-muted/30 p-4">
-                                        <LayoutPreview
-                                            layout={selectedLayout as any}
-                                            className="max-w-[280px]"
-                                        />
-                                    </div>
-                                )}
-
-                                {/* Regions */}
+                        {selectedLayout &&
+                            selectedLayout.regions &&
+                            selectedLayout.regions.length > 0 && (
                                 <div className="space-y-3">
                                     <label className="text-sm font-medium">
                                         {t('players.regions')}
@@ -203,14 +182,33 @@ export function PlayerLayoutEditor({
                                         </div>
                                     ))}
                                 </div>
-                            </div>
-                        </>
-                    )}
+                            )}
 
-                {loading && (
-                    <div className="flex items-center justify-center py-4">
-                        <Loader2 className="h-6 w-6 animate-spin" />
+                        {loading && (
+                            <div className="flex items-center justify-center py-4">
+                                <Loader2 className="h-6 w-6 animate-spin" />
+                            </div>
+                        )}
                     </div>
+
+                    {/* Right: preview */}
+                    <div className="flex items-start justify-center rounded-lg border bg-muted/30 p-4">
+                        {selectedLayout ? (
+                            <LayoutPreview
+                                layout={selectedLayout as any}
+                                className="max-w-[320px]"
+                            />
+                        ) : (
+                            <div className="flex h-full min-h-32 items-center justify-center text-sm text-muted-foreground">
+                                {t('players.selectLayout')}
+                            </div>
+                        )}
+                    </div>
+                </div>
+                {regionError && (
+                    <p className="text-sm font-medium text-destructive">
+                        {regionError}
+                    </p>
                 )}
             </CardContent>
         </Card>

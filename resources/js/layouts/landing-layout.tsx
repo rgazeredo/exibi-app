@@ -1,7 +1,7 @@
+import LandingFooter from '@/components/landing/footer';
+import LandingHeader from '@/components/landing/header';
 import { Head } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
-import LandingHeader from '@/components/landing/header';
-import LandingFooter from '@/components/landing/footer';
 
 interface LandingLayoutProps {
     title?: string;
@@ -9,7 +9,7 @@ interface LandingLayoutProps {
 
 export default function LandingLayout({
     children,
-    title = 'AZSign - Plataforma de Sinalização Digital',
+    title = 'Exibi - Plataforma de Sinalização Digital',
 }: PropsWithChildren<LandingLayoutProps>) {
     return (
         <div className="min-h-screen bg-white">

@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::requestActivation
-* @see app/Http/Controllers/Api/PlayerActivationController.php:25
+* @see app/Http/Controllers/Api/PlayerActivationController.php:24
 * @route '/api/v1/player/request-activation'
 */
 export const requestActivation = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ requestActivation.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::requestActivation
-* @see app/Http/Controllers/Api/PlayerActivationController.php:25
+* @see app/Http/Controllers/Api/PlayerActivationController.php:24
 * @route '/api/v1/player/request-activation'
 */
 requestActivation.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ requestActivation.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::requestActivation
-* @see app/Http/Controllers/Api/PlayerActivationController.php:25
+* @see app/Http/Controllers/Api/PlayerActivationController.php:24
 * @route '/api/v1/player/request-activation'
 */
 requestActivation.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ requestActivation.post = (options?: RouteQueryOptions): RouteDefinition<'post'> 
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::requestActivation
-* @see app/Http/Controllers/Api/PlayerActivationController.php:25
+* @see app/Http/Controllers/Api/PlayerActivationController.php:24
 * @route '/api/v1/player/request-activation'
 */
 const requestActivationForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -45,7 +45,7 @@ const requestActivationForm = (options?: RouteQueryOptions): RouteFormDefinition
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::requestActivation
-* @see app/Http/Controllers/Api/PlayerActivationController.php:25
+* @see app/Http/Controllers/Api/PlayerActivationController.php:24
 * @route '/api/v1/player/request-activation'
 */
 requestActivationForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -57,7 +57,7 @@ requestActivation.form = requestActivationForm
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::checkActivation
-* @see app/Http/Controllers/Api/PlayerActivationController.php:46
+* @see app/Http/Controllers/Api/PlayerActivationController.php:45
 * @route '/api/v1/player/check-activation'
 */
 export const checkActivation = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -72,7 +72,7 @@ checkActivation.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::checkActivation
-* @see app/Http/Controllers/Api/PlayerActivationController.php:46
+* @see app/Http/Controllers/Api/PlayerActivationController.php:45
 * @route '/api/v1/player/check-activation'
 */
 checkActivation.url = (options?: RouteQueryOptions) => {
@@ -81,7 +81,7 @@ checkActivation.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::checkActivation
-* @see app/Http/Controllers/Api/PlayerActivationController.php:46
+* @see app/Http/Controllers/Api/PlayerActivationController.php:45
 * @route '/api/v1/player/check-activation'
 */
 checkActivation.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -91,7 +91,7 @@ checkActivation.post = (options?: RouteQueryOptions): RouteDefinition<'post'> =>
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::checkActivation
-* @see app/Http/Controllers/Api/PlayerActivationController.php:46
+* @see app/Http/Controllers/Api/PlayerActivationController.php:45
 * @route '/api/v1/player/check-activation'
 */
 const checkActivationForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -101,7 +101,7 @@ const checkActivationForm = (options?: RouteQueryOptions): RouteFormDefinition<'
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::checkActivation
-* @see app/Http/Controllers/Api/PlayerActivationController.php:46
+* @see app/Http/Controllers/Api/PlayerActivationController.php:45
 * @route '/api/v1/player/check-activation'
 */
 checkActivationForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -113,7 +113,7 @@ checkActivation.form = checkActivationForm
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::playlist
-* @see app/Http/Controllers/Api/PlayerActivationController.php:102
+* @see app/Http/Controllers/Api/PlayerActivationController.php:101
 * @route '/api/v1/player/playlist'
 */
 export const playlist = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -128,7 +128,7 @@ playlist.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::playlist
-* @see app/Http/Controllers/Api/PlayerActivationController.php:102
+* @see app/Http/Controllers/Api/PlayerActivationController.php:101
 * @route '/api/v1/player/playlist'
 */
 playlist.url = (options?: RouteQueryOptions) => {
@@ -137,7 +137,7 @@ playlist.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::playlist
-* @see app/Http/Controllers/Api/PlayerActivationController.php:102
+* @see app/Http/Controllers/Api/PlayerActivationController.php:101
 * @route '/api/v1/player/playlist'
 */
 playlist.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -147,7 +147,7 @@ playlist.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::playlist
-* @see app/Http/Controllers/Api/PlayerActivationController.php:102
+* @see app/Http/Controllers/Api/PlayerActivationController.php:101
 * @route '/api/v1/player/playlist'
 */
 playlist.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -157,7 +157,7 @@ playlist.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::playlist
-* @see app/Http/Controllers/Api/PlayerActivationController.php:102
+* @see app/Http/Controllers/Api/PlayerActivationController.php:101
 * @route '/api/v1/player/playlist'
 */
 const playlistForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -167,7 +167,7 @@ const playlistForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::playlist
-* @see app/Http/Controllers/Api/PlayerActivationController.php:102
+* @see app/Http/Controllers/Api/PlayerActivationController.php:101
 * @route '/api/v1/player/playlist'
 */
 playlistForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -177,7 +177,7 @@ playlistForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::playlist
-* @see app/Http/Controllers/Api/PlayerActivationController.php:102
+* @see app/Http/Controllers/Api/PlayerActivationController.php:101
 * @route '/api/v1/player/playlist'
 */
 playlistForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -194,7 +194,7 @@ playlist.form = playlistForm
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::heartbeat
-* @see app/Http/Controllers/Api/PlayerActivationController.php:352
+* @see app/Http/Controllers/Api/PlayerActivationController.php:257
 * @route '/api/v1/player/heartbeat'
 */
 export const heartbeat = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -209,7 +209,7 @@ heartbeat.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::heartbeat
-* @see app/Http/Controllers/Api/PlayerActivationController.php:352
+* @see app/Http/Controllers/Api/PlayerActivationController.php:257
 * @route '/api/v1/player/heartbeat'
 */
 heartbeat.url = (options?: RouteQueryOptions) => {
@@ -218,7 +218,7 @@ heartbeat.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::heartbeat
-* @see app/Http/Controllers/Api/PlayerActivationController.php:352
+* @see app/Http/Controllers/Api/PlayerActivationController.php:257
 * @route '/api/v1/player/heartbeat'
 */
 heartbeat.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -228,7 +228,7 @@ heartbeat.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::heartbeat
-* @see app/Http/Controllers/Api/PlayerActivationController.php:352
+* @see app/Http/Controllers/Api/PlayerActivationController.php:257
 * @route '/api/v1/player/heartbeat'
 */
 const heartbeatForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -238,7 +238,7 @@ const heartbeatForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'>
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::heartbeat
-* @see app/Http/Controllers/Api/PlayerActivationController.php:352
+* @see app/Http/Controllers/Api/PlayerActivationController.php:257
 * @route '/api/v1/player/heartbeat'
 */
 heartbeatForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -250,7 +250,7 @@ heartbeat.form = heartbeatForm
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::log
-* @see app/Http/Controllers/Api/PlayerActivationController.php:459
+* @see app/Http/Controllers/Api/PlayerActivationController.php:364
 * @route '/api/v1/player/log'
 */
 export const log = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -265,7 +265,7 @@ log.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::log
-* @see app/Http/Controllers/Api/PlayerActivationController.php:459
+* @see app/Http/Controllers/Api/PlayerActivationController.php:364
 * @route '/api/v1/player/log'
 */
 log.url = (options?: RouteQueryOptions) => {
@@ -274,7 +274,7 @@ log.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::log
-* @see app/Http/Controllers/Api/PlayerActivationController.php:459
+* @see app/Http/Controllers/Api/PlayerActivationController.php:364
 * @route '/api/v1/player/log'
 */
 log.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -284,7 +284,7 @@ log.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::log
-* @see app/Http/Controllers/Api/PlayerActivationController.php:459
+* @see app/Http/Controllers/Api/PlayerActivationController.php:364
 * @route '/api/v1/player/log'
 */
 const logForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -294,7 +294,7 @@ const logForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::log
-* @see app/Http/Controllers/Api/PlayerActivationController.php:459
+* @see app/Http/Controllers/Api/PlayerActivationController.php:364
 * @route '/api/v1/player/log'
 */
 logForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -306,7 +306,7 @@ log.form = logForm
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::events
-* @see app/Http/Controllers/Api/PlayerActivationController.php:522
+* @see app/Http/Controllers/Api/PlayerActivationController.php:427
 * @route '/api/v1/player/events'
 */
 export const events = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -321,7 +321,7 @@ events.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::events
-* @see app/Http/Controllers/Api/PlayerActivationController.php:522
+* @see app/Http/Controllers/Api/PlayerActivationController.php:427
 * @route '/api/v1/player/events'
 */
 events.url = (options?: RouteQueryOptions) => {
@@ -330,7 +330,7 @@ events.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::events
-* @see app/Http/Controllers/Api/PlayerActivationController.php:522
+* @see app/Http/Controllers/Api/PlayerActivationController.php:427
 * @route '/api/v1/player/events'
 */
 events.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -340,7 +340,7 @@ events.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::events
-* @see app/Http/Controllers/Api/PlayerActivationController.php:522
+* @see app/Http/Controllers/Api/PlayerActivationController.php:427
 * @route '/api/v1/player/events'
 */
 const eventsForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -350,7 +350,7 @@ const eventsForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::events
-* @see app/Http/Controllers/Api/PlayerActivationController.php:522
+* @see app/Http/Controllers/Api/PlayerActivationController.php:427
 * @route '/api/v1/player/events'
 */
 eventsForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -362,7 +362,7 @@ events.form = eventsForm
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::uploadScreenshot
-* @see app/Http/Controllers/Api/PlayerActivationController.php:603
+* @see app/Http/Controllers/Api/PlayerActivationController.php:508
 * @route '/api/v1/player/screenshot'
 */
 export const uploadScreenshot = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -377,7 +377,7 @@ uploadScreenshot.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::uploadScreenshot
-* @see app/Http/Controllers/Api/PlayerActivationController.php:603
+* @see app/Http/Controllers/Api/PlayerActivationController.php:508
 * @route '/api/v1/player/screenshot'
 */
 uploadScreenshot.url = (options?: RouteQueryOptions) => {
@@ -386,7 +386,7 @@ uploadScreenshot.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::uploadScreenshot
-* @see app/Http/Controllers/Api/PlayerActivationController.php:603
+* @see app/Http/Controllers/Api/PlayerActivationController.php:508
 * @route '/api/v1/player/screenshot'
 */
 uploadScreenshot.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -396,7 +396,7 @@ uploadScreenshot.post = (options?: RouteQueryOptions): RouteDefinition<'post'> =
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::uploadScreenshot
-* @see app/Http/Controllers/Api/PlayerActivationController.php:603
+* @see app/Http/Controllers/Api/PlayerActivationController.php:508
 * @route '/api/v1/player/screenshot'
 */
 const uploadScreenshotForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -406,7 +406,7 @@ const uploadScreenshotForm = (options?: RouteQueryOptions): RouteFormDefinition<
 
 /**
 * @see \App\Http\Controllers\Api\PlayerActivationController::uploadScreenshot
-* @see app/Http/Controllers/Api/PlayerActivationController.php:603
+* @see app/Http/Controllers/Api/PlayerActivationController.php:508
 * @route '/api/v1/player/screenshot'
 */
 uploadScreenshotForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

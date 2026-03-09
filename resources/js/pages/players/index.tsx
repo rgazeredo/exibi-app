@@ -9,7 +9,6 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -94,7 +93,6 @@ interface Player {
     id: string;
     name: string;
     description: string | null;
-    is_active: boolean;
     is_online: boolean;
     last_seen_at: string | null;
     effective_layout: {
@@ -122,9 +120,13 @@ interface PlayersIndexProps {
         status?: string;
         tag?: string;
     };
+    canCreate: boolean;
 }
 
-export default function PlayersIndex({ filters }: PlayersIndexProps) {
+export default function PlayersIndex({
+    filters,
+    canCreate,
+}: PlayersIndexProps) {
     const { t } = useT();
     const [data, setData] = useState<Player[]>([]);
     const [loading, setLoading] = useState(true);
@@ -309,31 +311,20 @@ export default function PlayersIndex({ filters }: PlayersIndexProps) {
             },
             {
                 accessorKey: 'effective_layout',
-                header: t('players.playlist'),
+                header: t('players.layout'),
                 cell: ({ row }) => {
                     const effectiveLayout = row.original.effective_layout;
-                    const playlists = effectiveLayout?.playlists || [];
 
-                    if (playlists.length === 0) {
+                    if (!effectiveLayout) {
                         return (
                             <span className="text-sm text-muted-foreground italic">
-                                {t('players.noPlaylist')}
+                                {t('players.noLayout')}
                             </span>
                         );
                     }
 
                     return (
-                        <div className="flex flex-col gap-0.5 text-sm">
-                            {playlists.map((playlist) => (
-                                <Link
-                                    key={playlist.id}
-                                    href={`/playlists/${playlist.id}`}
-                                    className="hover:underline"
-                                >
-                                    {playlist.name}
-                                </Link>
-                            ))}
-                        </div>
+                        <span className="text-sm">{effectiveLayout.name}</span>
                     );
                 },
                 enableSorting: false,
@@ -350,32 +341,6 @@ export default function PlayersIndex({ filters }: PlayersIndexProps) {
                     );
                 },
                 enableSorting: false,
-            },
-            {
-                accessorKey: 'is_active',
-                header: ({ column }) => (
-                    <Button
-                        variant="ghost"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === 'asc')
-                        }
-                        className="-ml-4 justify-start"
-                    >
-                        {t('players.status.active')}
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                ),
-                cell: ({ row }) => (
-                    <Badge
-                        variant={
-                            row.original.is_active ? 'default' : 'secondary'
-                        }
-                    >
-                        {row.original.is_active
-                            ? t('players.status.active')
-                            : t('players.status.inactive')}
-                    </Badge>
-                ),
             },
             {
                 accessorKey: 'last_seen_at',
@@ -506,12 +471,19 @@ export default function PlayersIndex({ filters }: PlayersIndexProps) {
                             </p>
                         </div>
                     </div>
-                    <Button asChild>
-                        <Link href="/players/create">
+                    {canCreate ? (
+                        <Button asChild>
+                            <Link href="/players/create">
+                                <Plus className="mr-2 h-4 w-4" />
+                                {t('players.addPlayer')}
+                            </Link>
+                        </Button>
+                    ) : (
+                        <Button disabled title={t('players.limitReached')}>
                             <Plus className="mr-2 h-4 w-4" />
                             {t('players.addPlayer')}
-                        </Link>
-                    </Button>
+                        </Button>
+                    )}
                 </div>
 
                 {/* Filters */}
@@ -616,7 +588,7 @@ export default function PlayersIndex({ filters }: PlayersIndexProps) {
                                                       )
                                                     : t('players.getStarted')}
                                             </p>
-                                            {!hasFilters && (
+                                            {!hasFilters && canCreate && (
                                                 <Button
                                                     asChild
                                                     className="mt-4"

@@ -1,15 +1,4 @@
 import InputError from '@/components/input-error';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -43,18 +32,8 @@ import AppLayout from '@/layouts/app-layout';
 import TenantSettingsLayout from '@/layouts/tenant-settings/layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
-import axios from 'axios';
-import {
-    Clock,
-    Globe,
-    ImageIcon,
-    Keyboard,
-    Loader2,
-    Trash2,
-    Upload,
-    Zap,
-} from 'lucide-react';
-import { useRef, useState } from 'react';
+import { Clock, Globe, Keyboard, Loader2, Zap } from 'lucide-react';
+import { useState } from 'react';
 
 interface TenantData {
     id: string;
@@ -62,7 +41,6 @@ interface TenantData {
     slug: string;
     domain: string | null;
     icon_url: string | null;
-    splash_url: string | null;
     auto_optimize_videos: boolean;
     optimization_quality: 'hd' | 'fullhd';
     timezone: string;
@@ -137,13 +115,8 @@ export default function TenantSettings({
     tenantSettings,
 }: TenantSettingsProps) {
     const { t } = useT();
-    const [splashUrl, setSplashUrl] = useState<string | null>(
-        tenantSettings.splash_url,
-    );
-    const [uploadingSplash, setUploadingSplash] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [shortcutsDialogOpen, setShortcutsDialogOpen] = useState(false);
-    const splashInputRef = useRef<HTMLInputElement>(null);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: t('nav.dashboard'), href: '/dashboard' },
@@ -162,45 +135,6 @@ export default function TenantSettings({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post('/tenant/settings');
-    };
-
-    const handleSplashUpload = async (
-        e: React.ChangeEvent<HTMLInputElement>,
-    ) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        setUploadingSplash(true);
-        const formData = new FormData();
-        formData.append('splash', file);
-
-        try {
-            const { data } = await axios.post(
-                '/tenant/settings/splash',
-                formData,
-            );
-            if (data.success) {
-                setSplashUrl(data.splash_url);
-            }
-        } catch (error) {
-            console.error('Failed to upload splash:', error);
-        } finally {
-            setUploadingSplash(false);
-            if (splashInputRef.current) {
-                splashInputRef.current.value = '';
-            }
-        }
-    };
-
-    const handleDeleteSplash = async () => {
-        try {
-            const { data } = await axios.delete('/tenant/settings/splash');
-            if (data.success) {
-                setSplashUrl(null);
-            }
-        } catch (error) {
-            console.error('Failed to delete splash:', error);
-        }
     };
 
     return (
@@ -274,117 +208,6 @@ export default function TenantSettings({
                                         'Used for scheduling content on player devices.'}
                                 </p>
                                 <InputError message={errors.timezone} />
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Branding */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <ImageIcon className="h-5 w-5" />
-                                {t('tenant.branding') || 'Branding'}
-                            </CardTitle>
-                            <CardDescription>
-                                {t('tenant.brandingDesc') ||
-                                    "Customize your organization's visual identity"}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            {/* Splash */}
-                            <div className="space-y-3">
-                                <Label>
-                                    {t('tenant.splashScreen') ||
-                                        'Splash Screen'}
-                                </Label>
-                                <p className="text-xs text-muted-foreground">
-                                    {t('tenant.splashDesc') ||
-                                        'Displayed when player devices start up. Recommended: 1920x1080px, PNG or JPG.'}
-                                </p>
-                                <div className="flex items-start gap-4">
-                                    <div className="flex h-28 w-48 items-center justify-center overflow-hidden rounded-lg border bg-muted">
-                                        {splashUrl ? (
-                                            <img
-                                                src={splashUrl}
-                                                alt="Splash"
-                                                className="h-full w-full object-cover"
-                                            />
-                                        ) : (
-                                            <ImageIcon className="h-8 w-8 text-muted-foreground" />
-                                        )}
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <input
-                                            ref={splashInputRef}
-                                            type="file"
-                                            accept="image/png,image/jpeg"
-                                            onChange={handleSplashUpload}
-                                            className="hidden"
-                                        />
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            onClick={() =>
-                                                splashInputRef.current?.click()
-                                            }
-                                            disabled={uploadingSplash}
-                                        >
-                                            {uploadingSplash ? (
-                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                            ) : (
-                                                <Upload className="mr-2 h-4 w-4" />
-                                            )}
-                                            {t('common.upload') || 'Upload'}
-                                        </Button>
-                                        {splashUrl && (
-                                            <AlertDialog>
-                                                <AlertDialogTrigger asChild>
-                                                    <Button
-                                                        type="button"
-                                                        variant="outline"
-                                                    >
-                                                        <Trash2 className="mr-2 h-4 w-4" />
-                                                        {t('common.remove') ||
-                                                            'Remove'}
-                                                    </Button>
-                                                </AlertDialogTrigger>
-                                                <AlertDialogContent>
-                                                    <AlertDialogHeader>
-                                                        <AlertDialogTitle>
-                                                            {t(
-                                                                'tenant.removeSplashTitle',
-                                                            ) ||
-                                                                'Remove Splash Screen'}
-                                                        </AlertDialogTitle>
-                                                        <AlertDialogDescription>
-                                                            {t(
-                                                                'tenant.removeSplashDesc',
-                                                            ) ||
-                                                                'Are you sure you want to remove the splash screen? Player devices will display the default AZSign splash until a new image is uploaded.'}
-                                                        </AlertDialogDescription>
-                                                    </AlertDialogHeader>
-                                                    <AlertDialogFooter>
-                                                        <AlertDialogCancel>
-                                                            {t(
-                                                                'common.cancel',
-                                                            ) || 'Cancel'}
-                                                        </AlertDialogCancel>
-                                                        <AlertDialogAction
-                                                            onClick={
-                                                                handleDeleteSplash
-                                                            }
-                                                            className="bg-destructive text-white hover:bg-destructive/90"
-                                                        >
-                                                            {t(
-                                                                'common.remove',
-                                                            ) || 'Remove'}
-                                                        </AlertDialogAction>
-                                                    </AlertDialogFooter>
-                                                </AlertDialogContent>
-                                            </AlertDialog>
-                                        )}
-                                    </div>
-                                </div>
                             </div>
                         </CardContent>
                     </Card>

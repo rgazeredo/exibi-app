@@ -1,27 +1,24 @@
 import { Badge } from '@/components/ui/badge';
-import {
-    Shield,
-    Headphones,
-    HardDrive,
-    Globe,
-    Zap,
-} from 'lucide-react';
+import { Globe, HardDrive, Headphones, Shield, Zap } from 'lucide-react';
 
 const stats = [
     {
         value: '99.9%',
         label: 'Uptime garantido',
-        description: 'SLA de disponibilidade com infraestrutura redundante e monitoramento contínuo',
+        description:
+            'SLA de disponibilidade com infraestrutura redundante e monitoramento contínuo',
     },
     {
         value: '24/7',
         label: 'Monitoramento',
-        description: 'Datacenters monitorados 24 horas por dia, 365 dias por ano',
+        description:
+            'Datacenters monitorados 24 horas por dia, 365 dias por ano',
     },
     {
         value: '100%',
         label: 'Backups automáticos',
-        description: 'Seus dados replicados em múltiplos servidores de forma automática',
+        description:
+            'Seus dados replicados em múltiplos servidores de forma automática',
     },
 ];
 
@@ -56,7 +53,7 @@ export default function InstitutionalSection() {
                 <div className="mb-16 grid gap-8 md:grid-cols-3 lg:gap-12">
                     {stats.map((stat, index) => (
                         <div key={index} className="text-center">
-                            <div className="mb-2 text-4xl font-bold text-blue-600 lg:text-5xl">
+                            <div className="mb-2 text-4xl font-bold text-green-600 lg:text-5xl">
                                 {stat.value}
                             </div>
                             <div className="mb-1 text-lg font-semibold text-slate-900">
@@ -75,10 +72,10 @@ export default function InstitutionalSection() {
                         Infraestrutura de classe mundial
                     </h3>
                     <p className="text-slate-600">
-                        Sua operação roda em datacenters de alta disponibilidade,
-                        com proteção integrada contra ataques, backups automáticos
-                        e replicação de dados para garantir que seu conteúdo esteja
-                        sempre disponível.
+                        Sua operação roda em datacenters de alta
+                        disponibilidade, com proteção integrada contra ataques,
+                        backups automáticos e replicação de dados para garantir
+                        que seu conteúdo esteja sempre disponível.
                     </p>
                 </div>
 

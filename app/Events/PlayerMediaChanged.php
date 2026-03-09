@@ -44,11 +44,16 @@ class PlayerMediaChanged implements ShouldBroadcastNow
     {
         // Get the main region's playlist from the active layout
         $playlist = null;
-        $scheduledLayout = $this->player->getActiveScheduledLayout();
-        if ($scheduledLayout) {
-            $mainRegion = $scheduledLayout->layout?->regions?->first(fn ($r) => $r->is_main);
+        $layout = $this->player->getEffectiveLayout();
+        if ($layout) {
+            $layout->load('regions');
+            $mainRegion = $layout->regions?->first(fn ($r) => $r->is_main);
             if ($mainRegion) {
-                $playlist = $scheduledLayout->getPlaylistForRegion($mainRegion);
+                $regionPlaylist = $this->player->regionPlaylists()
+                    ->where('layout_region_id', $mainRegion->id)
+                    ->with('playlist')
+                    ->first();
+                $playlist = $regionPlaylist?->playlist;
             }
         }
 

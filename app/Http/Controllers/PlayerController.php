@@ -21,6 +21,7 @@ class PlayerController extends Controller
     {
         return Inertia::render('players/index', [
             'filters' => $request->only(['search', 'status', 'tag']),
+            'canCreate' => $request->user()->can('create', Player::class),
         ]);
     }
 
@@ -30,7 +31,7 @@ class PlayerController extends Controller
         $sortDirection = $request->input('direction', 'desc');
 
         // Validate sort field to prevent SQL injection
-        $allowedSortFields = ['name', 'last_seen_at', 'is_active', 'is_online', 'created_at'];
+        $allowedSortFields = ['name', 'last_seen_at', 'is_online', 'created_at'];
         if (! in_array($sortField, $allowedSortFields)) {
             $sortField = 'created_at';
         }
@@ -61,7 +62,6 @@ class PlayerController extends Controller
                 'id' => $player->id,
                 'name' => $player->name,
                 'description' => $player->description,
-                'is_active' => $player->is_active,
                 'is_online' => $player->isOnline(),
                 'last_seen_at' => $player->last_seen_at?->diffForHumans(),
                 'effective_layout' => $this->getEffectiveLayoutInfo($player),
@@ -86,6 +86,8 @@ class PlayerController extends Controller
 
     public function create(): Response
     {
+        $this->authorize('create', Player::class);
+
         return Inertia::render('players/form', [
             'layouts' => $this->getLayoutOptions(),
             'playlists' => $this->getPlaylistOptions(),
@@ -94,10 +96,11 @@ class PlayerController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('create', Player::class);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'is_active' => ['boolean'],
             'layout_id' => ['nullable', 'uuid', 'exists:layouts,id'],
             'region_playlists' => ['nullable', 'array'],
             'region_playlists.*.region_id' => ['required', 'uuid'],
@@ -107,7 +110,7 @@ class PlayerController extends Controller
             'config.update_interval_minutes' => ['nullable', 'integer', 'min:1', 'max:60'],
             'config.volume' => ['nullable', 'integer', 'min:0', 'max:100'],
             'config.password_caller_enabled' => ['nullable', 'boolean'],
-            'activation_code' => ['nullable', 'string', 'size:7'],
+            'activation_code' => ['required', 'string', 'size:7'],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['uuid', 'exists:tags,id'],
         ]);
@@ -181,7 +184,7 @@ class PlayerController extends Controller
     {
         $player->load([
             'tags',
-            'layout.layoutRegions.playlist',
+            'layout.regions',
             'regionPlaylists.layoutRegion',
         ]);
 
@@ -211,7 +214,6 @@ class PlayerController extends Controller
                 'name' => $player->name,
                 'description' => $player->description,
                 'api_token' => $player->api_token,
-                'is_active' => $player->is_active,
                 'is_online' => $player->isOnline(),
                 'last_seen_at' => $player->last_seen_at?->diffForHumans(),
                 'last_seen_at_full' => $player->last_seen_at?->toIso8601String(),
@@ -255,7 +257,6 @@ class PlayerController extends Controller
                 'name' => $player->name,
                 'description' => $player->description,
                 'layout_id' => $player->layout_id,
-                'is_active' => $player->is_active,
                 'config' => $player->config,
                 'tags' => $player->tags->map(fn ($tag) => [
                     'id' => $tag->id,
@@ -278,7 +279,6 @@ class PlayerController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'is_active' => ['boolean'],
             'layout_id' => ['nullable', 'uuid', 'exists:layouts,id'],
             'region_playlists' => ['nullable', 'array'],
             'region_playlists.*.region_id' => ['required', 'uuid'],
@@ -354,13 +354,15 @@ class PlayerController extends Controller
 
         $oldPlayerName = $player->name;
 
+        $player->load(['regionPlaylists', 'tags']);
+
         $newPlayer = DB::transaction(function () use ($player, $activation, $oldPlayerName) {
             // 1. Create new player with old player's configurations
             $newPlayer = Player::create([
                 'tenant_id' => $player->tenant_id,
                 'name' => $oldPlayerName,
                 'description' => $player->description,
-                'player_group_id' => $player->player_group_id,
+                'layout_id' => $player->layout_id,
                 'config' => $player->config,
                 'is_active' => true,
             ]);
@@ -376,31 +378,17 @@ class PlayerController extends Controller
             // 3. Claim the activation (links device to player)
             $activation->claim($player->tenant_id, $newPlayer);
 
-            // 4. Copy player_layouts
-            foreach ($player->playerLayouts()->with('regionPlaylists')->get() as $layout) {
-                $newLayout = $layout->replicate(['id', 'player_id']);
-                $newLayout->player_id = $newPlayer->id;
-                $newLayout->save();
-
-                // Copy region playlists for this layout
-                foreach ($layout->regionPlaylists as $rp) {
-                    $newRp = $rp->replicate(['id', 'player_layout_id']);
-                    $newRp->player_layout_id = $newLayout->id;
-                    $newRp->save();
-                }
-            }
-
-            // 5. Copy player_region_playlists (player level)
+            // 4. Copy region playlist assignments
             foreach ($player->regionPlaylists as $rp) {
                 $newRp = $rp->replicate(['id', 'player_id']);
                 $newRp->player_id = $newPlayer->id;
                 $newRp->save();
             }
 
-            // 6. Sync tags
+            // 5. Sync tags
             $newPlayer->tags()->sync($player->tags->pluck('id'));
 
-            // 7. Delete old player
+            // 6. Delete old player
             $player->delete();
 
             return $newPlayer;
@@ -504,7 +492,7 @@ class PlayerController extends Controller
     public function downloads(Player $player, PlaylistService $playlistService): Response
     {
         $player->load([
-            'layout.layoutRegions',
+            'layout.regions',
             'regionPlaylists.playlist.activeItems.media',
             'regionPlaylists.playlist.activeItems.childPlaylist.activeItems.media',
         ]);
@@ -808,10 +796,10 @@ class PlayerController extends Controller
         }
 
         // Load regions with their playlists
-        $layout->load('layoutRegions');
+        $layout->load('regions');
         $regionPlaylists = [];
 
-        foreach ($layout->layoutRegions as $region) {
+        foreach ($layout->regions as $region) {
             $regionPlaylist = $player->regionPlaylists
                 ->firstWhere('layout_region_id', $region->id);
             $regionPlaylists[] = [
@@ -827,7 +815,7 @@ class PlayerController extends Controller
             'id' => $layout->id,
             'name' => $layout->name,
             'source' => 'player',
-            'region_count' => $layout->layoutRegions->count(),
+            'region_count' => $layout->regions->count(),
             'region_playlists' => $regionPlaylists,
         ];
     }
@@ -887,6 +875,30 @@ class PlayerController extends Controller
             'playlist_name' => $data['playlist_name'],
             'regions' => array_values($regions),
         ];
+    }
+
+    /**
+     * Get the last 20 playback logs for a player.
+     */
+    public function playbackLogs(Player $player): JsonResponse
+    {
+        $logs = $player->playbackLogs()
+            ->with(['media', 'playlist'])
+            ->latest('started_at')
+            ->take(20)
+            ->get()
+            ->map(fn ($log) => [
+                'id' => $log->id,
+                'media_title' => $log->media?->title,
+                'media_type' => $log->media?->type,
+                'media_thumbnail_url' => $log->media?->getThumbnailUrl(),
+                'playlist_name' => $log->playlist?->name,
+                'started_at' => $log->started_at?->setTimezone('America/Sao_Paulo')->format('d/m/Y H:i'),
+                'duration_played_seconds' => $log->duration_played_seconds,
+                'completed' => $log->completed,
+            ]);
+
+        return response()->json(['logs' => $logs]);
     }
 
     /**

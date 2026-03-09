@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\PlaylistController::update
-* @see app/Http/Controllers/PlaylistController.php:214
+* @see app/Http/Controllers/PlaylistController.php:213
 * @route '/playlists/{playlist}/items'
 */
 export const update = (args: { playlist: string | { id: string } } | [playlist: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -16,7 +16,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\PlaylistController::update
-* @see app/Http/Controllers/PlaylistController.php:214
+* @see app/Http/Controllers/PlaylistController.php:213
 * @route '/playlists/{playlist}/items'
 */
 update.url = (args: { playlist: string | { id: string } } | [playlist: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -49,7 +49,7 @@ update.url = (args: { playlist: string | { id: string } } | [playlist: string | 
 
 /**
 * @see \App\Http\Controllers\PlaylistController::update
-* @see app/Http/Controllers/PlaylistController.php:214
+* @see app/Http/Controllers/PlaylistController.php:213
 * @route '/playlists/{playlist}/items'
 */
 update.put = (args: { playlist: string | { id: string } } | [playlist: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -59,7 +59,7 @@ update.put = (args: { playlist: string | { id: string } } | [playlist: string | 
 
 /**
 * @see \App\Http\Controllers\PlaylistController::update
-* @see app/Http/Controllers/PlaylistController.php:214
+* @see app/Http/Controllers/PlaylistController.php:213
 * @route '/playlists/{playlist}/items'
 */
 const updateForm = (args: { playlist: string | { id: string } } | [playlist: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -74,7 +74,7 @@ const updateForm = (args: { playlist: string | { id: string } } | [playlist: str
 
 /**
 * @see \App\Http\Controllers\PlaylistController::update
-* @see app/Http/Controllers/PlaylistController.php:214
+* @see app/Http/Controllers/PlaylistController.php:213
 * @route '/playlists/{playlist}/items'
 */
 updateForm.put = (args: { playlist: string | { id: string } } | [playlist: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -91,7 +91,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\PlaylistController::add
-* @see app/Http/Controllers/PlaylistController.php:347
+* @see app/Http/Controllers/PlaylistController.php:346
 * @route '/playlists/{playlist}/items'
 */
 export const add = (args: { playlist: string | { id: string } } | [playlist: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -106,7 +106,7 @@ add.definition = {
 
 /**
 * @see \App\Http\Controllers\PlaylistController::add
-* @see app/Http/Controllers/PlaylistController.php:347
+* @see app/Http/Controllers/PlaylistController.php:346
 * @route '/playlists/{playlist}/items'
 */
 add.url = (args: { playlist: string | { id: string } } | [playlist: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -139,7 +139,7 @@ add.url = (args: { playlist: string | { id: string } } | [playlist: string | { i
 
 /**
 * @see \App\Http\Controllers\PlaylistController::add
-* @see app/Http/Controllers/PlaylistController.php:347
+* @see app/Http/Controllers/PlaylistController.php:346
 * @route '/playlists/{playlist}/items'
 */
 add.post = (args: { playlist: string | { id: string } } | [playlist: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -149,7 +149,7 @@ add.post = (args: { playlist: string | { id: string } } | [playlist: string | { 
 
 /**
 * @see \App\Http\Controllers\PlaylistController::add
-* @see app/Http/Controllers/PlaylistController.php:347
+* @see app/Http/Controllers/PlaylistController.php:346
 * @route '/playlists/{playlist}/items'
 */
 const addForm = (args: { playlist: string | { id: string } } | [playlist: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -159,7 +159,7 @@ const addForm = (args: { playlist: string | { id: string } } | [playlist: string
 
 /**
 * @see \App\Http\Controllers\PlaylistController::add
-* @see app/Http/Controllers/PlaylistController.php:347
+* @see app/Http/Controllers/PlaylistController.php:346
 * @route '/playlists/{playlist}/items'
 */
 addForm.post = (args: { playlist: string | { id: string } } | [playlist: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -171,7 +171,7 @@ add.form = addForm
 
 /**
 * @see \App\Http\Controllers\PlaylistController::remove
-* @see app/Http/Controllers/PlaylistController.php:408
+* @see app/Http/Controllers/PlaylistController.php:407
 * @route '/playlists/{playlist}/items/{item}'
 */
 export const remove = (args: { playlist: string | { id: string }, item: string | { id: string } } | [playlist: string | { id: string }, item: string | { id: string } ], options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -186,7 +186,7 @@ remove.definition = {
 
 /**
 * @see \App\Http\Controllers\PlaylistController::remove
-* @see app/Http/Controllers/PlaylistController.php:408
+* @see app/Http/Controllers/PlaylistController.php:407
 * @route '/playlists/{playlist}/items/{item}'
 */
 remove.url = (args: { playlist: string | { id: string }, item: string | { id: string } } | [playlist: string | { id: string }, item: string | { id: string } ], options?: RouteQueryOptions) => {
@@ -216,7 +216,7 @@ remove.url = (args: { playlist: string | { id: string }, item: string | { id: st
 
 /**
 * @see \App\Http\Controllers\PlaylistController::remove
-* @see app/Http/Controllers/PlaylistController.php:408
+* @see app/Http/Controllers/PlaylistController.php:407
 * @route '/playlists/{playlist}/items/{item}'
 */
 remove.delete = (args: { playlist: string | { id: string }, item: string | { id: string } } | [playlist: string | { id: string }, item: string | { id: string } ], options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -226,7 +226,7 @@ remove.delete = (args: { playlist: string | { id: string }, item: string | { id:
 
 /**
 * @see \App\Http\Controllers\PlaylistController::remove
-* @see app/Http/Controllers/PlaylistController.php:408
+* @see app/Http/Controllers/PlaylistController.php:407
 * @route '/playlists/{playlist}/items/{item}'
 */
 const removeForm = (args: { playlist: string | { id: string }, item: string | { id: string } } | [playlist: string | { id: string }, item: string | { id: string } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -241,7 +241,7 @@ const removeForm = (args: { playlist: string | { id: string }, item: string | { 
 
 /**
 * @see \App\Http\Controllers\PlaylistController::remove
-* @see app/Http/Controllers/PlaylistController.php:408
+* @see app/Http/Controllers/PlaylistController.php:407
 * @route '/playlists/{playlist}/items/{item}'
 */
 removeForm.delete = (args: { playlist: string | { id: string }, item: string | { id: string } } | [playlist: string | { id: string }, item: string | { id: string } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

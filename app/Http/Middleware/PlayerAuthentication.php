@@ -23,10 +23,6 @@ class PlayerAuthentication
             return response()->json(['error' => 'Invalid token'], 401);
         }
 
-        if (! $player->is_active) {
-            return response()->json(['error' => 'Player deactivated'], 403);
-        }
-
         // Store player in request for use in controllers
         $request->merge(['player' => $player]);
         $request->setUserResolver(fn () => $player);

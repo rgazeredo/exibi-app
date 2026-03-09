@@ -74,11 +74,8 @@ class SoketiWebhookController extends Controller
                 break;
 
             case 'client_event':
-                // Verificar qual evento do cliente é
                 if ($clientEvent === 'client-heartbeat') {
                     $this->handleClientEvent($playerId, $event);
-                } elseif ($clientEvent === 'client-media-started') {
-                    $this->handleMediaStarted($playerId, $event);
                 }
                 break;
         }
@@ -204,88 +201,6 @@ class SoketiWebhookController extends Controller
             'player_id' => $playerId,
             'status' => $status,
             'media_id' => $newMediaId,
-        ]);
-    }
-
-    /**
-     * Handle media started event from player via WebSocket.
-     * This is a lightweight, real-time event sent when media changes.
-     * Supports both single media and multi-region updates.
-     */
-    private function handleMediaStarted(string $playerId, array $event): void
-    {
-        $player = Player::withoutGlobalScope('tenant')->find($playerId);
-
-        if (! $player) {
-            Log::warning('Soketi webhook: Player not found for media-started', ['player_id' => $playerId]);
-
-            return;
-        }
-
-        $data = $event['data'] ?? [];
-        if (is_string($data)) {
-            $data = json_decode($data, true) ?? [];
-        }
-
-        $mediaId = $data['media_id'] ?? null;
-        $regionId = $data['region_id'] ?? null;
-        $regionsPlayback = $data['regions_playback'] ?? null;
-        $title = $data['title'] ?? null;
-
-        // Update player's last_seen_at
-        $player->update(['last_seen_at' => now()]);
-
-        // Update the latest heartbeat with new region info for real-time accuracy
-        $latestHeartbeat = $player->heartbeats()->latest('created_at')->first();
-        if ($latestHeartbeat) {
-            $status = $latestHeartbeat->status ?? [];
-
-            // If regions_playback is provided, use it directly
-            if ($regionsPlayback) {
-                $status['regions_playback'] = $regionsPlayback;
-                if ($mediaId) {
-                    $status['current_media_id'] = $mediaId;
-                }
-            }
-            // If only region_id + media_id provided, update that specific region
-            elseif ($regionId && $mediaId) {
-                $existingRegions = $status['regions_playback'] ?? [];
-                $updated = false;
-                foreach ($existingRegions as &$region) {
-                    if (($region['region_id'] ?? null) === $regionId) {
-                        $region['media_id'] = $mediaId;
-                        $updated = true;
-                        break;
-                    }
-                }
-                if (! $updated) {
-                    $existingRegions[] = ['region_id' => $regionId, 'media_id' => $mediaId];
-                }
-                $status['regions_playback'] = $existingRegions;
-            }
-            // Legacy: just media_id, assume main region
-            elseif ($mediaId) {
-                $status['current_media_id'] = $mediaId;
-            }
-
-            $latestHeartbeat->update(['status' => $status]);
-        }
-
-        // Get media info for broadcast
-        $media = $mediaId ? Media::withoutGlobalScope('tenant')->find($mediaId) : null;
-
-        // Broadcast to admin panel
-        event(new PlayerMediaChanged(
-            player: $player,
-            media: $media,
-            startedAt: now()->toDateTimeString(),
-        ));
-
-        Log::info('Soketi webhook: Media started, broadcasting', [
-            'player_id' => $playerId,
-            'media_id' => $mediaId,
-            'region_id' => $regionId,
-            'title' => $title,
         ]);
     }
 

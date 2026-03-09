@@ -23,7 +23,7 @@ export default function AuthSplitLayout({
                     className="relative z-20 flex items-center text-lg font-medium"
                 >
                     <img
-                        src="/images/exibi.png"
+                        src="/images/exibi-horizontal.png"
                         alt="Exibi"
                         className="mr-2 h-8 w-auto"
                     />
@@ -49,7 +49,7 @@ export default function AuthSplitLayout({
                         className="relative z-20 flex items-center justify-center lg:hidden"
                     >
                         <img
-                            src="/images/exibi.png"
+                            src="/images/exibi-vertical.png"
                             alt="Exibi"
                             className="h-10 w-auto sm:h-12"
                         />

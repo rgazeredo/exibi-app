@@ -8,8 +8,8 @@ const solutions = [
         description:
             'Altere o conteúdo de qualquer tela em segundos, de onde você estiver. Sem visitas técnicas.',
         problem: 'Atualizações demoradas',
-        iconBg: 'bg-blue-100',
-        iconColor: 'text-blue-600',
+        iconBg: 'bg-green-100',
+        iconColor: 'text-green-600',
     },
     {
         icon: MonitorCheck,
@@ -71,9 +71,9 @@ export default function SolutionSection() {
                                     <div className="flex gap-4">
                                         {/* Sidebar */}
                                         <div className="w-40 space-y-2">
-                                            <div className="flex items-center gap-2 rounded-lg bg-blue-50 p-2">
-                                                <div className="h-6 w-6 rounded bg-blue-600" />
-                                                <span className="text-xs font-medium text-blue-700">
+                                            <div className="flex items-center gap-2 rounded-lg bg-green-50 p-2">
+                                                <div className="h-6 w-6 rounded bg-green-600" />
+                                                <span className="text-xs font-medium text-green-700">
                                                     Dashboard
                                                 </span>
                                             </div>
@@ -117,11 +117,11 @@ export default function SolutionSection() {
                                                         Offline
                                                     </div>
                                                 </div>
-                                                <div className="rounded-lg bg-blue-50 p-3">
-                                                    <div className="text-lg font-bold text-blue-700">
+                                                <div className="rounded-lg bg-green-50 p-3">
+                                                    <div className="text-lg font-bold text-green-700">
                                                         8
                                                     </div>
-                                                    <div className="text-xs text-blue-600">
+                                                    <div className="text-xs text-green-600">
                                                         Playlists
                                                     </div>
                                                 </div>
@@ -136,7 +136,7 @@ export default function SolutionSection() {
                                                     ].map((h, i) => (
                                                         <div
                                                             key={i}
-                                                            className="flex-1 rounded-t bg-gradient-to-t from-blue-500 to-blue-400"
+                                                            className="flex-1 rounded-t bg-gradient-to-t from-green-500 to-green-400"
                                                             style={{
                                                                 height: `${h}%`,
                                                             }}
@@ -163,7 +163,7 @@ export default function SolutionSection() {
                             </span>
                         </h2>
                         <p className="mb-8 text-lg text-slate-600">
-                            A AZSign foi desenvolvida para resolver os desafios
+                            O Exibi foi desenvolvido para resolver os desafios
                             reais de quem gerencia redes de sinalização digital.
                         </p>
 

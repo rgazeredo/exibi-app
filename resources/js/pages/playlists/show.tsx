@@ -3,7 +3,6 @@ import {
     type AvailablePlaylist,
     type AvailableWidget,
     type ContentItem,
-    type PlaybackMode,
 } from '@/components/content-editor';
 import { type ScheduleSlot } from '@/components/schedule-editor';
 import { TagBadges, TagInput } from '@/components/tag-input';
@@ -104,7 +103,6 @@ interface Playlist {
     name: string;
     description: string | null;
     is_active: boolean;
-    playback_mode: 'sequential' | 'interleaved' | 'auto' | 'random';
     total_duration: number;
     total_media_count: number;
     can_contain_subplaylists: boolean;
@@ -194,9 +192,6 @@ export default function PlaylistShow({
                   }
                 : undefined,
         })),
-    );
-    const [playbackMode, setPlaybackMode] = useState<PlaybackMode>(
-        playlist.playback_mode,
     );
     const [editorSaving, setEditorSaving] = useState(false);
     const [editorSaved, setEditorSaved] = useState(false);
@@ -293,11 +288,6 @@ export default function PlaylistShow({
         setHasChanges(true);
     }, []);
 
-    const handlePlaybackModeChange = useCallback((mode: PlaybackMode) => {
-        setPlaybackMode(mode);
-        setHasChanges(true);
-    }, []);
-
     const handleEditorSave = useCallback(() => {
         setEditorSaving(true);
         setEditorSaved(false);
@@ -305,7 +295,6 @@ export default function PlaylistShow({
         router.put(
             `/playlists/${playlist.id}/items`,
             {
-                playback_mode: playbackMode,
                 items: items.map((item) => ({
                     item_type: item.content_type,
                     item_id: item.content_id,
@@ -332,7 +321,7 @@ export default function PlaylistShow({
                 },
             },
         );
-    }, [playlist.id, playbackMode, items]);
+    }, [playlist.id, items]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -587,9 +576,6 @@ export default function PlaylistShow({
                             widgets: true,
                         }}
                         rightPanelTitle={t('playlists.playlistItems')}
-                        showPlaybackMode={true}
-                        playbackMode={playbackMode}
-                        onPlaybackModeChange={handlePlaybackModeChange}
                         canContainSubplaylists={
                             playlist.can_contain_subplaylists
                         }

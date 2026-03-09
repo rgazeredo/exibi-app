@@ -4,13 +4,6 @@
 
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import {
     closestCenter,
@@ -30,21 +23,10 @@ import {
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import {
-    Check,
-    Film,
-    HelpCircle,
-    LayoutList,
-    Loader2,
-    Save,
-} from 'lucide-react';
+import { Check, Film, LayoutList, Loader2, Save } from 'lucide-react';
 import { useState } from 'react';
 import { SortableContentItem } from './sortable-content-item';
-import type {
-    ContentItem,
-    ContentItemsPanelProps,
-    PlaybackMode,
-} from './types';
+import type { ContentItem, ContentItemsPanelProps } from './types';
 
 // ============================================================================
 // DROPPABLE ZONE (for empty before/after sections)
@@ -83,10 +65,6 @@ export function ContentItemsPanel({
     onRemove,
     onOpenDuration,
     onOpenSchedule,
-    showPlaybackMode = false,
-    playbackMode = 'sequential',
-    onPlaybackModeChange,
-    onPlaybackModeHelpClick,
     saving = false,
     saved = false,
     hasChanges = false,
@@ -159,75 +137,6 @@ export function ContentItemsPanel({
                                 </>
                             )}
                         </div>
-                    )}
-
-                    {/* Playback Mode Toggle (only for playlists) */}
-                    {showPlaybackMode && onPlaybackModeChange && (
-                        <>
-                            <Select
-                                value={playbackMode}
-                                onValueChange={(v) =>
-                                    onPlaybackModeChange(v as PlaybackMode)
-                                }
-                            >
-                                <SelectTrigger className="h-8 w-40 text-xs">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="sequential">
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex gap-0.5">
-                                                <div className="h-2 w-2 rounded-sm bg-blue-500"></div>
-                                                <div className="h-2 w-2 rounded-sm bg-blue-500"></div>
-                                                <div className="h-2 w-2 rounded-sm bg-green-500"></div>
-                                            </div>
-                                            {t('playlists.sequential')}
-                                        </div>
-                                    </SelectItem>
-                                    <SelectItem value="interleaved">
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex gap-0.5">
-                                                <div className="h-2 w-2 rounded-sm bg-blue-500"></div>
-                                                <div className="h-2 w-2 rounded-sm bg-green-500"></div>
-                                                <div className="h-2 w-2 rounded-sm bg-blue-500"></div>
-                                            </div>
-                                            {t('playlists.interleaved')}
-                                        </div>
-                                    </SelectItem>
-                                    <SelectItem value="auto">
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex gap-0.5">
-                                                <div className="h-2 w-2 rounded-sm bg-blue-500"></div>
-                                                <div className="h-2 w-2 rounded-sm bg-blue-500"></div>
-                                                <div className="h-2 w-2 rounded-sm bg-green-500"></div>
-                                                <div className="h-2 w-2 rounded-sm bg-blue-500"></div>
-                                            </div>
-                                            {t('playlists.proportional')}
-                                        </div>
-                                    </SelectItem>
-                                    <SelectItem value="random">
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex gap-0.5">
-                                                <div className="h-2 w-2 rounded-sm bg-green-500"></div>
-                                                <div className="h-2 w-2 rounded-sm bg-blue-500"></div>
-                                                <div className="h-2 w-2 rounded-sm bg-purple-500"></div>
-                                            </div>
-                                            {t('playlists.random')}
-                                        </div>
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                            {onPlaybackModeHelpClick && (
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                                    onClick={onPlaybackModeHelpClick}
-                                >
-                                    <HelpCircle className="h-4 w-4" />
-                                </Button>
-                            )}
-                        </>
                     )}
 
                     <Button

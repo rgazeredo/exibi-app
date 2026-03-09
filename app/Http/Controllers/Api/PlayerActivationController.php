@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Media;
 use App\Models\PendingPlayerActivation;
 use App\Models\Player;
-use App\Models\PlayerLayout;
 use App\Models\Playlist;
 use App\Models\SystemEvent;
 use App\Services\PlaylistService;
@@ -133,117 +132,19 @@ class PlayerActivationController extends Controller
         // WebSocket config for real-time communication (allows existing players to update config)
         $webSocketConfig = $webSocketService->getConfig();
 
-        // Check if player has a scheduled layout (via group)
-        $scheduledLayout = $player->getActiveScheduledLayout();
+        // Get player's assigned layout
+        $layout = $player->getEffectiveLayout();
 
-        if ($scheduledLayout && $scheduledLayout->layout) {
-            return $this->buildLayoutResponse($player, $scheduledLayout, $playlistService, $splashScreenUrl, $webSocketConfig, $request);
+        if ($layout) {
+            return $this->buildLegacyLayoutResponse($player, $layout, $playlistService, $splashScreenUrl, $webSocketConfig, $request);
         }
 
-        // Fallback to legacy layout (for groups that haven't been migrated yet)
-        $legacyLayout = $player->playerGroup?->layout;
-        if ($legacyLayout) {
-            return $this->buildLegacyLayoutResponse($player, $legacyLayout, $playlistService, $splashScreenUrl, $webSocketConfig, $request);
-        }
-
-        // Legacy mode - single playlist
+        // No layout assigned
         return $this->buildLegacyPlaylistResponse($player, $playlistService, $splashScreenUrl, $webSocketConfig, $request);
     }
 
     /**
-     * Build response with scheduled layout and multiple regions.
-     * Uses the PlayerLayout to get regions_overlay and region playlists.
-     */
-    private function buildLayoutResponse(
-        Player $player,
-        PlayerLayout $scheduledLayout,
-        PlaylistService $playlistService,
-        ?string $splashScreenUrl,
-        array $webSocketConfig,
-        Request $request
-    ): JsonResponse {
-        $layout = $scheduledLayout->layout;
-
-        // Load regions
-        $layout->load('regions');
-
-        $regionsData = $layout->regions->map(function ($region) use ($player, $scheduledLayout, $playlistService) {
-            // Get playlist for this region from the scheduled layout
-            // Player-level override still takes priority
-            $playerAssignment = $player->regionPlaylists()
-                ->where('layout_region_id', $region->id)
-                ->first();
-
-            // Get region assignment from scheduled layout for playlist and scale_type
-            $regionAssignment = $scheduledLayout->regionPlaylists()
-                ->where('layout_region_id', $region->id)
-                ->first();
-
-            $playlist = $playerAssignment
-                ? $playerAssignment->playlist
-                : $regionAssignment?->playlist;
-
-            // Get scale_type from region assignment, default to 'aspect'
-            $scaleType = $regionAssignment?->scale_type ?? 'aspect';
-
-            $playlistData = null;
-            if ($playlist) {
-                // Load playlist items
-                $playlist->load([
-                    'activeItems.media',
-                    'activeItems.widget.currentMedia',
-                    'activeItems.childPlaylist.activeItems.media',
-                    'activeItems.childPlaylist.activeItems.widget.currentMedia',
-                ]);
-
-                $playlistData = [
-                    'id' => $playlist->id,
-                    'name' => $playlist->name,
-                    'items' => $playlistService->getAllItemsForPlayer($playlist),
-                ];
-            }
-
-            return [
-                'id' => $region->id,
-                'name' => $region->name,
-                'x_percent' => (float) $region->x_percent,
-                'y_percent' => (float) $region->y_percent,
-                'width_percent' => (float) $region->width_percent,
-                'height_percent' => (float) $region->height_percent,
-                'is_main' => $region->is_main,
-                'scale_type' => $scaleType,
-                'playlist' => $playlistData,
-            ];
-        });
-
-        $config = $player->getEffectiveConfig();
-
-        return response()->json([
-            'server_time' => now()->getTimestampMs(),
-            'show_toast' => $request->input('show_toast', false),
-            'splash_screen_url' => $splashScreenUrl,
-            'config' => $config,
-            // Operating hours status (new system)
-
-            // Backwards compatibility
-
-            'kiosk_settings' => $player->tenant?->getKioskSettings(),
-            'layout' => [
-                'id' => $layout->id,
-                'name' => $layout->name,
-                'orientation' => $layout->orientation,
-                'regions_overlay' => $scheduledLayout->regions_overlay,
-                'regions' => $regionsData,
-            ],
-            'playlist' => null, // Null when using layout
-            // WebSocket config for real-time commands (allows existing players to update config)
-            'websocket' => $webSocketConfig,
-        ]);
-    }
-
-    /**
-     * Build response with legacy layout (before scheduled layouts migration).
-     * Uses group's direct layout_id and region_playlists.
+     * Build response with layout and region playlists.
      */
     private function buildLegacyLayoutResponse(
         Player $player,
@@ -257,7 +158,11 @@ class PlayerActivationController extends Controller
         $layout->load('regions');
 
         $regionsData = $layout->regions->map(function ($region) use ($player, $playlistService) {
-            $playlist = $player->getEffectivePlaylistForRegion($region);
+            $regionPlaylist = $player->regionPlaylists()
+                ->where('layout_region_id', $region->id)
+                ->with('playlist')
+                ->first();
+            $playlist = $regionPlaylist?->playlist;
 
             $playlistData = null;
             if ($playlist) {

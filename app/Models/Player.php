@@ -28,7 +28,6 @@ class Player extends Model
         'config',
         'downloads_status',
         'last_seen_at',
-        'is_active',
         'last_screenshot_url',
         'last_screenshot_at',
         'layout_id',
@@ -43,7 +42,6 @@ class Player extends Model
             'downloads_status' => 'array',
             'last_seen_at' => 'datetime',
             'last_screenshot_at' => 'datetime',
-            'is_active' => 'boolean',
         ];
     }
 
@@ -124,11 +122,6 @@ class Player extends Model
     public function playbackLogs(): HasMany
     {
         return $this->hasMany(PlaybackLog::class);
-    }
-
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
     }
 
     public function scopeOnline($query, int $minutes = 5)

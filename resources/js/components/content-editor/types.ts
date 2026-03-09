@@ -14,7 +14,6 @@ import {
 export type { ScheduleData, ScheduleMode, ScheduleSlot, ScheduleType };
 
 // Content types
-export type PlaybackMode = 'sequential' | 'interleaved' | 'auto' | 'random';
 export type ContentType = 'playlist' | 'media' | 'widget';
 
 // ============================================================================
@@ -141,11 +140,6 @@ export interface ContentEditorProps {
     tabs?: TabsConfig;
     rightPanelTitle?: string;
 
-    // Playback mode (for playlists)
-    showPlaybackMode?: boolean;
-    playbackMode?: PlaybackMode;
-    onPlaybackModeChange?: (mode: PlaybackMode) => void;
-
     // Optional features
     showDurationEditor?: boolean;
     showGroupPlacement?: boolean;
@@ -210,12 +204,6 @@ export interface ContentItemsPanelProps {
     onRemove: (index: number) => void;
     onOpenDuration?: (index: number) => void;
     onOpenSchedule: (index: number) => void;
-
-    // Playback mode
-    showPlaybackMode?: boolean;
-    playbackMode?: PlaybackMode;
-    onPlaybackModeChange?: (mode: PlaybackMode) => void;
-    onPlaybackModeHelpClick?: () => void;
 
     // Save
     saving?: boolean;

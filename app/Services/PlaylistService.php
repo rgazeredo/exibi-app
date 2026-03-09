@@ -418,13 +418,7 @@ class PlaylistService
                     return false;
                 }
 
-                // Already added to this parent
-                $alreadyAdded = PlaylistItem::where('playlist_id', $parent->id)
-                    ->where('item_type', 'playlist')
-                    ->where('item_id', $playlist->id)
-                    ->exists();
-
-                return ! $alreadyAdded;
+                return true;
             });
     }
 
@@ -449,7 +443,7 @@ class PlaylistService
     public function getPlaylistStructure(Playlist $playlist): array
     {
         $items = $playlist->items()
-            ->with(['media', 'childPlaylist', 'widget.currentMedia'])
+            ->with(['media', 'childPlaylist.items.media', 'childPlaylist.items.widget.currentMedia', 'widget.currentMedia'])
             ->get();
 
         // Get tenant timezone for display conversion
@@ -504,11 +498,41 @@ class PlaylistService
                     'thumbnail_url' => $item->widget->currentMedia?->getThumbnailUrl(),
                 ];
             } elseif ($item->isPlaylist() && $item->childPlaylist) {
+                $nestedItems = $item->childPlaylist->items->map(function ($nestedItem) {
+                    $nested = [
+                        'id' => $nestedItem->id,
+                        'item_type' => $nestedItem->item_type,
+                        'item_id' => $nestedItem->item_id,
+                        'position' => $nestedItem->position,
+                    ];
+
+                    if ($nestedItem->item_type === 'media' && $nestedItem->media) {
+                        $nested['media'] = [
+                            'id' => $nestedItem->media->id,
+                            'title' => $nestedItem->media->title,
+                            'type' => $nestedItem->media->type,
+                            'thumbnail_url' => $nestedItem->media->getThumbnailUrl(),
+                            'duration_seconds' => $nestedItem->media->duration_seconds,
+                        ];
+                    } elseif ($nestedItem->item_type === 'widget' && $nestedItem->widget) {
+                        $nested['widget'] = [
+                            'id' => $nestedItem->widget->id,
+                            'name' => $nestedItem->widget->name,
+                            'widget_type' => $nestedItem->widget->widget_type,
+                            'thumbnail_url' => $nestedItem->widget->currentMedia?->getThumbnailUrl(),
+                            'duration_seconds' => $nestedItem->widget->getEffectiveDuration(),
+                        ];
+                    }
+
+                    return $nested;
+                })->toArray();
+
                 $data['playlist'] = [
                     'id' => $item->childPlaylist->id,
                     'name' => $item->childPlaylist->name,
                     'media_count' => $item->childPlaylist->getMediaCount(),
                     'total_duration' => $item->childPlaylist->getTotalDuration(),
+                    'items' => $nestedItems,
                 ];
             }
 

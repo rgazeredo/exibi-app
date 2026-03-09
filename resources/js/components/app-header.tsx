@@ -92,7 +92,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                 </SheetTitle>
                                 <SheetHeader className="flex justify-start text-left">
                                     <img
-                                        src="/images/exibi.png"
+                                        src="/images/exibi-horizontal.png"
                                         alt="Exibi"
                                         className="h-6 w-auto"
                                     />

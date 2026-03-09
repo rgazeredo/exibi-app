@@ -58,11 +58,6 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-interface PlayerGroup {
-    id: string;
-    name: string;
-}
-
 interface Player {
     id: string;
     name: string;
@@ -105,7 +100,6 @@ interface PaginationMeta {
 interface LogsPageProps {
     filters: {
         date_range?: string;
-        player_group_id?: string;
         player_id?: string;
         media_id?: string;
         tag_id?: string;
@@ -113,7 +107,6 @@ interface LogsPageProps {
         date_from?: string;
         date_to?: string;
     };
-    playerGroups: PlayerGroup[];
     players: Player[];
     media: Media[];
     tags: Tag[];
@@ -121,7 +114,6 @@ interface LogsPageProps {
 
 export default function LogsPage({
     filters,
-    playerGroups,
     players,
     media,
     tags,
@@ -130,9 +122,6 @@ export default function LogsPage({
 
     // Filter states
     const [dateRange, setDateRange] = useState(filters.date_range || '7d');
-    const [playerGroupId, setPlayerGroupId] = useState(
-        filters.player_group_id || '_all',
-    );
     const [playerId, setPlayerId] = useState(filters.player_id || '_all');
     const [mediaId, setMediaId] = useState(filters.media_id || '_all');
     const [tagId, setTagId] = useState(filters.tag_id || '_all');
@@ -141,7 +130,6 @@ export default function LogsPage({
     const [dateTo, setDateTo] = useState(filters.date_to || '');
 
     // Combobox open states
-    const [openPlayerGroup, setOpenPlayerGroup] = useState(false);
     const [openPlayer, setOpenPlayer] = useState(false);
     const [openMedia, setOpenMedia] = useState(false);
     const [openTag, setOpenTag] = useState(false);
@@ -182,8 +170,6 @@ export default function LogsPage({
                     params.set('date_range', dateRange);
                 }
 
-                if (playerGroupId && playerGroupId !== '_all')
-                    params.set('player_group_id', playerGroupId);
                 if (playerId && playerId !== '_all')
                     params.set('player_id', playerId);
                 if (mediaId && mediaId !== '_all')
@@ -218,7 +204,6 @@ export default function LogsPage({
             dateRange,
             dateFrom,
             dateTo,
-            playerGroupId,
             playerId,
             mediaId,
             tagId,
@@ -233,7 +218,6 @@ export default function LogsPage({
         dateRange,
         dateFrom,
         dateTo,
-        playerGroupId,
         playerId,
         mediaId,
         tagId,
@@ -259,7 +243,6 @@ export default function LogsPage({
 
     const clearFilters = () => {
         setDateRange('7d');
-        setPlayerGroupId('_all');
         setPlayerId('_all');
         setMediaId('_all');
         setTagId('_all');
@@ -269,7 +252,6 @@ export default function LogsPage({
     };
 
     const hasActiveFilters =
-        (playerGroupId && playerGroupId !== '_all') ||
         (playerId && playerId !== '_all') ||
         (mediaId && mediaId !== '_all') ||
         (tagId && tagId !== '_all') ||
@@ -277,8 +259,6 @@ export default function LogsPage({
         dateRange === 'custom';
 
     // Helper to get selected item names
-    const getSelectedPlayerGroupName = () =>
-        playerGroups.find((g) => g.id === playerGroupId)?.name;
     const getSelectedPlayerName = () =>
         players.find((p) => p.id === playerId)?.name;
     const getSelectedMediaTitle = () =>
@@ -505,110 +485,6 @@ export default function LogsPage({
                                     </div>
                                 </>
                             )}
-
-                            {/* Player Group Filter */}
-                            <div className="space-y-2">
-                                <Label>{t('reports.playerGroup')}</Label>
-                                <Popover
-                                    open={openPlayerGroup}
-                                    onOpenChange={setOpenPlayerGroup}
-                                >
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            role="combobox"
-                                            aria-expanded={openPlayerGroup}
-                                            className="w-full justify-between font-normal"
-                                        >
-                                            <span className="truncate">
-                                                {playerGroupId === '_all'
-                                                    ? t(
-                                                          'reports.allPlayerGroups',
-                                                      )
-                                                    : getSelectedPlayerGroupName() ||
-                                                      t(
-                                                          'reports.allPlayerGroups',
-                                                      )}
-                                            </span>
-                                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent
-                                        className="w-[250px] p-0"
-                                        align="start"
-                                    >
-                                        <Command>
-                                            <CommandInput
-                                                placeholder={t(
-                                                    'reports.searchPlayerGroup',
-                                                )}
-                                            />
-                                            <CommandList>
-                                                <CommandEmpty>
-                                                    {t(
-                                                        'reports.noPlayerGroupFound',
-                                                    )}
-                                                </CommandEmpty>
-                                                <CommandGroup>
-                                                    <CommandItem
-                                                        value="_all"
-                                                        onSelect={() => {
-                                                            setPlayerGroupId(
-                                                                '_all',
-                                                            );
-                                                            setOpenPlayerGroup(
-                                                                false,
-                                                            );
-                                                        }}
-                                                    >
-                                                        <Check
-                                                            className={cn(
-                                                                'mr-2 h-4 w-4',
-                                                                playerGroupId ===
-                                                                    '_all'
-                                                                    ? 'opacity-100'
-                                                                    : 'opacity-0',
-                                                            )}
-                                                        />
-                                                        {t(
-                                                            'reports.allPlayerGroups',
-                                                        )}
-                                                    </CommandItem>
-                                                    {playerGroups.map(
-                                                        (group) => (
-                                                            <CommandItem
-                                                                key={group.id}
-                                                                value={
-                                                                    group.name
-                                                                }
-                                                                onSelect={() => {
-                                                                    setPlayerGroupId(
-                                                                        group.id,
-                                                                    );
-                                                                    setOpenPlayerGroup(
-                                                                        false,
-                                                                    );
-                                                                }}
-                                                            >
-                                                                <Check
-                                                                    className={cn(
-                                                                        'mr-2 h-4 w-4',
-                                                                        playerGroupId ===
-                                                                            group.id
-                                                                            ? 'opacity-100'
-                                                                            : 'opacity-0',
-                                                                    )}
-                                                                />
-                                                                {group.name}
-                                                            </CommandItem>
-                                                        ),
-                                                    )}
-                                                </CommandGroup>
-                                            </CommandList>
-                                        </Command>
-                                    </PopoverContent>
-                                </Popover>
-                            </div>
 
                             {/* Player Filter */}
                             <div className="space-y-2">
