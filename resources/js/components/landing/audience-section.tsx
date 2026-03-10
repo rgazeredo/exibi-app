@@ -1,11 +1,11 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-    Lightbulb,
-    Users,
-    HeartHandshake,
-    MessageCircle,
     ArrowRight,
+    HeartHandshake,
+    Lightbulb,
+    MessageCircle,
+    Users,
 } from 'lucide-react';
 
 const pillars = [
@@ -51,7 +51,7 @@ export default function AudienceSection() {
                         </span>
                     </h2>
                     <p className="text-lg text-slate-600">
-                        A AZSign não nasceu de uma ideia abstrata. Nasceu da
+                        A Exibi não nasceu de uma ideia abstrata. Nasceu da
                         experiência prática, de anos resolvendo problemas reais
                         e ouvindo quem opera mídia indoor todos os dias.
                     </p>
@@ -84,7 +84,7 @@ export default function AudienceSection() {
                 {/* CTA - Open communication */}
                 <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 p-8 lg:p-12">
                     {/* Background decoration */}
-                    <div className="absolute right-0 top-0 h-64 w-64 -translate-y-1/2 translate-x-1/2 rounded-full bg-amber-500/10 blur-3xl" />
+                    <div className="absolute top-0 right-0 h-64 w-64 translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/10 blur-3xl" />
                     <div className="absolute bottom-0 left-0 h-48 w-48 -translate-x-1/2 translate-y-1/2 rounded-full bg-blue-500/10 blur-3xl" />
 
                     <div className="relative flex flex-col items-center gap-8 lg:flex-row lg:justify-between">

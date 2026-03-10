@@ -36,7 +36,7 @@ return [
     ],
 
     'widgets' => [
-        // URL of the AZSign Widgets API for video generation
+        // URL of the Exibi Widgets API for video generation
         'url' => env('WIDGETS_API_URL', 'http://localhost:3000'),
         // Webhook URL that the Widgets API will call when video is ready
         'webhook_url' => env('WIDGETS_WEBHOOK_URL'),

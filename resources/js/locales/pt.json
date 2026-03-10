@@ -957,7 +957,7 @@
         "selectTimezone": "Selecionar fuso horário",
         "timezoneDesc": "Usado para agendamento de conteúdo nos players.",
         "removeSplashTitle": "Remover Tela de Splash",
-        "removeSplashDesc": "Tem certeza que deseja remover a tela de splash? Os players exibirão a splash padrão do AZSign até que uma nova imagem seja enviada.",
+        "removeSplashDesc": "Tem certeza que deseja remover a tela de splash? Os players exibirão a splash padrão do Exibi até que uma nova imagem seja enviada.",
         "settingsNav": {
             "general": "Geral",
             "users": "Usuários",

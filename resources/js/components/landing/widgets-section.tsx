@@ -72,7 +72,7 @@ export default function WidgetsSection() {
                         </div>
 
                         <p className="mt-6 text-xs text-slate-500">
-                            Os widgets do AZSign são fornecidos pela{' '}
+                            Os widgets do Exibi são fornecidos pela{' '}
                             <a
                                 href="https://azcontent.com.br"
                                 target="_blank"

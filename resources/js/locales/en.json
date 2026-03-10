@@ -961,7 +961,7 @@
         "selectTimezone": "Select timezone",
         "timezoneDesc": "Used for scheduling content on player devices.",
         "removeSplashTitle": "Remove Splash Screen",
-        "removeSplashDesc": "Are you sure you want to remove the splash screen? Player devices will display the default AZSign splash until a new image is uploaded.",
+        "removeSplashDesc": "Are you sure you want to remove the splash screen? Player devices will display the default Exibi splash until a new image is uploaded.",
         "settingsNav": {
             "general": "General",
             "users": "Users",

@@ -1,6 +1,6 @@
 import '../css/app.css';
-import './i18n';
 import './echo'; // Initialize Laravel Echo for WebSocket
+import './i18n';
 
 import { createInertiaApp } from '@inertiajs/react';
 import axios from 'axios';
@@ -31,7 +31,7 @@ axios.interceptors.response.use(
     },
 );
 
-const appName = import.meta.env.VITE_APP_NAME || 'AZSign';
+const appName = import.meta.env.VITE_APP_NAME || 'Exibi';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
