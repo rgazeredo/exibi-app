@@ -794,26 +794,26 @@ regenerateTokenForm.post = (args: { player: string | { id: string } } | [player:
 regenerateToken.form = regenerateTokenForm
 
 /**
-* @see \App\Http\Controllers\PlayerController::refreshPlaylist
+* @see \App\Http\Controllers\PlayerController::refreshPlayer
 * @see app/Http/Controllers/PlayerController.php:413
 * @route '/players/{player}/refresh-playlist'
 */
-export const refreshPlaylist = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: refreshPlaylist.url(args, options),
+export const refreshPlayer = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: refreshPlayer.url(args, options),
     method: 'post',
 })
 
-refreshPlaylist.definition = {
+refreshPlayer.definition = {
     methods: ["post"],
     url: '/players/{player}/refresh-playlist',
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\PlayerController::refreshPlaylist
+* @see \App\Http\Controllers\PlayerController::refreshPlayer
 * @see app/Http/Controllers/PlayerController.php:413
 * @route '/players/{player}/refresh-playlist'
 */
-refreshPlaylist.url = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
+refreshPlayer.url = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { player: args }
     }
@@ -836,42 +836,42 @@ refreshPlaylist.url = (args: { player: string | { id: string } } | [player: stri
         : args.player,
     }
 
-    return refreshPlaylist.definition.url
+    return refreshPlayer.definition.url
             .replace('{player}', parsedArgs.player.toString())
             .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\PlayerController::refreshPlaylist
+* @see \App\Http\Controllers\PlayerController::refreshPlayer
 * @see app/Http/Controllers/PlayerController.php:413
 * @route '/players/{player}/refresh-playlist'
 */
-refreshPlaylist.post = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: refreshPlaylist.url(args, options),
+refreshPlayer.post = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: refreshPlayer.url(args, options),
     method: 'post',
 })
 
 /**
-* @see \App\Http\Controllers\PlayerController::refreshPlaylist
+* @see \App\Http\Controllers\PlayerController::refreshPlayer
 * @see app/Http/Controllers/PlayerController.php:413
 * @route '/players/{player}/refresh-playlist'
 */
-const refreshPlaylistForm = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: refreshPlaylist.url(args, options),
+const refreshPlayerForm = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: refreshPlayer.url(args, options),
     method: 'post',
 })
 
 /**
-* @see \App\Http\Controllers\PlayerController::refreshPlaylist
+* @see \App\Http\Controllers\PlayerController::refreshPlayer
 * @see app/Http/Controllers/PlayerController.php:413
 * @route '/players/{player}/refresh-playlist'
 */
-refreshPlaylistForm.post = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: refreshPlaylist.url(args, options),
+refreshPlayerForm.post = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: refreshPlayer.url(args, options),
     method: 'post',
 })
 
-refreshPlaylist.form = refreshPlaylistForm
+refreshPlayer.form = refreshPlayerForm
 
 /**
 * @see \App\Http\Controllers\PlayerController::refreshApp
@@ -1613,6 +1613,6 @@ replacePlayerForm.post = (args: { player: string | { id: string } } | [player: s
 
 replacePlayer.form = replacePlayerForm
 
-const PlayerController = { index, create, store, show, edit, update, destroy, search, regenerateToken, refreshPlaylist, refreshApp, reboot, requestScreenshot, screenshotStatus, currentlyPlaying, downloads, playbackLogs, replacePlayer }
+const PlayerController = { index, create, store, show, edit, update, destroy, search, regenerateToken, refreshPlayer, refreshApp, reboot, requestScreenshot, screenshotStatus, currentlyPlaying, downloads, playbackLogs, replacePlayer }
 
 export default PlayerController

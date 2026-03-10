@@ -41,20 +41,20 @@ class PlaylistController extends Controller
         $playlists = Playlist::query()
             ->with('tags')
             ->withCount(['media'])
-            ->when($request->search, fn ($q, $search) => $q->where('name', 'ilike', "%{$search}%"))
-            ->when($request->tag, fn ($q, $tagId) => $q->whereHas('tags', fn ($tq) => $tq->where('tags.id', $tagId)))
+            ->when($request->search, fn($q, $search) => $q->where('name', 'ilike', "%{$search}%"))
+            ->when($request->tag, fn($q, $tagId) => $q->whereHas('tags', fn($tq) => $tq->where('tags.id', $tagId)))
             ->orderBy($sortField, $sortDirection)
             ->paginate($perPage);
 
         return response()->json([
-            'data' => $playlists->through(fn ($playlist) => [
+            'data' => $playlists->through(fn($playlist) => [
                 'id' => $playlist->id,
                 'name' => $playlist->name,
                 'description' => $playlist->description,
                 'is_active' => $playlist->is_active,
                 'media_count' => $playlist->media_count,
                 'players_count' => $playlist->getEffectivePlayersCount(),
-                'tags' => $playlist->tags->map(fn ($tag) => [
+                'tags' => $playlist->tags->map(fn($tag) => [
                     'id' => $tag->id,
                     'name' => $tag->name,
                     'slug' => $tag->slug,
@@ -150,7 +150,7 @@ class PlaylistController extends Controller
                 'total_media_count' => $playlistService->getTotalMediaCount($playlist),
                 'can_contain_subplaylists' => $playlist->canContainSubPlaylists(),
                 'created_at' => $playlist->created_at->toDateTimeString(),
-                'tags' => $playlist->tags->map(fn ($tag) => [
+                'tags' => $playlist->tags->map(fn($tag) => [
                     'id' => $tag->id,
                     'name' => $tag->name,
                     'slug' => $tag->slug,
@@ -158,14 +158,14 @@ class PlaylistController extends Controller
                 ]),
                 'items' => $playlistService->getPlaylistStructure($playlist),
             ],
-            'availablePlaylists' => $availablePlaylists->map(fn ($p) => [
+            'availablePlaylists' => $availablePlaylists->map(fn($p) => [
                 'id' => $p->id,
                 'name' => $p->name,
                 'media_count' => $p->getMediaCount(),
                 'total_duration' => $p->getTotalDuration(),
                 'items' => $this->getPlaylistNestedItems($p),
             ])->values(),
-            'availableWidgets' => $availableWidgets->map(fn ($w) => [
+            'availableWidgets' => $availableWidgets->map(fn($w) => [
                 'id' => $w->id,
                 'name' => $w->name,
                 'widget_type' => $w->widget_type,
@@ -478,7 +478,7 @@ class PlaylistController extends Controller
                 'name' => $playlist->name,
                 'total_duration' => $playlist->getTotalDuration(),
                 'total_media_count' => $playlistService->getTotalMediaCount($playlist),
-                'media' => $flattenedMedia->map(fn ($item, $index) => [
+                'media' => $flattenedMedia->map(fn($item, $index) => [
                     'id' => $item['media']->id,
                     'title' => $item['media']->title,
                     'type' => $item['media']->type,
@@ -519,14 +519,14 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Send refresh_playlist command to all players using this playlist.
+     * Send refresh_player command to all players using this playlist.
      */
     public function refreshPlayers(Playlist $playlist, WebSocketService $webSocketService): JsonResponse
     {
         // Get all players using this playlist via their layouts
         $players = Player::query()
             ->where('tenant_id', $playlist->tenant_id)
-            ->whereHas('regionPlaylists', fn ($q) => $q->where('playlist_id', $playlist->id))
+            ->whereHas('regionPlaylists', fn($q) => $q->where('playlist_id', $playlist->id))
             ->get();
 
         if ($players->isEmpty()) {
@@ -537,12 +537,12 @@ class PlaylistController extends Controller
             ]);
         }
 
-        $results = $webSocketService->sendCommandToMany($players, 'refresh_playlist');
+        $results = $webSocketService->sendCommandToMany($players, 'refresh_player');
 
         return response()->json([
             'success' => true,
             'results' => $results,
-            'updated' => collect($results)->filter(fn ($success) => $success === true)->count(),
+            'updated' => collect($results)->filter(fn($success) => $success === true)->count(),
             'total' => $players->count(),
         ]);
     }

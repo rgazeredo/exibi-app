@@ -136,7 +136,7 @@ class MediaController extends Controller
                 'transcoding_status' => $media->getTranscodingStatus(),
                 'transcoded_versions' => $transcodedVersions,
                 'metadata' => $media->metadata,
-                'tags' => $media->tags->map(fn ($tag) => [
+                'tags' => $media->tags->map(fn($tag) => [
                     'id' => $tag->id,
                     'name' => $tag->name,
                     'slug' => $tag->slug,
@@ -199,7 +199,7 @@ class MediaController extends Controller
         $affectedPlayerIds = $this->collectAffectedPlayers(collect([$media]));
 
         // Delete files from storage
-        $this->mediaService->deleteMediaFiles($media);
+        $this->mediaService->deleteAllMediaFiles($media);
 
         $media->delete();
 
@@ -237,14 +237,14 @@ class MediaController extends Controller
 
                 return $q->whereIn('id', $ids);
             })
-            ->when($request->search, fn ($q, $search) => $q->where('title', 'ilike', "%{$search}%"))
-            ->when($request->type && $request->type !== 'all', fn ($q) => $q->where('type', $request->type))
-            ->when($request->tag, fn ($q, $tagId) => $q->whereHas('tags', fn ($tq) => $tq->where('tags.id', $tagId)))
+            ->when($request->search, fn($q, $search) => $q->where('title', 'ilike', "%{$search}%"))
+            ->when($request->type && $request->type !== 'all', fn($q) => $q->where('type', $request->type))
+            ->when($request->tag, fn($q, $tagId) => $q->whereHas('tags', fn($tq) => $tq->where('tags.id', $tagId)))
             ->orderBy($sortField, $sortDirection)
             ->paginate($perPage);
 
         return response()->json([
-            'data' => $media->through(fn ($item) => [
+            'data' => $media->through(fn($item) => [
                 'id' => $item->id,
                 'title' => $item->title,
                 'type' => $item->type,
@@ -257,7 +257,7 @@ class MediaController extends Controller
                 'orientation' => $item->isPortrait() ? 'portrait' : 'landscape',
                 'thumbnail_url' => $item->getThumbnailUrl(),
                 'url' => $item->getPublicUrl(),
-                'tags' => $item->tags->map(fn ($tag) => [
+                'tags' => $item->tags->map(fn($tag) => [
                     'id' => $tag->id,
                     'name' => $tag->name,
                     'slug' => $tag->slug,
@@ -335,7 +335,7 @@ class MediaController extends Controller
         $deleted = 0;
         foreach ($mediaItems as $media) {
             // Delete files from storage
-            $this->mediaService->deleteMediaFiles($media);
+            $this->mediaService->deleteAllMediaFiles($media);
             $media->delete();
             $deleted++;
         }
@@ -463,7 +463,7 @@ class MediaController extends Controller
             ->get();
 
         if ($players->isNotEmpty()) {
-            $webSocketService->sendCommandToMany($players, 'refresh_playlist');
+            $webSocketService->sendCommandToMany($players, 'refresh_player');
         }
     }
 }

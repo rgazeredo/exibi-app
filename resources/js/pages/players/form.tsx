@@ -23,7 +23,7 @@ import { useT } from '@/hooks/use-translations';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, useForm } from '@inertiajs/react';
-import { Info, MonitorPlay, Save, X } from 'lucide-react';
+import { Info, Monitor, MonitorPlay, Save, Smartphone, X } from 'lucide-react';
 import { useState } from 'react';
 
 interface Layout {
@@ -83,10 +83,26 @@ export default function PlayerForm({
     const { t } = useT();
 
     const ORIENTATIONS = [
-        { value: 'landscape', label: t('players.landscape') },
-        { value: 'landscape_inverted', label: t('players.landscape_inverted') },
-        { value: 'portrait_left', label: t('players.portrait_left') },
-        { value: 'portrait_right', label: t('players.portrait_right') },
+        {
+            value: 'landscape',
+            label: t('players.landscape'),
+            icon: <Monitor className="h-4 w-4" />,
+        },
+        {
+            value: 'landscape_inverted',
+            label: t('players.landscape_inverted'),
+            icon: <Monitor className="h-4 w-4 rotate-180" />,
+        },
+        {
+            value: 'portrait_left',
+            label: t('players.portrait_left'),
+            icon: <Smartphone className="h-4 w-4 -rotate-90" />,
+        },
+        {
+            value: 'portrait_right',
+            label: t('players.portrait_right'),
+            icon: <Smartphone className="h-4 w-4 rotate-90" />,
+        },
     ];
 
     const defaultLayout = !player
@@ -390,7 +406,14 @@ export default function PlayerForm({
                                                                 orientation.value
                                                             }
                                                         >
-                                                            {orientation.label}
+                                                            <span className="flex items-center gap-2">
+                                                                {
+                                                                    orientation.icon
+                                                                }
+                                                                {
+                                                                    orientation.label
+                                                                }
+                                                            </span>
                                                         </SelectItem>
                                                     ),
                                                 )}

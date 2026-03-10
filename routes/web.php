@@ -49,7 +49,7 @@ if ($isSubdomainMode) {
     // Production: redirect main domain to app subdomain (temporary)
     Route::domain($appDomain)->group(function () {
         Route::get('/', function () {
-            return redirect('https://app.'.config('app.domain'));
+            return redirect('https://app.' . config('app.domain'));
         })->name('landing.redirect');
 
         // Landing page preview at /beta
@@ -143,7 +143,7 @@ $adminRoutes = function () {
         Route::get('api/players/search', [PlayerController::class, 'search'])->name('players.search');
         Route::post('players/{player}/regenerate-token', [PlayerController::class, 'regenerateToken'])
             ->name('players.regenerate-token');
-        Route::post('players/{player}/refresh-playlist', [PlayerController::class, 'refreshPlaylist'])
+        Route::post('players/{player}/refresh-playlist', [PlayerController::class, 'refreshPlayer'])
             ->name('players.refresh-playlist');
         Route::post('players/{player}/refresh-app', [PlayerController::class, 'refreshApp'])
             ->name('players.refresh-app');
@@ -247,10 +247,10 @@ $adminRoutes = function () {
 
 if ($isSubdomainMode) {
     // Production: admin panel on app.{domain} subdomain
-    Route::domain('app.'.$appDomain)->group($adminRoutes);
+    Route::domain('app.' . $appDomain)->group($adminRoutes);
 } else {
     // Local: all routes at root level
     $adminRoutes();
 }
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

@@ -54,6 +54,6 @@ class RefreshPlayersPlaylist implements ShouldQueue
             'player_ids' => $this->playerIds,
         ]);
 
-        $webSocketService->sendCommandToMany($players, 'refresh_playlist');
+        $webSocketService->sendCommandToMany($players, 'refresh_player');
     }
 }

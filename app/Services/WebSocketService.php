@@ -29,7 +29,7 @@ class WebSocketService
 
             return true;
         } catch (\Exception $e) {
-            Log::error('WebSocket command failed: '.$e->getMessage(), [
+            Log::error('WebSocket command failed: ' . $e->getMessage(), [
                 'player_id' => $player->id,
                 'command' => $command,
                 'exception' => $e,
@@ -42,9 +42,9 @@ class WebSocketService
     /**
      * Envia comando para atualizar a playlist.
      */
-    public function refreshPlaylist(Player $player, bool $showToast = false): bool
+    public function refreshPlayer(Player $player, bool $showToast = false): bool
     {
-        return $this->sendCommand($player, 'refresh_playlist', [
+        return $this->sendCommand($player, 'refresh_player', [
             'show_toast' => $showToast,
         ]);
     }
@@ -94,10 +94,10 @@ class WebSocketService
         $port = env('PUSHER_PUBLIC_PORT', env('PUSHER_PORT', 6001));
 
         // Se porta for 443 (HTTPS padrão), não incluir na URL
-        $portSuffix = ($port == 443 || $port == 80) ? '' : ':'.$port;
+        $portSuffix = ($port == 443 || $port == 80) ? '' : ':' . $port;
 
         return [
-            'url' => $wsScheme.'://'.$host.$portSuffix,
+            'url' => $wsScheme . '://' . $host . $portSuffix,
             'key' => env('PUSHER_APP_KEY'),
         ];
     }

@@ -1,7 +1,6 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
-/**
-* @see \App\Http\Controllers\Api\SoketiWebhookController::handle
-* @see app/Http/Controllers/Api/SoketiWebhookController.php:26
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
+26
 * @route '/api/webhooks/soketi'
 */
 export const handle = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({

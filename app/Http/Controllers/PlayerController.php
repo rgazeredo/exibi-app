@@ -43,10 +43,10 @@ class PlayerController extends Controller
                 'tags',
                 'layout',
             ])
-            ->when($request->search, fn ($q, $search) => $q->where('name', 'ilike', "%{$search}%"))
-            ->when($request->status === 'online', fn ($q) => $q->online())
-            ->when($request->status === 'offline', fn ($q) => $q->offline())
-            ->when($request->tag, fn ($q, $tagId) => $q->whereHas('tags', fn ($tq) => $tq->where('tags.id', $tagId)));
+            ->when($request->search, fn($q, $search) => $q->where('name', 'ilike', "%{$search}%"))
+            ->when($request->status === 'online', fn($q) => $q->online())
+            ->when($request->status === 'offline', fn($q) => $q->offline())
+            ->when($request->tag, fn($q, $tagId) => $q->whereHas('tags', fn($tq) => $tq->where('tags.id', $tagId)));
 
         // Handle is_online sorting with raw SQL (computed from last_seen_at)
         if ($sortField === 'is_online') {
@@ -58,14 +58,14 @@ class PlayerController extends Controller
         $players = $query->paginate($perPage);
 
         return response()->json([
-            'data' => $players->through(fn ($player) => [
+            'data' => $players->through(fn($player) => [
                 'id' => $player->id,
                 'name' => $player->name,
                 'description' => $player->description,
                 'is_online' => $player->isOnline(),
                 'last_seen_at' => $player->last_seen_at?->diffForHumans(),
                 'effective_layout' => $this->getEffectiveLayoutInfo($player),
-                'tags' => $player->tags->map(fn ($tag) => [
+                'tags' => $player->tags->map(fn($tag) => [
                     'id' => $tag->id,
                     'name' => $tag->name,
                     'slug' => $tag->slug,
@@ -198,7 +198,7 @@ class PlayerController extends Controller
             ->latest('created_at')
             ->take(20)
             ->get()
-            ->map(fn ($hb) => [
+            ->map(fn($hb) => [
                 'id' => $hb->id,
                 'ip_address' => $hb->ip_address,
                 'app_version' => $hb->app_version,
@@ -218,7 +218,7 @@ class PlayerController extends Controller
                 'last_seen_at' => $player->last_seen_at?->diffForHumans(),
                 'last_seen_at_full' => $player->last_seen_at?->toIso8601String(),
                 'effective_layout' => $this->getEffectiveLayoutData($player),
-                'tags' => $player->tags->map(fn ($tag) => [
+                'tags' => $player->tags->map(fn($tag) => [
                     'id' => $tag->id,
                     'name' => $tag->name,
                     'slug' => $tag->slug,
@@ -258,13 +258,13 @@ class PlayerController extends Controller
                 'description' => $player->description,
                 'layout_id' => $player->layout_id,
                 'config' => $player->config,
-                'tags' => $player->tags->map(fn ($tag) => [
+                'tags' => $player->tags->map(fn($tag) => [
                     'id' => $tag->id,
                     'name' => $tag->name,
                     'slug' => $tag->slug,
                     'color' => $tag->color,
                 ]),
-                'region_playlists' => $player->regionPlaylists->map(fn ($rp) => [
+                'region_playlists' => $player->regionPlaylists->map(fn($rp) => [
                     'region_id' => $rp->layout_region_id,
                     'playlist_id' => $rp->playlist_id,
                 ])->toArray(),
@@ -406,18 +406,18 @@ class PlayerController extends Controller
     }
 
     /**
-     * Send refresh_playlist command to player via WebSocket.
+     * Send refresh_player command to player via WebSocket.
      *
      * Accepts optional show_toast parameter to display notification on player after refresh.
      */
-    public function refreshPlaylist(
+    public function refreshPlayer(
         Request $request,
         Player $player,
         WebSocketService $webSocketService
     ): JsonResponse {
         $showToast = $request->boolean('show_toast', false);
 
-        $success = $webSocketService->refreshPlaylist($player, $showToast);
+        $success = $webSocketService->refreshPlayer($player, $showToast);
 
         return response()->json([
             'success' => $success,
@@ -592,13 +592,13 @@ class PlayerController extends Controller
             ->orderBy('is_system', 'desc')
             ->orderBy('name')
             ->get()
-            ->map(fn ($layout) => [
+            ->map(fn($layout) => [
                 'id' => $layout->id,
                 'name' => $layout->name,
                 'description' => $layout->description,
                 'orientation' => $layout->orientation,
                 'is_system' => $layout->is_system,
-                'regions' => $layout->regions->map(fn ($region) => [
+                'regions' => $layout->regions->map(fn($region) => [
                     'id' => $region->id,
                     'name' => $region->name,
                     'x_percent' => $region->x_percent,
@@ -682,11 +682,11 @@ class PlayerController extends Controller
         }
 
         $playlists = $player->regionPlaylists
-            ->map(fn ($rp) => $rp->playlist)
+            ->map(fn($rp) => $rp->playlist)
             ->filter()
             ->unique('id')
             ->values()
-            ->map(fn ($playlist) => [
+            ->map(fn($playlist) => [
                 'id' => $playlist->id,
                 'name' => $playlist->name,
             ])
@@ -779,7 +779,7 @@ class PlayerController extends Controller
         }
 
         // Return the earliest next start
-        usort($nextStarts, fn ($a, $b) => $a->timestamp - $b->timestamp);
+        usort($nextStarts, fn($a, $b) => $a->timestamp - $b->timestamp);
 
         return $nextStarts[0];
     }
@@ -887,7 +887,7 @@ class PlayerController extends Controller
             ->latest('started_at')
             ->take(20)
             ->get()
-            ->map(fn ($log) => [
+            ->map(fn($log) => [
                 'id' => $log->id,
                 'media_title' => $log->media?->title,
                 'media_type' => $log->media?->type,

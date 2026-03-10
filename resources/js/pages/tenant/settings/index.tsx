@@ -1,5 +1,4 @@
 import InputError from '@/components/input-error';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -353,85 +352,6 @@ export default function TenantSettings({
                                         keys={['◀', '×5', '+', 'OK']}
                                         description="Resetar dispositivo"
                                         note="Remove ativação e configurações locais"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Chamador de Senha */}
-                            <div>
-                                <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold">
-                                    <span className="h-2 w-2 rounded-full bg-orange-500" />
-                                    Chamador de Senha
-                                    <Badge
-                                        variant="outline"
-                                        className="text-xs font-normal"
-                                    >
-                                        Requer habilitação
-                                    </Badge>
-                                </h3>
-                                <p className="mb-3 text-xs text-muted-foreground">
-                                    Funciona apenas quando "Chamador de Senha"
-                                    está habilitado nas configurações do grupo
-                                    ou player.
-                                </p>
-                                <div className="space-y-2">
-                                    <ShortcutRow
-                                        keys={['▲', '+', 'OK']}
-                                        description="Chamar próxima senha (incrementar)"
-                                    />
-                                    <ShortcutRow
-                                        keys={['▼', '+', 'OK']}
-                                        description="Decrementar senha"
-                                    />
-                                    <ShortcutRow
-                                        keys={['OK', '×3']}
-                                        description="Rechamar senha atual (sem incrementar)"
-                                    />
-                                    <ShortcutRow
-                                        keys={['◀', '×3', '+', 'OK']}
-                                        description="Zerar senha (volta para 0)"
-                                    />
-                                    <ShortcutRow
-                                        keys={['▶', '×3', '+', 'OK']}
-                                        description="Abrir configuração de senha"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Configuração de Senha */}
-                            <div>
-                                <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold">
-                                    <span className="h-2 w-2 rounded-full bg-green-500" />
-                                    Modo Configuração de Senha
-                                </h3>
-                                <p className="mb-3 text-xs text-muted-foreground">
-                                    Quando o overlay de configuração está aberto
-                                    (após ▶×3 + OK):
-                                </p>
-                                <div className="space-y-2">
-                                    <ShortcutRow
-                                        keys={['▲']}
-                                        description="Aumentar número"
-                                    />
-                                    <ShortcutRow
-                                        keys={['▼']}
-                                        description="Diminuir número"
-                                    />
-                                    <ShortcutRow
-                                        keys={['0-9']}
-                                        description="Digitar número diretamente (até 4 dígitos)"
-                                    />
-                                    <ShortcutRow
-                                        keys={['DEL']}
-                                        description="Apagar último dígito"
-                                    />
-                                    <ShortcutRow
-                                        keys={['OK']}
-                                        description="Confirmar nova senha"
-                                    />
-                                    <ShortcutRow
-                                        keys={['BACK']}
-                                        description="Cancelar"
                                     />
                                 </div>
                             </div>

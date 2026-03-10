@@ -14,12 +14,12 @@ use Illuminate\Queue\SerializesModels;
  * Evento para enviar comandos para players via WebSocket.
  *
  * Comandos suportados:
- * - refresh_playlist: Recarrega a playlist
+ * - refresh_player: Recarrega a playlist
  * - refresh_app: Verifica atualizações do app
  * - reboot: Reinicia o player
  *
  * Uso:
- * event(new PlayerCommand($player, 'refresh_playlist', ['show_toast' => true]));
+ * event(new PlayerCommand($player, 'refresh_player', ['show_toast' => true]));
  */
 class PlayerCommand implements ShouldBroadcastNow
 {
@@ -39,7 +39,7 @@ class PlayerCommand implements ShouldBroadcastNow
      */
     public function broadcastOn(): Channel
     {
-        return new PrivateChannel('player.'.$this->player->id);
+        return new PrivateChannel('player.' . $this->player->id);
     }
 
     /**
