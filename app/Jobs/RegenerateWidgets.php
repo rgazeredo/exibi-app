@@ -20,6 +20,10 @@ class RegenerateWidgets implements ShouldQueue
      */
     public function handle(WidgetsApiService $widgetsService): void
     {
+        if (! Schema::hasTable('widgets')) {
+            return;
+        }
+
         $currentHour = now()->hour;
 
         // Weather widgets should not regenerate between 22h and 04h
