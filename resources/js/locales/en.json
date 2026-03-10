@@ -401,6 +401,7 @@
         "folders": "Folders",
         "upload": "Upload",
         "uploadMedia": "Upload Media",
+        "uploadMediaDesc": "Select the files you want to upload.",
         "uploadFiles": "Upload Files",
         "searchMedia": "Search media...",
         "allTypes": "All Types",

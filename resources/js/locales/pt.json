@@ -395,6 +395,7 @@
         "folders": "Pastas",
         "upload": "Enviar",
         "uploadMedia": "Enviar Mídia",
+        "uploadMediaDesc": "Selecione os arquivos para fazer upload.",
         "uploadFiles": "Enviar Arquivos",
         "searchMedia": "Buscar mídia...",
         "allTypes": "Todos os Tipos",

@@ -343,8 +343,6 @@ export function UploadMediaDialog({
         onOpenChange(false);
     };
 
-    const destinationText = folderName || t('media.rootFolder') || 'Raiz';
-
     return (
         <>
             <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -354,10 +352,8 @@ export function UploadMediaDialog({
                             {t('media.uploadMedia') || 'Upload de Mídia'}
                         </DialogTitle>
                         <DialogDescription>
-                            {t('media.uploadingTo') || 'Enviando para:'}{' '}
-                            <span className="font-medium text-foreground">
-                                {destinationText}
-                            </span>
+                            {t('media.uploadMediaDesc') ||
+                                'Selecione os arquivos para fazer upload.'}
                         </DialogDescription>
                     </DialogHeader>
 
