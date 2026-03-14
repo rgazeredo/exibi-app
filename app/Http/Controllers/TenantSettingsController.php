@@ -23,7 +23,6 @@ class TenantSettingsController extends Controller
                 'domain' => $tenant->getDomain(),
                 'icon_url' => $tenant->getIconUrl(),
                 'splash_url' => $tenant->getSplashUrl(),
-                'auto_optimize_videos' => $tenant->shouldAutoOptimizeVideos(),
                 'optimization_quality' => $tenant->getOptimizationQuality(),
                 'timezone' => $tenant->getTimezone(),
             ],
@@ -37,14 +36,12 @@ class TenantSettingsController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'domain' => ['nullable', 'string', 'max:255'],
-            'auto_optimize_videos' => ['boolean'],
             'optimization_quality' => ['required', 'in:hd,fullhd'],
             'timezone' => ['required', 'string', 'timezone:all'],
         ]);
 
         $tenant->name = $validated['name'];
         $tenant->setSetting('domain', $validated['domain'] ?? null);
-        $tenant->setSetting('auto_optimize_videos', $validated['auto_optimize_videos'] ?? true);
         $tenant->setSetting('optimization_quality', $validated['optimization_quality']);
         $tenant->setSetting('timezone', $validated['timezone']);
         $tenant->save();

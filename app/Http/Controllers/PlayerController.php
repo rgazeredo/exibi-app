@@ -101,7 +101,7 @@ class PlayerController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'layout_id' => ['nullable', 'uuid', 'exists:layouts,id'],
+            'layout_id' => ['required', 'uuid', 'exists:layouts,id'],
             'region_playlists' => ['nullable', 'array'],
             'region_playlists.*.region_id' => ['required', 'uuid'],
             'region_playlists.*.playlist_id' => ['nullable', 'uuid', 'exists:playlists,id'],
@@ -279,7 +279,7 @@ class PlayerController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'layout_id' => ['nullable', 'uuid', 'exists:layouts,id'],
+            'layout_id' => ['required', 'uuid', 'exists:layouts,id'],
             'region_playlists' => ['nullable', 'array'],
             'region_playlists.*.region_id' => ['required', 'uuid'],
             'region_playlists.*.playlist_id' => ['nullable', 'uuid', 'exists:playlists,id'],
@@ -815,7 +815,17 @@ class PlayerController extends Controller
             'id' => $layout->id,
             'name' => $layout->name,
             'source' => 'player',
+            'orientation' => $layout->orientation,
             'region_count' => $layout->regions->count(),
+            'regions' => $layout->regions->map(fn ($r) => [
+                'id' => $r->id,
+                'name' => $r->name,
+                'x_percent' => $r->x_percent,
+                'y_percent' => $r->y_percent,
+                'width_percent' => $r->width_percent,
+                'height_percent' => $r->height_percent,
+                'is_main' => $r->is_main,
+            ])->toArray(),
             'region_playlists' => $regionPlaylists,
         ];
     }

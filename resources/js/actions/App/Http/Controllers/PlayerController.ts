@@ -1115,7 +1115,7 @@ requestScreenshot.form = requestScreenshotForm
 
 /**
 * @see \App\Http\Controllers\PlayerController::screenshotStatus
-* @see app/Http/Controllers/PlayerController.php:826
+* @see app/Http/Controllers/PlayerController.php:836
 * @route '/players/{player}/screenshot-status'
 */
 export const screenshotStatus = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -1130,7 +1130,7 @@ screenshotStatus.definition = {
 
 /**
 * @see \App\Http\Controllers\PlayerController::screenshotStatus
-* @see app/Http/Controllers/PlayerController.php:826
+* @see app/Http/Controllers/PlayerController.php:836
 * @route '/players/{player}/screenshot-status'
 */
 screenshotStatus.url = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -1163,7 +1163,7 @@ screenshotStatus.url = (args: { player: string | { id: string } } | [player: str
 
 /**
 * @see \App\Http\Controllers\PlayerController::screenshotStatus
-* @see app/Http/Controllers/PlayerController.php:826
+* @see app/Http/Controllers/PlayerController.php:836
 * @route '/players/{player}/screenshot-status'
 */
 screenshotStatus.get = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -1173,7 +1173,7 @@ screenshotStatus.get = (args: { player: string | { id: string } } | [player: str
 
 /**
 * @see \App\Http\Controllers\PlayerController::screenshotStatus
-* @see app/Http/Controllers/PlayerController.php:826
+* @see app/Http/Controllers/PlayerController.php:836
 * @route '/players/{player}/screenshot-status'
 */
 screenshotStatus.head = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -1183,7 +1183,7 @@ screenshotStatus.head = (args: { player: string | { id: string } } | [player: st
 
 /**
 * @see \App\Http\Controllers\PlayerController::screenshotStatus
-* @see app/Http/Controllers/PlayerController.php:826
+* @see app/Http/Controllers/PlayerController.php:836
 * @route '/players/{player}/screenshot-status'
 */
 const screenshotStatusForm = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -1193,7 +1193,7 @@ const screenshotStatusForm = (args: { player: string | { id: string } } | [playe
 
 /**
 * @see \App\Http\Controllers\PlayerController::screenshotStatus
-* @see app/Http/Controllers/PlayerController.php:826
+* @see app/Http/Controllers/PlayerController.php:836
 * @route '/players/{player}/screenshot-status'
 */
 screenshotStatusForm.get = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -1203,7 +1203,7 @@ screenshotStatusForm.get = (args: { player: string | { id: string } } | [player:
 
 /**
 * @see \App\Http\Controllers\PlayerController::screenshotStatus
-* @see app/Http/Controllers/PlayerController.php:826
+* @see app/Http/Controllers/PlayerController.php:836
 * @route '/players/{player}/screenshot-status'
 */
 screenshotStatusForm.head = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -1220,7 +1220,7 @@ screenshotStatus.form = screenshotStatusForm
 
 /**
 * @see \App\Http\Controllers\PlayerController::currentlyPlaying
-* @see app/Http/Controllers/PlayerController.php:907
+* @see app/Http/Controllers/PlayerController.php:917
 * @route '/players/{player}/currently-playing'
 */
 export const currentlyPlaying = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -1235,7 +1235,7 @@ currentlyPlaying.definition = {
 
 /**
 * @see \App\Http\Controllers\PlayerController::currentlyPlaying
-* @see app/Http/Controllers/PlayerController.php:907
+* @see app/Http/Controllers/PlayerController.php:917
 * @route '/players/{player}/currently-playing'
 */
 currentlyPlaying.url = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -1268,7 +1268,7 @@ currentlyPlaying.url = (args: { player: string | { id: string } } | [player: str
 
 /**
 * @see \App\Http\Controllers\PlayerController::currentlyPlaying
-* @see app/Http/Controllers/PlayerController.php:907
+* @see app/Http/Controllers/PlayerController.php:917
 * @route '/players/{player}/currently-playing'
 */
 currentlyPlaying.get = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -1278,7 +1278,7 @@ currentlyPlaying.get = (args: { player: string | { id: string } } | [player: str
 
 /**
 * @see \App\Http\Controllers\PlayerController::currentlyPlaying
-* @see app/Http/Controllers/PlayerController.php:907
+* @see app/Http/Controllers/PlayerController.php:917
 * @route '/players/{player}/currently-playing'
 */
 currentlyPlaying.head = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -1288,7 +1288,7 @@ currentlyPlaying.head = (args: { player: string | { id: string } } | [player: st
 
 /**
 * @see \App\Http\Controllers\PlayerController::currentlyPlaying
-* @see app/Http/Controllers/PlayerController.php:907
+* @see app/Http/Controllers/PlayerController.php:917
 * @route '/players/{player}/currently-playing'
 */
 const currentlyPlayingForm = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -1298,7 +1298,7 @@ const currentlyPlayingForm = (args: { player: string | { id: string } } | [playe
 
 /**
 * @see \App\Http\Controllers\PlayerController::currentlyPlaying
-* @see app/Http/Controllers/PlayerController.php:907
+* @see app/Http/Controllers/PlayerController.php:917
 * @route '/players/{player}/currently-playing'
 */
 currentlyPlayingForm.get = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -1308,7 +1308,7 @@ currentlyPlayingForm.get = (args: { player: string | { id: string } } | [player:
 
 /**
 * @see \App\Http\Controllers\PlayerController::currentlyPlaying
-* @see app/Http/Controllers/PlayerController.php:907
+* @see app/Http/Controllers/PlayerController.php:917
 * @route '/players/{player}/currently-playing'
 */
 currentlyPlayingForm.head = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -1430,7 +1430,7 @@ downloads.form = downloadsForm
 
 /**
 * @see \App\Http\Controllers\PlayerController::playbackLogs
-* @see app/Http/Controllers/PlayerController.php:883
+* @see app/Http/Controllers/PlayerController.php:893
 * @route '/players/{player}/playback-logs'
 */
 export const playbackLogs = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -1445,7 +1445,7 @@ playbackLogs.definition = {
 
 /**
 * @see \App\Http\Controllers\PlayerController::playbackLogs
-* @see app/Http/Controllers/PlayerController.php:883
+* @see app/Http/Controllers/PlayerController.php:893
 * @route '/players/{player}/playback-logs'
 */
 playbackLogs.url = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -1478,7 +1478,7 @@ playbackLogs.url = (args: { player: string | { id: string } } | [player: string 
 
 /**
 * @see \App\Http\Controllers\PlayerController::playbackLogs
-* @see app/Http/Controllers/PlayerController.php:883
+* @see app/Http/Controllers/PlayerController.php:893
 * @route '/players/{player}/playback-logs'
 */
 playbackLogs.get = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -1488,7 +1488,7 @@ playbackLogs.get = (args: { player: string | { id: string } } | [player: string 
 
 /**
 * @see \App\Http\Controllers\PlayerController::playbackLogs
-* @see app/Http/Controllers/PlayerController.php:883
+* @see app/Http/Controllers/PlayerController.php:893
 * @route '/players/{player}/playback-logs'
 */
 playbackLogs.head = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -1498,7 +1498,7 @@ playbackLogs.head = (args: { player: string | { id: string } } | [player: string
 
 /**
 * @see \App\Http\Controllers\PlayerController::playbackLogs
-* @see app/Http/Controllers/PlayerController.php:883
+* @see app/Http/Controllers/PlayerController.php:893
 * @route '/players/{player}/playback-logs'
 */
 const playbackLogsForm = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -1508,7 +1508,7 @@ const playbackLogsForm = (args: { player: string | { id: string } } | [player: s
 
 /**
 * @see \App\Http\Controllers\PlayerController::playbackLogs
-* @see app/Http/Controllers/PlayerController.php:883
+* @see app/Http/Controllers/PlayerController.php:893
 * @route '/players/{player}/playback-logs'
 */
 playbackLogsForm.get = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -1518,7 +1518,7 @@ playbackLogsForm.get = (args: { player: string | { id: string } } | [player: str
 
 /**
 * @see \App\Http\Controllers\PlayerController::playbackLogs
-* @see app/Http/Controllers/PlayerController.php:883
+* @see app/Http/Controllers/PlayerController.php:893
 * @route '/players/{player}/playback-logs'
 */
 playbackLogsForm.head = (args: { player: string | { id: string } } | [player: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

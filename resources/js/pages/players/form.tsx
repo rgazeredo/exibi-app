@@ -224,9 +224,6 @@ export default function PlayerForm({
             ...data,
             layout_id: data.layout_id || null,
             tags: selectedTags.map((t) => t.id),
-            onSuccess: () => {
-                router.visit(`/players`);
-            },
         };
 
         if (player) {

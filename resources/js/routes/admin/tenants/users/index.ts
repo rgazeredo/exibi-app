@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\TenantController::index
-* @see app/Http/Controllers/Admin/TenantController.php:377
+* @see app/Http/Controllers/Admin/TenantController.php:374
 * @route '/admin/tenants/{tenant}/users'
 */
 export const index = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::index
-* @see app/Http/Controllers/Admin/TenantController.php:377
+* @see app/Http/Controllers/Admin/TenantController.php:374
 * @route '/admin/tenants/{tenant}/users'
 */
 index.url = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -49,7 +49,7 @@ index.url = (args: { tenant: string | { id: string } } | [tenant: string | { id:
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::index
-* @see app/Http/Controllers/Admin/TenantController.php:377
+* @see app/Http/Controllers/Admin/TenantController.php:374
 * @route '/admin/tenants/{tenant}/users'
 */
 index.get = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -59,7 +59,7 @@ index.get = (args: { tenant: string | { id: string } } | [tenant: string | { id:
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::index
-* @see app/Http/Controllers/Admin/TenantController.php:377
+* @see app/Http/Controllers/Admin/TenantController.php:374
 * @route '/admin/tenants/{tenant}/users'
 */
 index.head = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -69,7 +69,7 @@ index.head = (args: { tenant: string | { id: string } } | [tenant: string | { id
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::index
-* @see app/Http/Controllers/Admin/TenantController.php:377
+* @see app/Http/Controllers/Admin/TenantController.php:374
 * @route '/admin/tenants/{tenant}/users'
 */
 const indexForm = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -79,7 +79,7 @@ const indexForm = (args: { tenant: string | { id: string } } | [tenant: string |
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::index
-* @see app/Http/Controllers/Admin/TenantController.php:377
+* @see app/Http/Controllers/Admin/TenantController.php:374
 * @route '/admin/tenants/{tenant}/users'
 */
 indexForm.get = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -89,7 +89,7 @@ indexForm.get = (args: { tenant: string | { id: string } } | [tenant: string | {
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::index
-* @see app/Http/Controllers/Admin/TenantController.php:377
+* @see app/Http/Controllers/Admin/TenantController.php:374
 * @route '/admin/tenants/{tenant}/users'
 */
 indexForm.head = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -106,7 +106,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::search
-* @see app/Http/Controllers/Admin/TenantController.php:389
+* @see app/Http/Controllers/Admin/TenantController.php:386
 * @route '/admin/api/tenants/{tenant}/users/search'
 */
 export const search = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -121,7 +121,7 @@ search.definition = {
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::search
-* @see app/Http/Controllers/Admin/TenantController.php:389
+* @see app/Http/Controllers/Admin/TenantController.php:386
 * @route '/admin/api/tenants/{tenant}/users/search'
 */
 search.url = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -154,7 +154,7 @@ search.url = (args: { tenant: string | { id: string } } | [tenant: string | { id
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::search
-* @see app/Http/Controllers/Admin/TenantController.php:389
+* @see app/Http/Controllers/Admin/TenantController.php:386
 * @route '/admin/api/tenants/{tenant}/users/search'
 */
 search.get = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -164,7 +164,7 @@ search.get = (args: { tenant: string | { id: string } } | [tenant: string | { id
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::search
-* @see app/Http/Controllers/Admin/TenantController.php:389
+* @see app/Http/Controllers/Admin/TenantController.php:386
 * @route '/admin/api/tenants/{tenant}/users/search'
 */
 search.head = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -174,7 +174,7 @@ search.head = (args: { tenant: string | { id: string } } | [tenant: string | { i
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::search
-* @see app/Http/Controllers/Admin/TenantController.php:389
+* @see app/Http/Controllers/Admin/TenantController.php:386
 * @route '/admin/api/tenants/{tenant}/users/search'
 */
 const searchForm = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -184,7 +184,7 @@ const searchForm = (args: { tenant: string | { id: string } } | [tenant: string 
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::search
-* @see app/Http/Controllers/Admin/TenantController.php:389
+* @see app/Http/Controllers/Admin/TenantController.php:386
 * @route '/admin/api/tenants/{tenant}/users/search'
 */
 searchForm.get = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -194,7 +194,7 @@ searchForm.get = (args: { tenant: string | { id: string } } | [tenant: string | 
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::search
-* @see app/Http/Controllers/Admin/TenantController.php:389
+* @see app/Http/Controllers/Admin/TenantController.php:386
 * @route '/admin/api/tenants/{tenant}/users/search'
 */
 searchForm.head = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -211,7 +211,7 @@ search.form = searchForm
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::create
-* @see app/Http/Controllers/Admin/TenantController.php:449
+* @see app/Http/Controllers/Admin/TenantController.php:446
 * @route '/admin/tenants/{tenant}/users/create'
 */
 export const create = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -226,7 +226,7 @@ create.definition = {
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::create
-* @see app/Http/Controllers/Admin/TenantController.php:449
+* @see app/Http/Controllers/Admin/TenantController.php:446
 * @route '/admin/tenants/{tenant}/users/create'
 */
 create.url = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -259,7 +259,7 @@ create.url = (args: { tenant: string | { id: string } } | [tenant: string | { id
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::create
-* @see app/Http/Controllers/Admin/TenantController.php:449
+* @see app/Http/Controllers/Admin/TenantController.php:446
 * @route '/admin/tenants/{tenant}/users/create'
 */
 create.get = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -269,7 +269,7 @@ create.get = (args: { tenant: string | { id: string } } | [tenant: string | { id
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::create
-* @see app/Http/Controllers/Admin/TenantController.php:449
+* @see app/Http/Controllers/Admin/TenantController.php:446
 * @route '/admin/tenants/{tenant}/users/create'
 */
 create.head = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -279,7 +279,7 @@ create.head = (args: { tenant: string | { id: string } } | [tenant: string | { i
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::create
-* @see app/Http/Controllers/Admin/TenantController.php:449
+* @see app/Http/Controllers/Admin/TenantController.php:446
 * @route '/admin/tenants/{tenant}/users/create'
 */
 const createForm = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -289,7 +289,7 @@ const createForm = (args: { tenant: string | { id: string } } | [tenant: string 
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::create
-* @see app/Http/Controllers/Admin/TenantController.php:449
+* @see app/Http/Controllers/Admin/TenantController.php:446
 * @route '/admin/tenants/{tenant}/users/create'
 */
 createForm.get = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -299,7 +299,7 @@ createForm.get = (args: { tenant: string | { id: string } } | [tenant: string | 
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::create
-* @see app/Http/Controllers/Admin/TenantController.php:449
+* @see app/Http/Controllers/Admin/TenantController.php:446
 * @route '/admin/tenants/{tenant}/users/create'
 */
 createForm.head = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -316,7 +316,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::store
-* @see app/Http/Controllers/Admin/TenantController.php:461
+* @see app/Http/Controllers/Admin/TenantController.php:458
 * @route '/admin/tenants/{tenant}/users'
 */
 export const store = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -331,7 +331,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::store
-* @see app/Http/Controllers/Admin/TenantController.php:461
+* @see app/Http/Controllers/Admin/TenantController.php:458
 * @route '/admin/tenants/{tenant}/users'
 */
 store.url = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -364,7 +364,7 @@ store.url = (args: { tenant: string | { id: string } } | [tenant: string | { id:
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::store
-* @see app/Http/Controllers/Admin/TenantController.php:461
+* @see app/Http/Controllers/Admin/TenantController.php:458
 * @route '/admin/tenants/{tenant}/users'
 */
 store.post = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -374,7 +374,7 @@ store.post = (args: { tenant: string | { id: string } } | [tenant: string | { id
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::store
-* @see app/Http/Controllers/Admin/TenantController.php:461
+* @see app/Http/Controllers/Admin/TenantController.php:458
 * @route '/admin/tenants/{tenant}/users'
 */
 const storeForm = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -384,7 +384,7 @@ const storeForm = (args: { tenant: string | { id: string } } | [tenant: string |
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::store
-* @see app/Http/Controllers/Admin/TenantController.php:461
+* @see app/Http/Controllers/Admin/TenantController.php:458
 * @route '/admin/tenants/{tenant}/users'
 */
 storeForm.post = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -396,7 +396,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::destroy
-* @see app/Http/Controllers/Admin/TenantController.php:517
+* @see app/Http/Controllers/Admin/TenantController.php:514
 * @route '/admin/tenants/{tenant}/users/{user}'
 */
 export const destroy = (args: { tenant: string | { id: string }, user: string | { id: string } } | [tenant: string | { id: string }, user: string | { id: string } ], options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -411,7 +411,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::destroy
-* @see app/Http/Controllers/Admin/TenantController.php:517
+* @see app/Http/Controllers/Admin/TenantController.php:514
 * @route '/admin/tenants/{tenant}/users/{user}'
 */
 destroy.url = (args: { tenant: string | { id: string }, user: string | { id: string } } | [tenant: string | { id: string }, user: string | { id: string } ], options?: RouteQueryOptions) => {
@@ -441,7 +441,7 @@ destroy.url = (args: { tenant: string | { id: string }, user: string | { id: str
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::destroy
-* @see app/Http/Controllers/Admin/TenantController.php:517
+* @see app/Http/Controllers/Admin/TenantController.php:514
 * @route '/admin/tenants/{tenant}/users/{user}'
 */
 destroy.delete = (args: { tenant: string | { id: string }, user: string | { id: string } } | [tenant: string | { id: string }, user: string | { id: string } ], options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -451,7 +451,7 @@ destroy.delete = (args: { tenant: string | { id: string }, user: string | { id: 
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::destroy
-* @see app/Http/Controllers/Admin/TenantController.php:517
+* @see app/Http/Controllers/Admin/TenantController.php:514
 * @route '/admin/tenants/{tenant}/users/{user}'
 */
 const destroyForm = (args: { tenant: string | { id: string }, user: string | { id: string } } | [tenant: string | { id: string }, user: string | { id: string } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -466,7 +466,7 @@ const destroyForm = (args: { tenant: string | { id: string }, user: string | { i
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::destroy
-* @see app/Http/Controllers/Admin/TenantController.php:517
+* @see app/Http/Controllers/Admin/TenantController.php:514
 * @route '/admin/tenants/{tenant}/users/{user}'
 */
 destroyForm.delete = (args: { tenant: string | { id: string }, user: string | { id: string } } | [tenant: string | { id: string }, user: string | { id: string } ], options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

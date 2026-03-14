@@ -18,10 +18,14 @@ class VideoTranscodingService
      * Quality presets for transcoding
      * Format: [height => [bitrate, audio_bitrate]]
      */
+    /**
+     * Quality presets optimized for TV box compatibility
+     * Format: [height => [bitrate, audio_bitrate]]
+     */
     protected array $qualityPresets = [
-        1080 => ['6M', '128k'],
-        720 => ['3M', '96k'],
-        480 => ['1.5M', '64k'],
+        1080 => ['4M', '128k'],
+        720 => ['3M', '128k'],
+        480 => ['1.5M', '128k'],
     ];
 
     public function __construct()
@@ -229,12 +233,24 @@ class VideoTranscodingService
             $dimensions['height']
         );
 
+        // FFmpeg command optimized for TV box compatibility
+        // - profile main: more compatible than high with older decoders
+        // - level 4.0: sufficient for 1080p30, better compatibility
+        // - pix_fmt yuv420p: critical for hardware decoder support
+        // - g/keyint: 2 second GOP for better seeking
+        // - refs 3: limited reference frames for easier decoding
+        // - r 30: cap framerate to 30fps
+        // - ac 2: ensure stereo audio output
         $command = sprintf(
             'ffmpeg -y -i %s '.
             '-c:v libx264 -preset medium -crf 23 '.
-            '-profile:v high -level 4.1 '.
+            '-profile:v main -level 4.0 '.
+            '-pix_fmt yuv420p '.
             '-maxrate %s -bufsize %s '.
-            '-c:a aac -b:a %s '.
+            '-g 60 -keyint_min 60 '.
+            '-refs 3 '.
+            '-r 30 '.
+            '-c:a aac -b:a %s -ac 2 '.
             '-vf "%s" '.
             '-movflags +faststart '.
             '-threads 0 '.

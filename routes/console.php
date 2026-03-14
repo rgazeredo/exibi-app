@@ -2,6 +2,7 @@
 
 use App\Jobs\CleanupExpiredActivations;
 use App\Jobs\CleanupHeartbeats;
+use App\Jobs\CleanupPlaybackLogs;
 use App\Jobs\RegenerateWidgets;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -19,6 +20,9 @@ Artisan::command('inspire', function () {
 
 // Cleanup old heartbeat records daily at 3:00 AM
 Schedule::job(new CleanupHeartbeats)->daily()->at('03:00');
+
+// Cleanup old playback logs (older than 30 days) daily at 3:30 AM
+Schedule::job(new CleanupPlaybackLogs)->daily()->at('03:30');
 
 // Cleanup expired activation codes every hour
 Schedule::job(new CleanupExpiredActivations)->hourly();

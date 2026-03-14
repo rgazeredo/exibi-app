@@ -1,4 +1,15 @@
 import InputError from '@/components/input-error';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -25,14 +36,23 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import { useT } from '@/hooks/use-translations';
 import AppLayout from '@/layouts/app-layout';
 import TenantSettingsLayout from '@/layouts/tenant-settings/layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
-import { Clock, Globe, Keyboard, Loader2, Zap } from 'lucide-react';
-import { useState } from 'react';
+import axios from 'axios';
+import {
+    Clock,
+    Globe,
+    ImageIcon,
+    Keyboard,
+    Loader2,
+    Trash2,
+    Upload,
+    Zap,
+} from 'lucide-react';
+import { useRef, useState } from 'react';
 
 interface TenantData {
     id: string;
@@ -40,29 +60,17 @@ interface TenantData {
     slug: string;
     domain: string | null;
     icon_url: string | null;
-    auto_optimize_videos: boolean;
+    splash_url: string | null;
     optimization_quality: 'hd' | 'fullhd';
     timezone: string;
 }
 
-// Common timezones for selection
+// Brazilian timezones
 const TIMEZONES = [
-    { value: 'America/Sao_Paulo', label: 'São Paulo (GMT-3)' },
-    { value: 'America/Manaus', label: 'Manaus (GMT-4)' },
-    { value: 'America/Cuiaba', label: 'Cuiabá (GMT-4)' },
-    { value: 'America/Fortaleza', label: 'Fortaleza (GMT-3)' },
-    { value: 'America/Recife', label: 'Recife (GMT-3)' },
-    { value: 'America/Belem', label: 'Belém (GMT-3)' },
-    { value: 'America/Rio_Branco', label: 'Rio Branco (GMT-5)' },
-    { value: 'America/New_York', label: 'New York (GMT-5/-4)' },
-    { value: 'America/Los_Angeles', label: 'Los Angeles (GMT-8/-7)' },
-    { value: 'America/Chicago', label: 'Chicago (GMT-6/-5)' },
-    { value: 'Europe/London', label: 'London (GMT/BST)' },
-    { value: 'Europe/Paris', label: 'Paris (GMT+1/+2)' },
-    { value: 'Europe/Lisbon', label: 'Lisbon (GMT/+1)' },
-    { value: 'Asia/Tokyo', label: 'Tokyo (GMT+9)' },
-    { value: 'Australia/Sydney', label: 'Sydney (GMT+10/+11)' },
-    { value: 'UTC', label: 'UTC' },
+    { value: 'America/Noronha', label: 'Fernando de Noronha (GMT-2)' },
+    { value: 'America/Sao_Paulo', label: 'Horário de Brasília (GMT-3)' },
+    { value: 'America/Manaus', label: 'Horário do Amazonas (GMT-4)' },
+    { value: 'America/Rio_Branco', label: 'Horário do Acre (GMT-5)' },
 ];
 
 interface TenantSettingsProps {
@@ -114,8 +122,12 @@ export default function TenantSettings({
     tenantSettings,
 }: TenantSettingsProps) {
     const { t } = useT();
-    const [showPassword, setShowPassword] = useState(false);
+    const [splashUrl, setSplashUrl] = useState<string | null>(
+        tenantSettings.splash_url,
+    );
+    const [uploadingSplash, setUploadingSplash] = useState(false);
     const [shortcutsDialogOpen, setShortcutsDialogOpen] = useState(false);
+    const splashInputRef = useRef<HTMLInputElement>(null);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: t('nav.dashboard'), href: '/dashboard' },
@@ -126,7 +138,6 @@ export default function TenantSettings({
         useForm({
             name: tenantSettings.name,
             domain: tenantSettings.domain || '',
-            auto_optimize_videos: tenantSettings.auto_optimize_videos,
             optimization_quality: tenantSettings.optimization_quality,
             timezone: tenantSettings.timezone,
         });
@@ -134,6 +145,45 @@ export default function TenantSettings({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post('/tenant/settings');
+    };
+
+    const handleSplashUpload = async (
+        e: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploadingSplash(true);
+        const formData = new FormData();
+        formData.append('splash', file);
+
+        try {
+            const { data } = await axios.post(
+                '/tenant/settings/splash',
+                formData,
+            );
+            if (data.success) {
+                setSplashUrl(data.splash_url);
+            }
+        } catch (error) {
+            console.error('Failed to upload splash:', error);
+        } finally {
+            setUploadingSplash(false);
+            if (splashInputRef.current) {
+                splashInputRef.current.value = '';
+            }
+        }
+    };
+
+    const handleDeleteSplash = async () => {
+        try {
+            const { data } = await axios.delete('/tenant/settings/splash');
+            if (data.success) {
+                setSplashUrl(null);
+            }
+        } catch (error) {
+            console.error('Failed to delete splash:', error);
+        }
     };
 
     return (
@@ -211,6 +261,117 @@ export default function TenantSettings({
                         </CardContent>
                     </Card>
 
+                    {/* Branding */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <ImageIcon className="h-5 w-5" />
+                                {t('tenant.branding') || 'Branding'}
+                            </CardTitle>
+                            <CardDescription>
+                                {t('tenant.brandingDesc') ||
+                                    "Customize your organization's visual identity"}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            {/* Splash */}
+                            <div className="space-y-3">
+                                <Label>
+                                    {t('tenant.splashScreen') ||
+                                        'Splash Screen'}
+                                </Label>
+                                <p className="text-xs text-muted-foreground">
+                                    {t('tenant.splashDesc') ||
+                                        'Displayed when player devices start up. Recommended: 1920x1080px, PNG or JPG.'}
+                                </p>
+                                <div className="flex items-start gap-4">
+                                    <div className="flex h-28 w-48 items-center justify-center overflow-hidden rounded-lg border bg-muted">
+                                        {splashUrl ? (
+                                            <img
+                                                src={splashUrl}
+                                                alt="Splash"
+                                                className="h-full w-full object-cover"
+                                            />
+                                        ) : (
+                                            <ImageIcon className="h-8 w-8 text-muted-foreground" />
+                                        )}
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <input
+                                            ref={splashInputRef}
+                                            type="file"
+                                            accept="image/png,image/jpeg"
+                                            onChange={handleSplashUpload}
+                                            className="hidden"
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={() =>
+                                                splashInputRef.current?.click()
+                                            }
+                                            disabled={uploadingSplash}
+                                        >
+                                            {uploadingSplash ? (
+                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            ) : (
+                                                <Upload className="mr-2 h-4 w-4" />
+                                            )}
+                                            {t('common.upload') || 'Upload'}
+                                        </Button>
+                                        {splashUrl && (
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                    >
+                                                        <Trash2 className="mr-2 h-4 w-4" />
+                                                        {t('common.remove') ||
+                                                            'Remove'}
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>
+                                                            {t(
+                                                                'tenant.removeSplashTitle',
+                                                            ) ||
+                                                                'Remove Splash Screen'}
+                                                        </AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            {t(
+                                                                'tenant.removeSplashDesc',
+                                                            ) ||
+                                                                'Are you sure you want to remove the splash screen? Player devices will display the default AZSign splash until a new image is uploaded.'}
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>
+                                                            {t(
+                                                                'common.cancel',
+                                                            ) || 'Cancel'}
+                                                        </AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={
+                                                                handleDeleteSplash
+                                                            }
+                                                            className="bg-destructive text-white hover:bg-destructive/90"
+                                                        >
+                                                            {t(
+                                                                'common.remove',
+                                                            ) || 'Remove'}
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
                     {/* Video Processing */}
                     <Card>
                         <CardHeader>
@@ -225,79 +386,54 @@ export default function TenantSettings({
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
-                            <div className="flex items-center justify-between">
-                                <div className="space-y-0.5">
-                                    <Label htmlFor="auto_optimize">
-                                        {t('tenant.autoOptimize') ||
-                                            'Auto-optimize videos'}
-                                    </Label>
-                                    <p className="text-xs text-muted-foreground">
-                                        {t('tenant.autoOptimizeDesc') ||
-                                            'Automatically transcode uploaded videos for optimal playback performance. This reduces file size and ensures compatibility with all player devices.'}
-                                    </p>
-                                </div>
-                                <Switch
-                                    id="auto_optimize"
-                                    checked={data.auto_optimize_videos}
-                                    onCheckedChange={(checked: boolean) =>
-                                        setData('auto_optimize_videos', checked)
-                                    }
-                                />
-                            </div>
+                            <p className="text-sm text-muted-foreground">
+                                {t('tenant.videoProcessingInfo') ||
+                                    'All videos are automatically transcoded for optimal compatibility with TV box devices.'}
+                            </p>
 
-                            {data.auto_optimize_videos && (
-                                <div className="space-y-3">
-                                    <Label>
-                                        {t('tenant.optimizationQuality') ||
-                                            'Optimization Quality'}
-                                    </Label>
-                                    <RadioGroup
-                                        value={data.optimization_quality}
-                                        onValueChange={(
-                                            value: 'hd' | 'fullhd',
-                                        ) =>
-                                            setData(
-                                                'optimization_quality',
-                                                value,
-                                            )
-                                        }
-                                        className="flex flex-col space-y-2"
-                                    >
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroupItem
-                                                value="fullhd"
-                                                id="fullhd"
-                                            />
-                                            <Label
-                                                htmlFor="fullhd"
-                                                className="cursor-pointer font-normal"
-                                            >
-                                                Full HD (1080p) -{' '}
-                                                {t('tenant.recommended') ||
-                                                    'Recommended'}
-                                            </Label>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroupItem
-                                                value="hd"
-                                                id="hd"
-                                            />
-                                            <Label
-                                                htmlFor="hd"
-                                                className="cursor-pointer font-normal"
-                                            >
-                                                HD (720p) -{' '}
-                                                {t('tenant.smallerFiles') ||
-                                                    'Smaller files'}
-                                            </Label>
-                                        </div>
-                                    </RadioGroup>
-                                    <p className="text-xs text-muted-foreground">
-                                        {t('tenant.optimizationQualityDesc') ||
-                                            'Select the maximum resolution for optimized videos. HD uses less storage space.'}
-                                    </p>
-                                </div>
-                            )}
+                            <div className="space-y-3">
+                                <Label>
+                                    {t('tenant.optimizationQuality') ||
+                                        'Optimization Quality'}
+                                </Label>
+                                <RadioGroup
+                                    value={data.optimization_quality}
+                                    onValueChange={(value: 'hd' | 'fullhd') =>
+                                        setData('optimization_quality', value)
+                                    }
+                                    className="flex flex-col space-y-2"
+                                >
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="hd" id="hd" />
+                                        <Label
+                                            htmlFor="hd"
+                                            className="cursor-pointer font-normal"
+                                        >
+                                            HD (720p) -{' '}
+                                            {t('tenant.recommended') ||
+                                                'Recommended'}
+                                        </Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem
+                                            value="fullhd"
+                                            id="fullhd"
+                                        />
+                                        <Label
+                                            htmlFor="fullhd"
+                                            className="cursor-pointer font-normal"
+                                        >
+                                            Full HD (1080p) -{' '}
+                                            {t('tenant.higherQuality') ||
+                                                'Higher quality'}
+                                        </Label>
+                                    </div>
+                                </RadioGroup>
+                                <p className="text-xs text-muted-foreground">
+                                    {t('tenant.optimizationQualityDesc') ||
+                                        'Select the maximum resolution for optimized videos. HD uses less storage space.'}
+                                </p>
+                            </div>
                         </CardContent>
                     </Card>
 

@@ -63,14 +63,6 @@ class Layout extends Model
     }
 
     /**
-     * Get player groups using this layout.
-     */
-    public function playerGroups(): HasMany
-    {
-        return $this->hasMany(PlayerGroup::class);
-    }
-
-    /**
      * Scope to only system layouts.
      */
     public function scopeSystem(Builder $query): Builder

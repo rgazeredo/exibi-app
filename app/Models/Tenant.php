@@ -31,7 +31,6 @@ class Tenant extends Model
                 'media.view', 'media.create', 'media.edit', 'media.delete',
                 'playlists.view', 'playlists.create', 'playlists.edit', 'playlists.delete',
                 'players.view', 'players.create', 'players.edit', 'players.delete',
-                'player_groups.view', 'player_groups.create', 'player_groups.edit', 'player_groups.delete',
                 'widgets.view', 'widgets.create', 'widgets.edit', 'widgets.delete',
                 'tags.view', 'tags.create', 'tags.edit', 'tags.delete',
                 'reports.view',
@@ -44,7 +43,6 @@ class Tenant extends Model
                 'media.view',
                 'playlists.view',
                 'players.view',
-                'player_groups.view',
                 'widgets.view',
                 'tags.view',
                 'reports.view',
@@ -125,19 +123,12 @@ class Tenant extends Model
     }
 
     /**
-     * Check if videos should be auto-optimized.
-     */
-    public function shouldAutoOptimizeVideos(): bool
-    {
-        return (bool) $this->getSetting('auto_optimize_videos', true);
-    }
-
-    /**
      * Get the optimization quality setting (hd or fullhd).
+     * Default is 'hd' (720p) for maximum TV box compatibility.
      */
     public function getOptimizationQuality(): string
     {
-        return $this->getSetting('optimization_quality', 'fullhd');
+        return $this->getSetting('optimization_quality', 'hd');
     }
 
     /**

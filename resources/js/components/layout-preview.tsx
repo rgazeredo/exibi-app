@@ -55,14 +55,22 @@ export function LayoutPreview({
                         }}
                     >
                         {regionContent?.[region.id] ?? (
-                            <div className="flex flex-col items-center gap-1 text-center">
-                                <span className="text-xs font-medium text-muted-foreground">
-                                    {formatRegionName(region.name)}
+                            region.height_percent <= 25 ? (
+                                // Banner (short height) - single line
+                                <span className="text-[10px] font-medium text-muted-foreground">
+                                    {formatRegionName(region.name)} {Math.round(region.width_percent)}% x {Math.round(region.height_percent)}%
                                 </span>
-                                <span className="text-[10px] text-muted-foreground/70">
-                                    {Math.round(region.width_percent)}% x {Math.round(region.height_percent)}%
-                                </span>
-                            </div>
+                            ) : (
+                                // Normal region - stacked
+                                <div className="flex flex-col items-center gap-1 text-center">
+                                    <span className="text-xs font-medium text-muted-foreground">
+                                        {formatRegionName(region.name)}
+                                    </span>
+                                    <span className="text-[10px] text-muted-foreground/70">
+                                        {Math.round(region.width_percent)}% x {Math.round(region.height_percent)}%
+                                    </span>
+                                </div>
+                            )
                         )}
                     </div>
                 );

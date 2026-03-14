@@ -82,7 +82,7 @@ search.form = searchForm
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 export const list = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +97,7 @@ list.definition = {
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 list.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ list.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 list.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -116,7 +116,7 @@ list.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 list.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -126,7 +126,7 @@ list.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 const listForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -136,7 +136,7 @@ const listForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 listForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -146,7 +146,7 @@ listForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 listForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -325,7 +325,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::store
-* @see app/Http/Controllers/TenantRoleController.php:86
+* @see app/Http/Controllers/TenantRoleController.php:88
 * @route '/tenant/settings/roles'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -340,7 +340,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::store
-* @see app/Http/Controllers/TenantRoleController.php:86
+* @see app/Http/Controllers/TenantRoleController.php:88
 * @route '/tenant/settings/roles'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -349,7 +349,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::store
-* @see app/Http/Controllers/TenantRoleController.php:86
+* @see app/Http/Controllers/TenantRoleController.php:88
 * @route '/tenant/settings/roles'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -359,7 +359,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::store
-* @see app/Http/Controllers/TenantRoleController.php:86
+* @see app/Http/Controllers/TenantRoleController.php:88
 * @route '/tenant/settings/roles'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -369,7 +369,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::store
-* @see app/Http/Controllers/TenantRoleController.php:86
+* @see app/Http/Controllers/TenantRoleController.php:88
 * @route '/tenant/settings/roles'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -381,7 +381,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::edit
-* @see app/Http/Controllers/TenantRoleController.php:117
+* @see app/Http/Controllers/TenantRoleController.php:119
 * @route '/tenant/settings/roles/{role}/edit'
 */
 export const edit = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -396,7 +396,7 @@ edit.definition = {
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::edit
-* @see app/Http/Controllers/TenantRoleController.php:117
+* @see app/Http/Controllers/TenantRoleController.php:119
 * @route '/tenant/settings/roles/{role}/edit'
 */
 edit.url = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -429,7 +429,7 @@ edit.url = (args: { role: string | { id: string } } | [role: string | { id: stri
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::edit
-* @see app/Http/Controllers/TenantRoleController.php:117
+* @see app/Http/Controllers/TenantRoleController.php:119
 * @route '/tenant/settings/roles/{role}/edit'
 */
 edit.get = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -439,7 +439,7 @@ edit.get = (args: { role: string | { id: string } } | [role: string | { id: stri
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::edit
-* @see app/Http/Controllers/TenantRoleController.php:117
+* @see app/Http/Controllers/TenantRoleController.php:119
 * @route '/tenant/settings/roles/{role}/edit'
 */
 edit.head = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -449,7 +449,7 @@ edit.head = (args: { role: string | { id: string } } | [role: string | { id: str
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::edit
-* @see app/Http/Controllers/TenantRoleController.php:117
+* @see app/Http/Controllers/TenantRoleController.php:119
 * @route '/tenant/settings/roles/{role}/edit'
 */
 const editForm = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -459,7 +459,7 @@ const editForm = (args: { role: string | { id: string } } | [role: string | { id
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::edit
-* @see app/Http/Controllers/TenantRoleController.php:117
+* @see app/Http/Controllers/TenantRoleController.php:119
 * @route '/tenant/settings/roles/{role}/edit'
 */
 editForm.get = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -469,7 +469,7 @@ editForm.get = (args: { role: string | { id: string } } | [role: string | { id: 
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::edit
-* @see app/Http/Controllers/TenantRoleController.php:117
+* @see app/Http/Controllers/TenantRoleController.php:119
 * @route '/tenant/settings/roles/{role}/edit'
 */
 editForm.head = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -486,7 +486,7 @@ edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::update
-* @see app/Http/Controllers/TenantRoleController.php:146
+* @see app/Http/Controllers/TenantRoleController.php:153
 * @route '/tenant/settings/roles/{role}'
 */
 export const update = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -501,7 +501,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::update
-* @see app/Http/Controllers/TenantRoleController.php:146
+* @see app/Http/Controllers/TenantRoleController.php:153
 * @route '/tenant/settings/roles/{role}'
 */
 update.url = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -534,7 +534,7 @@ update.url = (args: { role: string | { id: string } } | [role: string | { id: st
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::update
-* @see app/Http/Controllers/TenantRoleController.php:146
+* @see app/Http/Controllers/TenantRoleController.php:153
 * @route '/tenant/settings/roles/{role}'
 */
 update.put = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -544,7 +544,7 @@ update.put = (args: { role: string | { id: string } } | [role: string | { id: st
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::update
-* @see app/Http/Controllers/TenantRoleController.php:146
+* @see app/Http/Controllers/TenantRoleController.php:153
 * @route '/tenant/settings/roles/{role}'
 */
 const updateForm = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -559,7 +559,7 @@ const updateForm = (args: { role: string | { id: string } } | [role: string | { 
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::update
-* @see app/Http/Controllers/TenantRoleController.php:146
+* @see app/Http/Controllers/TenantRoleController.php:153
 * @route '/tenant/settings/roles/{role}'
 */
 updateForm.put = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -576,7 +576,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::destroy
-* @see app/Http/Controllers/TenantRoleController.php:192
+* @see app/Http/Controllers/TenantRoleController.php:199
 * @route '/tenant/settings/roles/{role}'
 */
 export const destroy = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -591,7 +591,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::destroy
-* @see app/Http/Controllers/TenantRoleController.php:192
+* @see app/Http/Controllers/TenantRoleController.php:199
 * @route '/tenant/settings/roles/{role}'
 */
 destroy.url = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -624,7 +624,7 @@ destroy.url = (args: { role: string | { id: string } } | [role: string | { id: s
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::destroy
-* @see app/Http/Controllers/TenantRoleController.php:192
+* @see app/Http/Controllers/TenantRoleController.php:199
 * @route '/tenant/settings/roles/{role}'
 */
 destroy.delete = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -634,7 +634,7 @@ destroy.delete = (args: { role: string | { id: string } } | [role: string | { id
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::destroy
-* @see app/Http/Controllers/TenantRoleController.php:192
+* @see app/Http/Controllers/TenantRoleController.php:199
 * @route '/tenant/settings/roles/{role}'
 */
 const destroyForm = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -649,7 +649,7 @@ const destroyForm = (args: { role: string | { id: string } } | [role: string | {
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::destroy
-* @see app/Http/Controllers/TenantRoleController.php:192
+* @see app/Http/Controllers/TenantRoleController.php:199
 * @route '/tenant/settings/roles/{role}'
 */
 destroyForm.delete = (args: { role: string | { id: string } } | [role: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

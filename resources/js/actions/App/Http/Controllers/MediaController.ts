@@ -219,7 +219,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:104
+* @see app/Http/Controllers/MediaController.php:103
 * @route '/media/{medium}'
 */
 export const show = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -234,7 +234,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:104
+* @see app/Http/Controllers/MediaController.php:103
 * @route '/media/{medium}'
 */
 show.url = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -261,7 +261,7 @@ show.url = (args: { medium: string | number } | [medium: string | number ] | str
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:104
+* @see app/Http/Controllers/MediaController.php:103
 * @route '/media/{medium}'
 */
 show.get = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -271,7 +271,7 @@ show.get = (args: { medium: string | number } | [medium: string | number ] | str
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:104
+* @see app/Http/Controllers/MediaController.php:103
 * @route '/media/{medium}'
 */
 show.head = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -281,7 +281,7 @@ show.head = (args: { medium: string | number } | [medium: string | number ] | st
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:104
+* @see app/Http/Controllers/MediaController.php:103
 * @route '/media/{medium}'
 */
 const showForm = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -291,7 +291,7 @@ const showForm = (args: { medium: string | number } | [medium: string | number ]
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:104
+* @see app/Http/Controllers/MediaController.php:103
 * @route '/media/{medium}'
 */
 showForm.get = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -301,7 +301,7 @@ showForm.get = (args: { medium: string | number } | [medium: string | number ] |
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:104
+* @see app/Http/Controllers/MediaController.php:103
 * @route '/media/{medium}'
 */
 showForm.head = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -318,7 +318,7 @@ show.form = showForm
 
 /**
 * @see \App\Http\Controllers\MediaController::edit
-* @see app/Http/Controllers/MediaController.php:150
+* @see app/Http/Controllers/MediaController.php:149
 * @route '/media/{medium}/edit'
 */
 export const edit = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -333,7 +333,7 @@ edit.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::edit
-* @see app/Http/Controllers/MediaController.php:150
+* @see app/Http/Controllers/MediaController.php:149
 * @route '/media/{medium}/edit'
 */
 edit.url = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -360,7 +360,7 @@ edit.url = (args: { medium: string | number } | [medium: string | number ] | str
 
 /**
 * @see \App\Http\Controllers\MediaController::edit
-* @see app/Http/Controllers/MediaController.php:150
+* @see app/Http/Controllers/MediaController.php:149
 * @route '/media/{medium}/edit'
 */
 edit.get = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -370,7 +370,7 @@ edit.get = (args: { medium: string | number } | [medium: string | number ] | str
 
 /**
 * @see \App\Http\Controllers\MediaController::edit
-* @see app/Http/Controllers/MediaController.php:150
+* @see app/Http/Controllers/MediaController.php:149
 * @route '/media/{medium}/edit'
 */
 edit.head = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -380,7 +380,7 @@ edit.head = (args: { medium: string | number } | [medium: string | number ] | st
 
 /**
 * @see \App\Http\Controllers\MediaController::edit
-* @see app/Http/Controllers/MediaController.php:150
+* @see app/Http/Controllers/MediaController.php:149
 * @route '/media/{medium}/edit'
 */
 const editForm = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -390,7 +390,7 @@ const editForm = (args: { medium: string | number } | [medium: string | number ]
 
 /**
 * @see \App\Http\Controllers\MediaController::edit
-* @see app/Http/Controllers/MediaController.php:150
+* @see app/Http/Controllers/MediaController.php:149
 * @route '/media/{medium}/edit'
 */
 editForm.get = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -400,7 +400,7 @@ editForm.get = (args: { medium: string | number } | [medium: string | number ] |
 
 /**
 * @see \App\Http\Controllers\MediaController::edit
-* @see app/Http/Controllers/MediaController.php:150
+* @see app/Http/Controllers/MediaController.php:149
 * @route '/media/{medium}/edit'
 */
 editForm.head = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -417,7 +417,7 @@ edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\MediaController::update
-* @see app/Http/Controllers/MediaController.php:163
+* @see app/Http/Controllers/MediaController.php:162
 * @route '/media/{medium}'
 */
 export const update = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -432,7 +432,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::update
-* @see app/Http/Controllers/MediaController.php:163
+* @see app/Http/Controllers/MediaController.php:162
 * @route '/media/{medium}'
 */
 update.url = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -459,7 +459,7 @@ update.url = (args: { medium: string | number } | [medium: string | number ] | s
 
 /**
 * @see \App\Http\Controllers\MediaController::update
-* @see app/Http/Controllers/MediaController.php:163
+* @see app/Http/Controllers/MediaController.php:162
 * @route '/media/{medium}'
 */
 update.put = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -469,7 +469,7 @@ update.put = (args: { medium: string | number } | [medium: string | number ] | s
 
 /**
 * @see \App\Http\Controllers\MediaController::update
-* @see app/Http/Controllers/MediaController.php:163
+* @see app/Http/Controllers/MediaController.php:162
 * @route '/media/{medium}'
 */
 update.patch = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
@@ -479,7 +479,7 @@ update.patch = (args: { medium: string | number } | [medium: string | number ] |
 
 /**
 * @see \App\Http\Controllers\MediaController::update
-* @see app/Http/Controllers/MediaController.php:163
+* @see app/Http/Controllers/MediaController.php:162
 * @route '/media/{medium}'
 */
 const updateForm = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -494,7 +494,7 @@ const updateForm = (args: { medium: string | number } | [medium: string | number
 
 /**
 * @see \App\Http\Controllers\MediaController::update
-* @see app/Http/Controllers/MediaController.php:163
+* @see app/Http/Controllers/MediaController.php:162
 * @route '/media/{medium}'
 */
 updateForm.put = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -509,7 +509,7 @@ updateForm.put = (args: { medium: string | number } | [medium: string | number ]
 
 /**
 * @see \App\Http\Controllers\MediaController::update
-* @see app/Http/Controllers/MediaController.php:163
+* @see app/Http/Controllers/MediaController.php:162
 * @route '/media/{medium}'
 */
 updateForm.patch = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -526,7 +526,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\MediaController::destroy
-* @see app/Http/Controllers/MediaController.php:194
+* @see app/Http/Controllers/MediaController.php:193
 * @route '/media/{medium}'
 */
 export const destroy = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -541,7 +541,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::destroy
-* @see app/Http/Controllers/MediaController.php:194
+* @see app/Http/Controllers/MediaController.php:193
 * @route '/media/{medium}'
 */
 destroy.url = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -568,7 +568,7 @@ destroy.url = (args: { medium: string | number } | [medium: string | number ] | 
 
 /**
 * @see \App\Http\Controllers\MediaController::destroy
-* @see app/Http/Controllers/MediaController.php:194
+* @see app/Http/Controllers/MediaController.php:193
 * @route '/media/{medium}'
 */
 destroy.delete = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -578,7 +578,7 @@ destroy.delete = (args: { medium: string | number } | [medium: string | number ]
 
 /**
 * @see \App\Http\Controllers\MediaController::destroy
-* @see app/Http/Controllers/MediaController.php:194
+* @see app/Http/Controllers/MediaController.php:193
 * @route '/media/{medium}'
 */
 const destroyForm = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -593,7 +593,7 @@ const destroyForm = (args: { medium: string | number } | [medium: string | numbe
 
 /**
 * @see \App\Http\Controllers\MediaController::destroy
-* @see app/Http/Controllers/MediaController.php:194
+* @see app/Http/Controllers/MediaController.php:193
 * @route '/media/{medium}'
 */
 destroyForm.delete = (args: { medium: string | number } | [medium: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -610,7 +610,7 @@ destroy.form = destroyForm
 
 /**
 * @see \App\Http\Controllers\MediaController::search
-* @see app/Http/Controllers/MediaController.php:218
+* @see app/Http/Controllers/MediaController.php:217
 * @route '/api/media/search'
 */
 export const search = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -625,7 +625,7 @@ search.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::search
-* @see app/Http/Controllers/MediaController.php:218
+* @see app/Http/Controllers/MediaController.php:217
 * @route '/api/media/search'
 */
 search.url = (options?: RouteQueryOptions) => {
@@ -634,7 +634,7 @@ search.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\MediaController::search
-* @see app/Http/Controllers/MediaController.php:218
+* @see app/Http/Controllers/MediaController.php:217
 * @route '/api/media/search'
 */
 search.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -644,7 +644,7 @@ search.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\MediaController::search
-* @see app/Http/Controllers/MediaController.php:218
+* @see app/Http/Controllers/MediaController.php:217
 * @route '/api/media/search'
 */
 search.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -654,7 +654,7 @@ search.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\MediaController::search
-* @see app/Http/Controllers/MediaController.php:218
+* @see app/Http/Controllers/MediaController.php:217
 * @route '/api/media/search'
 */
 const searchForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -664,7 +664,7 @@ const searchForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\MediaController::search
-* @see app/Http/Controllers/MediaController.php:218
+* @see app/Http/Controllers/MediaController.php:217
 * @route '/api/media/search'
 */
 searchForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -674,7 +674,7 @@ searchForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\MediaController::search
-* @see app/Http/Controllers/MediaController.php:218
+* @see app/Http/Controllers/MediaController.php:217
 * @route '/api/media/search'
 */
 searchForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -691,7 +691,7 @@ search.form = searchForm
 
 /**
 * @see \App\Http\Controllers\MediaController::stats
-* @see app/Http/Controllers/MediaController.php:299
+* @see app/Http/Controllers/MediaController.php:298
 * @route '/api/media/stats'
 */
 export const stats = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -706,7 +706,7 @@ stats.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::stats
-* @see app/Http/Controllers/MediaController.php:299
+* @see app/Http/Controllers/MediaController.php:298
 * @route '/api/media/stats'
 */
 stats.url = (options?: RouteQueryOptions) => {
@@ -715,7 +715,7 @@ stats.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\MediaController::stats
-* @see app/Http/Controllers/MediaController.php:299
+* @see app/Http/Controllers/MediaController.php:298
 * @route '/api/media/stats'
 */
 stats.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -725,7 +725,7 @@ stats.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\MediaController::stats
-* @see app/Http/Controllers/MediaController.php:299
+* @see app/Http/Controllers/MediaController.php:298
 * @route '/api/media/stats'
 */
 stats.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -735,7 +735,7 @@ stats.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\MediaController::stats
-* @see app/Http/Controllers/MediaController.php:299
+* @see app/Http/Controllers/MediaController.php:298
 * @route '/api/media/stats'
 */
 const statsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -745,7 +745,7 @@ const statsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\MediaController::stats
-* @see app/Http/Controllers/MediaController.php:299
+* @see app/Http/Controllers/MediaController.php:298
 * @route '/api/media/stats'
 */
 statsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -755,7 +755,7 @@ statsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\MediaController::stats
-* @see app/Http/Controllers/MediaController.php:299
+* @see app/Http/Controllers/MediaController.php:298
 * @route '/api/media/stats'
 */
 statsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -772,7 +772,7 @@ stats.form = statsForm
 
 /**
 * @see \App\Http\Controllers\MediaController::move
-* @see app/Http/Controllers/MediaController.php:312
+* @see app/Http/Controllers/MediaController.php:311
 * @route '/api/media/move'
 */
 export const move = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -787,7 +787,7 @@ move.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::move
-* @see app/Http/Controllers/MediaController.php:312
+* @see app/Http/Controllers/MediaController.php:311
 * @route '/api/media/move'
 */
 move.url = (options?: RouteQueryOptions) => {
@@ -796,7 +796,7 @@ move.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\MediaController::move
-* @see app/Http/Controllers/MediaController.php:312
+* @see app/Http/Controllers/MediaController.php:311
 * @route '/api/media/move'
 */
 move.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -806,7 +806,7 @@ move.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\MediaController::move
-* @see app/Http/Controllers/MediaController.php:312
+* @see app/Http/Controllers/MediaController.php:311
 * @route '/api/media/move'
 */
 const moveForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -816,7 +816,7 @@ const moveForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => (
 
 /**
 * @see \App\Http\Controllers\MediaController::move
-* @see app/Http/Controllers/MediaController.php:312
+* @see app/Http/Controllers/MediaController.php:311
 * @route '/api/media/move'
 */
 moveForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -828,7 +828,7 @@ move.form = moveForm
 
 /**
 * @see \App\Http\Controllers\MediaController::bulkDelete
-* @see app/Http/Controllers/MediaController.php:323
+* @see app/Http/Controllers/MediaController.php:322
 * @route '/api/media/bulk-delete'
 */
 export const bulkDelete = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -843,7 +843,7 @@ bulkDelete.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::bulkDelete
-* @see app/Http/Controllers/MediaController.php:323
+* @see app/Http/Controllers/MediaController.php:322
 * @route '/api/media/bulk-delete'
 */
 bulkDelete.url = (options?: RouteQueryOptions) => {
@@ -852,7 +852,7 @@ bulkDelete.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\MediaController::bulkDelete
-* @see app/Http/Controllers/MediaController.php:323
+* @see app/Http/Controllers/MediaController.php:322
 * @route '/api/media/bulk-delete'
 */
 bulkDelete.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -862,7 +862,7 @@ bulkDelete.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\MediaController::bulkDelete
-* @see app/Http/Controllers/MediaController.php:323
+* @see app/Http/Controllers/MediaController.php:322
 * @route '/api/media/bulk-delete'
 */
 const bulkDeleteForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -872,7 +872,7 @@ const bulkDeleteForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'
 
 /**
 * @see \App\Http\Controllers\MediaController::bulkDelete
-* @see app/Http/Controllers/MediaController.php:323
+* @see app/Http/Controllers/MediaController.php:322
 * @route '/api/media/bulk-delete'
 */
 bulkDeleteForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -884,7 +884,7 @@ bulkDelete.form = bulkDeleteForm
 
 /**
 * @see \App\Http\Controllers\MediaController::apiShow
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 export const apiShow = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -899,7 +899,7 @@ apiShow.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::apiShow
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 apiShow.url = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -932,7 +932,7 @@ apiShow.url = (args: { media: string | { id: string } } | [media: string | { id:
 
 /**
 * @see \App\Http\Controllers\MediaController::apiShow
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 apiShow.get = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -942,7 +942,7 @@ apiShow.get = (args: { media: string | { id: string } } | [media: string | { id:
 
 /**
 * @see \App\Http\Controllers\MediaController::apiShow
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 apiShow.head = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -952,7 +952,7 @@ apiShow.head = (args: { media: string | { id: string } } | [media: string | { id
 
 /**
 * @see \App\Http\Controllers\MediaController::apiShow
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 const apiShowForm = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -962,7 +962,7 @@ const apiShowForm = (args: { media: string | { id: string } } | [media: string |
 
 /**
 * @see \App\Http\Controllers\MediaController::apiShow
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 apiShowForm.get = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -972,7 +972,7 @@ apiShowForm.get = (args: { media: string | { id: string } } | [media: string | {
 
 /**
 * @see \App\Http\Controllers\MediaController::apiShow
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 apiShowForm.head = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -989,7 +989,7 @@ apiShow.form = apiShowForm
 
 /**
 * @see \App\Http\Controllers\MediaController::replace
-* @see app/Http/Controllers/MediaController.php:394
+* @see app/Http/Controllers/MediaController.php:393
 * @route '/media/{media}/replace'
 */
 export const replace = (args: { media: string | number } | [media: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -1004,7 +1004,7 @@ replace.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::replace
-* @see app/Http/Controllers/MediaController.php:394
+* @see app/Http/Controllers/MediaController.php:393
 * @route '/media/{media}/replace'
 */
 replace.url = (args: { media: string | number } | [media: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -1031,7 +1031,7 @@ replace.url = (args: { media: string | number } | [media: string | number ] | st
 
 /**
 * @see \App\Http\Controllers\MediaController::replace
-* @see app/Http/Controllers/MediaController.php:394
+* @see app/Http/Controllers/MediaController.php:393
 * @route '/media/{media}/replace'
 */
 replace.post = (args: { media: string | number } | [media: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -1041,7 +1041,7 @@ replace.post = (args: { media: string | number } | [media: string | number ] | s
 
 /**
 * @see \App\Http\Controllers\MediaController::replace
-* @see app/Http/Controllers/MediaController.php:394
+* @see app/Http/Controllers/MediaController.php:393
 * @route '/media/{media}/replace'
 */
 const replaceForm = (args: { media: string | number } | [media: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -1051,7 +1051,7 @@ const replaceForm = (args: { media: string | number } | [media: string | number 
 
 /**
 * @see \App\Http\Controllers\MediaController::replace
-* @see app/Http/Controllers/MediaController.php:394
+* @see app/Http/Controllers/MediaController.php:393
 * @route '/media/{media}/replace'
 */
 replaceForm.post = (args: { media: string | number } | [media: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

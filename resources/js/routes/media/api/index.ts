@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 export const show = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 show.url = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -49,7 +49,7 @@ show.url = (args: { media: string | { id: string } } | [media: string | { id: st
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 show.get = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -59,7 +59,7 @@ show.get = (args: { media: string | { id: string } } | [media: string | { id: st
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 show.head = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -69,7 +69,7 @@ show.head = (args: { media: string | { id: string } } | [media: string | { id: s
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 const showForm = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -79,7 +79,7 @@ const showForm = (args: { media: string | { id: string } } | [media: string | { 
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 showForm.get = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -89,7 +89,7 @@ showForm.get = (args: { media: string | { id: string } } | [media: string | { id
 
 /**
 * @see \App\Http\Controllers\MediaController::show
-* @see app/Http/Controllers/MediaController.php:284
+* @see app/Http/Controllers/MediaController.php:283
 * @route '/api/media/{media}'
 */
 showForm.head = (args: { media: string | { id: string } } | [media: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

@@ -82,7 +82,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::update
-* @see app/Http/Controllers/TenantSettingsController.php:33
+* @see app/Http/Controllers/TenantSettingsController.php:32
 * @route '/tenant/settings'
 */
 export const update = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -97,7 +97,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::update
-* @see app/Http/Controllers/TenantSettingsController.php:33
+* @see app/Http/Controllers/TenantSettingsController.php:32
 * @route '/tenant/settings'
 */
 update.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ update.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::update
-* @see app/Http/Controllers/TenantSettingsController.php:33
+* @see app/Http/Controllers/TenantSettingsController.php:32
 * @route '/tenant/settings'
 */
 update.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -116,7 +116,7 @@ update.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::update
-* @see app/Http/Controllers/TenantSettingsController.php:33
+* @see app/Http/Controllers/TenantSettingsController.php:32
 * @route '/tenant/settings'
 */
 const updateForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -126,7 +126,7 @@ const updateForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::update
-* @see app/Http/Controllers/TenantSettingsController.php:33
+* @see app/Http/Controllers/TenantSettingsController.php:32
 * @route '/tenant/settings'
 */
 updateForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -138,7 +138,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::uploadIcon
-* @see app/Http/Controllers/TenantSettingsController.php:55
+* @see app/Http/Controllers/TenantSettingsController.php:52
 * @route '/tenant/settings/icon'
 */
 export const uploadIcon = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -153,7 +153,7 @@ uploadIcon.definition = {
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::uploadIcon
-* @see app/Http/Controllers/TenantSettingsController.php:55
+* @see app/Http/Controllers/TenantSettingsController.php:52
 * @route '/tenant/settings/icon'
 */
 uploadIcon.url = (options?: RouteQueryOptions) => {
@@ -162,7 +162,7 @@ uploadIcon.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::uploadIcon
-* @see app/Http/Controllers/TenantSettingsController.php:55
+* @see app/Http/Controllers/TenantSettingsController.php:52
 * @route '/tenant/settings/icon'
 */
 uploadIcon.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -172,7 +172,7 @@ uploadIcon.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::uploadIcon
-* @see app/Http/Controllers/TenantSettingsController.php:55
+* @see app/Http/Controllers/TenantSettingsController.php:52
 * @route '/tenant/settings/icon'
 */
 const uploadIconForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -182,7 +182,7 @@ const uploadIconForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::uploadIcon
-* @see app/Http/Controllers/TenantSettingsController.php:55
+* @see app/Http/Controllers/TenantSettingsController.php:52
 * @route '/tenant/settings/icon'
 */
 uploadIconForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -194,7 +194,7 @@ uploadIcon.form = uploadIconForm
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteIcon
-* @see app/Http/Controllers/TenantSettingsController.php:113
+* @see app/Http/Controllers/TenantSettingsController.php:110
 * @route '/tenant/settings/icon'
 */
 export const deleteIcon = (options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -209,7 +209,7 @@ deleteIcon.definition = {
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteIcon
-* @see app/Http/Controllers/TenantSettingsController.php:113
+* @see app/Http/Controllers/TenantSettingsController.php:110
 * @route '/tenant/settings/icon'
 */
 deleteIcon.url = (options?: RouteQueryOptions) => {
@@ -218,7 +218,7 @@ deleteIcon.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteIcon
-* @see app/Http/Controllers/TenantSettingsController.php:113
+* @see app/Http/Controllers/TenantSettingsController.php:110
 * @route '/tenant/settings/icon'
 */
 deleteIcon.delete = (options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -228,7 +228,7 @@ deleteIcon.delete = (options?: RouteQueryOptions): RouteDefinition<'delete'> => 
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteIcon
-* @see app/Http/Controllers/TenantSettingsController.php:113
+* @see app/Http/Controllers/TenantSettingsController.php:110
 * @route '/tenant/settings/icon'
 */
 const deleteIconForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -243,7 +243,7 @@ const deleteIconForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteIcon
-* @see app/Http/Controllers/TenantSettingsController.php:113
+* @see app/Http/Controllers/TenantSettingsController.php:110
 * @route '/tenant/settings/icon'
 */
 deleteIconForm.delete = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -260,7 +260,7 @@ deleteIcon.form = deleteIconForm
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::uploadSplash
-* @see app/Http/Controllers/TenantSettingsController.php:84
+* @see app/Http/Controllers/TenantSettingsController.php:81
 * @route '/tenant/settings/splash'
 */
 export const uploadSplash = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -275,7 +275,7 @@ uploadSplash.definition = {
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::uploadSplash
-* @see app/Http/Controllers/TenantSettingsController.php:84
+* @see app/Http/Controllers/TenantSettingsController.php:81
 * @route '/tenant/settings/splash'
 */
 uploadSplash.url = (options?: RouteQueryOptions) => {
@@ -284,7 +284,7 @@ uploadSplash.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::uploadSplash
-* @see app/Http/Controllers/TenantSettingsController.php:84
+* @see app/Http/Controllers/TenantSettingsController.php:81
 * @route '/tenant/settings/splash'
 */
 uploadSplash.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -294,7 +294,7 @@ uploadSplash.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::uploadSplash
-* @see app/Http/Controllers/TenantSettingsController.php:84
+* @see app/Http/Controllers/TenantSettingsController.php:81
 * @route '/tenant/settings/splash'
 */
 const uploadSplashForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -304,7 +304,7 @@ const uploadSplashForm = (options?: RouteQueryOptions): RouteFormDefinition<'pos
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::uploadSplash
-* @see app/Http/Controllers/TenantSettingsController.php:84
+* @see app/Http/Controllers/TenantSettingsController.php:81
 * @route '/tenant/settings/splash'
 */
 uploadSplashForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -316,7 +316,7 @@ uploadSplash.form = uploadSplashForm
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteSplash
-* @see app/Http/Controllers/TenantSettingsController.php:127
+* @see app/Http/Controllers/TenantSettingsController.php:124
 * @route '/tenant/settings/splash'
 */
 export const deleteSplash = (options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -331,7 +331,7 @@ deleteSplash.definition = {
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteSplash
-* @see app/Http/Controllers/TenantSettingsController.php:127
+* @see app/Http/Controllers/TenantSettingsController.php:124
 * @route '/tenant/settings/splash'
 */
 deleteSplash.url = (options?: RouteQueryOptions) => {
@@ -340,7 +340,7 @@ deleteSplash.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteSplash
-* @see app/Http/Controllers/TenantSettingsController.php:127
+* @see app/Http/Controllers/TenantSettingsController.php:124
 * @route '/tenant/settings/splash'
 */
 deleteSplash.delete = (options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -350,7 +350,7 @@ deleteSplash.delete = (options?: RouteQueryOptions): RouteDefinition<'delete'> =
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteSplash
-* @see app/Http/Controllers/TenantSettingsController.php:127
+* @see app/Http/Controllers/TenantSettingsController.php:124
 * @route '/tenant/settings/splash'
 */
 const deleteSplashForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -365,7 +365,7 @@ const deleteSplashForm = (options?: RouteQueryOptions): RouteFormDefinition<'pos
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteSplash
-* @see app/Http/Controllers/TenantSettingsController.php:127
+* @see app/Http/Controllers/TenantSettingsController.php:124
 * @route '/tenant/settings/splash'
 */
 deleteSplashForm.delete = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

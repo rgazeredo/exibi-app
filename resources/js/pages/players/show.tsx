@@ -1,8 +1,8 @@
 import {
-    HeartbeatHistoryModal,
     PlayerDiagnostics,
     type HeartbeatEntry,
 } from '@/components/PlayerDiagnostics';
+import { LayoutPreview } from '@/components/layout-preview';
 import { TagBadges } from '@/components/tag-input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,7 +25,6 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import axios from 'axios';
 import {
-    Activity,
     AlertCircle,
     ArrowLeft,
     Camera,
@@ -121,8 +120,18 @@ interface Player {
         id: string;
         name: string;
         source: 'player' | 'group';
+        orientation: 'landscape' | 'portrait';
         group_name: string | null;
         region_count: number;
+        regions: Array<{
+            id: string;
+            name: string;
+            x_percent: number;
+            y_percent: number;
+            width_percent: number;
+            height_percent: number;
+            is_main: boolean;
+        }>;
         region_playlists: Array<{
             region_name: string;
             playlist: {
@@ -140,15 +149,6 @@ interface Player {
         is_default: boolean;
         is_active: boolean;
     }>;
-    player_group: {
-        id: string;
-        name: string;
-        is_default: boolean;
-        layout?: {
-            id: string;
-            name: string;
-        } | null;
-    } | null;
     tags: Tag[];
     config: {
         orientation?: string;
@@ -536,13 +536,6 @@ export default function PlayerShow({
                                 <Edit className="mr-2 h-4 w-4" />
                                 {t('common.edit')}
                             </Link>
-                        </Button>
-                        <Button
-                            variant="outline"
-                            onClick={() => setReplaceDialogOpen(true)}
-                        >
-                            <Replace className="mr-2 h-4 w-4" />
-                            {t('players.replacePlayer')}
                         </Button>
                         <Dialog
                             open={deleteDialogOpen}
@@ -935,143 +928,127 @@ export default function PlayerShow({
                 </Dialog>
 
                 <div className="grid gap-6 md:grid-cols-2">
-                    {/* Player Info */}
+                    {/* Layout */}
                     <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <MonitorPlay className="h-5 w-5" />
-                                {t('players.playerDetails')}
-                            </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    <LayoutGrid className="h-5 w-5" />
+                                    Layout
+                                </CardTitle>
+                                {player.effective_layout && (
+                                    <Button variant="outline" size="sm" asChild>
+                                        <Link
+                                            href={`/players/${player.id}/edit`}
+                                        >
+                                            <Edit className="mr-2 h-4 w-4" />
+                                            {t('common.edit')}
+                                        </Link>
+                                    </Button>
+                                )}
+                            </div>
                         </CardHeader>
                         <CardContent>
-                            <dl className="space-y-3">
-                                <div className="flex justify-between">
-                                    <dt className="text-sm text-muted-foreground">
-                                        {t('players.lastSeen')}
-                                    </dt>
-                                    <dd className="text-sm font-medium">
-                                        {player.last_seen_at ||
-                                            t('common.never')}
-                                    </dd>
-                                </div>
-                                <div className="flex justify-between">
-                                    <dt className="text-sm text-muted-foreground">
-                                        {t('players.orientation')}
-                                    </dt>
-                                    <dd className="text-sm font-medium">
-                                        {(() => {
-                                            const orientation =
-                                                player.config?.orientation ||
-                                                'landscape';
-                                            switch (orientation) {
-                                                case 'landscape':
-                                                    return t(
-                                                        'players.landscape',
-                                                    );
-                                                case 'landscape_inverted':
-                                                    return t(
-                                                        'players.landscape_inverted',
-                                                    );
-                                                case 'portrait_left':
-                                                    return t(
-                                                        'players.portrait_left',
-                                                    );
-                                                case 'portrait_right':
-                                                    return t(
-                                                        'players.portrait_right',
-                                                    );
-                                                case 'portrait':
-                                                    return t(
-                                                        'players.portrait_left',
-                                                    ); // legacy
-                                                default:
-                                                    return t(
-                                                        'players.landscape',
-                                                    );
-                                            }
-                                        })()}
-                                    </dd>
-                                </div>
-                                <div className="flex justify-between">
-                                    <dt className="text-sm text-muted-foreground">
-                                        {t('players.updateInterval')}
-                                    </dt>
-                                    <dd className="text-sm font-medium">
-                                        {player.config
-                                            ?.update_interval_minutes ||
-                                            15}{' '}
-                                        {t('players.minutes')}
-                                    </dd>
-                                </div>
-                                <div className="flex justify-between">
-                                    <dt className="text-sm text-muted-foreground">
-                                        {t('players.created')}
-                                    </dt>
-                                    <dd className="text-sm font-medium">
-                                        {formatDate(player.created_at)}
-                                    </dd>
-                                </div>
-                            </dl>
-                        </CardContent>
-                    </Card>
-
-                    {/* Layout Atual & Remote Commands */}
-                    <Card className="gap-2">
-                        {/* Layout Atual Section */}
-                        <CardHeader className="pb-2">
-                            <CardTitle className="flex items-center gap-2">
-                                <LayoutGrid className="h-5 w-5" />
-                                {t('players.currentLayout')}
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-0 pb-3">
                             {player.effective_layout ? (
-                                <div className="space-y-2">
+                                <div className="space-y-3">
+                                    {/* Layout name */}
                                     <div className="flex flex-wrap items-center gap-1">
                                         <span className="font-medium">
                                             {player.effective_layout.name}
                                         </span>
-                                        {player.effective_layout.source ===
-                                        'player' ? (
-                                            <span className="text-xs text-primary">
-                                                ({t('players.ownLayout')})
-                                            </span>
-                                        ) : player.effective_layout
-                                              .group_name ? (
-                                            <span className="text-xs text-muted-foreground">
-                                                ({t('players.inheritedFrom')}{' '}
-                                                {
-                                                    player.effective_layout
-                                                        .group_name
-                                                }
-                                                )
-                                            </span>
-                                        ) : null}
                                     </div>
-                                    {player.effective_layout.region_playlists
-                                        .length > 0 && (
-                                        <div className="space-y-1">
+
+                                    {/* Layout preview (left) + Region playlists (right) */}
+                                    <div className="flex gap-4">
+                                        {/* Layout miniature - clickable to edit */}
+                                        <div className="h-[164px] shrink-0">
+                                            <Link
+                                                href={`/players/${player.id}/edit`}
+                                                className="block h-full transition-opacity hover:opacity-80"
+                                                title={t('common.edit')}
+                                            >
+                                                <LayoutPreview
+                                                    layout={{
+                                                        id: player
+                                                            .effective_layout
+                                                            .id,
+                                                        name: player
+                                                            .effective_layout
+                                                            .name,
+                                                        tenant_id: null,
+                                                        description: null,
+                                                        orientation:
+                                                            player
+                                                                .effective_layout
+                                                                .orientation,
+                                                        is_system: false,
+                                                        is_active: true,
+                                                        regions:
+                                                            player.effective_layout.regions.map(
+                                                                (r) => ({
+                                                                    ...r,
+                                                                    layout_id:
+                                                                        player
+                                                                            .effective_layout!
+                                                                            .id,
+                                                                    position: 0,
+                                                                    created_at:
+                                                                        '',
+                                                                    updated_at:
+                                                                        '',
+                                                                }),
+                                                            ),
+                                                        created_at: '',
+                                                        updated_at: '',
+                                                    }}
+                                                    aspectRatio={
+                                                        player.effective_layout
+                                                            .orientation ===
+                                                        'portrait'
+                                                            ? '9:16'
+                                                            : '16:9'
+                                                    }
+                                                    className="!h-full !w-auto cursor-pointer"
+                                                />
+                                            </Link>
+                                        </div>
+
+                                        {/* Region playlists */}
+                                        <div className="flex flex-1 flex-col gap-3">
+                                            <span className="font-semibold">
+                                                {t('layouts.regions')}
+                                            </span>
                                             {player.effective_layout.region_playlists.map(
                                                 (rp, idx) => (
                                                     <div
                                                         key={idx}
-                                                        className="flex items-center gap-1.5 text-sm"
+                                                        className="rounded-md border p-2"
                                                     >
-                                                        <span className="shrink-0 text-muted-foreground">
-                                                            {rp.region_name}:
-                                                        </span>
+                                                        <div className="text-xs font-medium text-muted-foreground">
+                                                            {rp.region_name
+                                                                .replace(
+                                                                    /_/g,
+                                                                    ' ',
+                                                                )
+                                                                .replace(
+                                                                    /\b\w/g,
+                                                                    (c) =>
+                                                                        c.toUpperCase(),
+                                                                )}
+                                                        </div>
                                                         {rp.playlist ? (
                                                             <Link
                                                                 href={`/playlists/${rp.playlist.id}`}
-                                                                className="truncate hover:underline"
+                                                                className="text-sm font-medium text-primary hover:underline"
                                                             >
+                                                                Playlist:{' '}
                                                                 {
                                                                     rp.playlist
                                                                         .name
                                                                 }
                                                             </Link>
                                                         ) : (
-                                                            <span className="text-muted-foreground italic">
+                                                            <span className="text-sm text-muted-foreground italic">
                                                                 {t(
                                                                     'players.noneAssigned',
                                                                 )}
@@ -1081,58 +1058,91 @@ export default function PlayerShow({
                                                 ),
                                             )}
                                         </div>
-                                    )}
+                                    </div>
                                 </div>
                             ) : (
-                                <p className="text-sm text-muted-foreground italic">
-                                    {t('players.noneAssigned')}
-                                </p>
+                                <div className="flex flex-col items-center justify-center py-8 text-center">
+                                    <LayoutGrid className="mb-2 h-8 w-8 text-muted-foreground/50" />
+                                    <p className="text-sm text-muted-foreground">
+                                        {t('players.noneAssigned')}
+                                    </p>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="mt-3"
+                                        asChild
+                                    >
+                                        <Link
+                                            href={`/players/${player.id}/edit`}
+                                        >
+                                            <Edit className="mr-2 h-4 w-4" />
+                                            {t('players.configureLayout')}
+                                        </Link>
+                                    </Button>
+                                </div>
                             )}
                         </CardContent>
+                    </Card>
 
-                        {/* Remote Commands Section */}
-                        <CardHeader className="pt-0 pb-2">
-                            <CardTitle className="flex items-center gap-2 text-base">
-                                <Power className="h-4 w-4" />
+                    {/* Remote Commands */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <Power className="h-5 w-5" />
                                 {t('players.remoteCommands')}
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="pt-0">
-                            <div className="flex flex-wrap gap-3">
+                        <CardContent>
+                            <div className="grid grid-cols-3 gap-3">
+                                {/* Atualizar Player */}
                                 <Button
                                     variant="outline"
-                                    size="sm"
+                                    className="flex h-20 cursor-pointer flex-col items-center justify-center gap-1.5 bg-muted/50 p-2 transition-all hover:border-primary hover:bg-primary/10"
                                     onClick={() => setRefreshDialogOpen(true)}
-                                    disabled={sendingCommand !== null}
+                                    disabled={
+                                        !player.is_online ||
+                                        sendingCommand !== null
+                                    }
                                 >
                                     {sendingCommand === 'refresh-playlist' ? (
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        <Loader2 className="h-6 w-6 animate-spin text-primary" />
                                     ) : (
-                                        <ListRestart className="mr-2 h-4 w-4" />
+                                        <ListRestart className="h-6 w-6 text-primary" />
                                     )}
-                                    {t('players.refreshPlayer')}
+                                    <span className="text-sm font-semibold">
+                                        {t('players.refreshPlayer')}
+                                    </span>
                                 </Button>
+
+                                {/* Reiniciar App */}
                                 <Button
                                     variant="outline"
-                                    size="sm"
+                                    className="flex h-20 cursor-pointer flex-col items-center justify-center gap-1.5 bg-muted/50 p-2 transition-all hover:border-primary hover:bg-primary/10"
                                     onClick={() =>
                                         sendCommand(
                                             'reboot',
                                             t('players.reboot'),
                                         )
                                     }
-                                    disabled={sendingCommand !== null}
+                                    disabled={
+                                        !player.is_online ||
+                                        sendingCommand !== null
+                                    }
                                 >
                                     {sendingCommand === 'reboot' ? (
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
                                     ) : (
-                                        <Power className="mr-2 h-4 w-4" />
+                                        <Power className="h-6 w-6 text-orange-500" />
                                     )}
-                                    {t('players.reboot')}
+                                    <span className="text-sm font-semibold">
+                                        {t('players.reboot')}
+                                    </span>
                                 </Button>
+
+                                {/* Captura de Tela */}
                                 <Button
                                     variant="outline"
-                                    size="sm"
+                                    className="flex h-20 cursor-pointer flex-col items-center justify-center gap-1.5 bg-muted/50 p-2 transition-all hover:border-primary hover:bg-primary/10"
                                     onClick={requestScreenshot}
                                     disabled={
                                         !player.is_online ||
@@ -1141,40 +1151,43 @@ export default function PlayerShow({
                                     }
                                 >
                                     {screenshotLoading ? (
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
                                     ) : (
-                                        <Camera className="mr-2 h-4 w-4" />
+                                        <Camera className="h-6 w-6 text-blue-500" />
                                     )}
-                                    {t('players.screenshot')}
+                                    <span className="text-sm font-semibold">
+                                        {t('players.screenshot')}
+                                    </span>
                                 </Button>
 
-                                {/* Separator */}
-                                <div className="mx-1 h-8 w-px bg-border" />
-
-                                {/* Connection History */}
-                                <HeartbeatHistoryModal
-                                    heartbeatHistory={heartbeat_history}
-                                    trigger={
-                                        <Button variant="outline" size="sm">
-                                            <Activity className="mr-2 h-4 w-4" />
-                                            {t(
-                                                'players.diagnostics.heartbeatHistory',
-                                            )}
-                                        </Button>
-                                    }
-                                />
+                                {/* Histórico de Exibição */}
                                 <Button
                                     variant="outline"
-                                    size="sm"
+                                    className="flex h-20 cursor-pointer flex-col items-center justify-center gap-1.5 bg-muted/50 p-2 transition-all hover:border-primary hover:bg-primary/10"
                                     onClick={() => {
                                         setPlaybackHistoryOpen(true);
                                         fetchPlaybackLogs();
                                     }}
                                 >
-                                    <HistoryIcon className="mr-2 h-4 w-4" />
-                                    {t('players.playbackHistory')}
+                                    <HistoryIcon className="h-6 w-6 text-violet-500" />
+                                    <span className="text-sm font-semibold">
+                                        {t('players.playbackHistory')}
+                                    </span>
+                                </Button>
+
+                                {/* Substituir Player */}
+                                <Button
+                                    variant="outline"
+                                    className="flex h-20 cursor-pointer flex-col items-center justify-center gap-1.5 bg-muted/50 p-2 transition-all hover:border-primary hover:bg-primary/10"
+                                    onClick={() => setReplaceDialogOpen(true)}
+                                >
+                                    <Replace className="h-6 w-6 text-emerald-500" />
+                                    <span className="text-sm font-semibold">
+                                        {t('players.replacePlayer')}
+                                    </span>
                                 </Button>
                             </div>
+
                             {commandFeedback && (
                                 <div
                                     className={`mt-3 flex items-center gap-2 rounded-md p-3 text-sm ${
@@ -1207,6 +1220,12 @@ export default function PlayerShow({
                     geolocation={player.geolocation}
                     deviceInfo={player.device_info}
                     diagnostics={player.diagnostics}
+                    lastSeenAt={player.last_seen_at}
+                    orientation={player.config?.orientation}
+                    updateIntervalMinutes={
+                        player.config?.update_interval_minutes || 15
+                    }
+                    createdAt={player.created_at}
                 />
             </div>
         </AppLayout>

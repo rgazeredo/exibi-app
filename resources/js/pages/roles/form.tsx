@@ -46,7 +46,6 @@ const MODULE_LABELS: Record<string, string> = {
     media: 'Mídia',
     playlists: 'Playlists',
     players: 'Players',
-    player_groups: 'Grupos de Players',
     widgets: 'Widgets',
     tags: 'Tags',
     reports: 'Relatórios',

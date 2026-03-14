@@ -132,21 +132,16 @@ class PlayerActivationController extends Controller
         // WebSocket config for real-time communication (allows existing players to update config)
         $webSocketConfig = $webSocketService->getConfig();
 
-        // Get player's assigned layout
+        // Get player's assigned layout (always required)
         $layout = $player->getEffectiveLayout();
 
-        if ($layout) {
-            return $this->buildLegacyLayoutResponse($player, $layout, $playlistService, $splashScreenUrl, $webSocketConfig, $request);
-        }
-
-        // No layout assigned
-        return $this->buildLegacyPlaylistResponse($player, $playlistService, $splashScreenUrl, $webSocketConfig, $request);
+        return $this->buildLayoutResponse($player, $layout, $playlistService, $splashScreenUrl, $webSocketConfig, $request);
     }
 
     /**
      * Build response with layout and region playlists.
      */
-    private function buildLegacyLayoutResponse(
+    private function buildLayoutResponse(
         Player $player,
         \App\Models\Layout $layout,
         PlaylistService $playlistService,
@@ -189,7 +184,7 @@ class PlayerActivationController extends Controller
                 'width_percent' => (float) $region->width_percent,
                 'height_percent' => (float) $region->height_percent,
                 'is_main' => $region->is_main,
-                'scale_type' => 'aspect', // Default for legacy layouts
+                'scale_type' => 'aspect',
                 'playlist' => $playlistData,
             ];
         });
@@ -214,36 +209,6 @@ class PlayerActivationController extends Controller
                 'regions' => $regionsData,
             ],
             'playlist' => null, // Null when using layout
-            // WebSocket config for real-time commands (allows existing players to update config)
-            'websocket' => $webSocketConfig,
-        ]);
-    }
-
-    /**
-     * Build response when no layout is configured.
-     * Returns empty response with splash screen.
-     */
-    private function buildLegacyPlaylistResponse(
-        Player $player,
-        PlaylistService $playlistService,
-        ?string $splashScreenUrl,
-        array $webSocketConfig,
-        Request $request
-    ): JsonResponse {
-        $config = $player->getEffectiveConfig();
-
-        return response()->json([
-            'server_time' => now()->getTimestampMs(),
-            'splash_screen_url' => $splashScreenUrl,
-            'config' => $config,
-            // Operating hours status (new system)
-
-            // Backwards compatibility
-
-            'kiosk_settings' => $player->tenant?->getKioskSettings(),
-            'layout' => null,
-            'playlist' => null,
-            'message' => 'No layout or playlist assigned',
             // WebSocket config for real-time commands (allows existing players to update config)
             'websocket' => $webSocketConfig,
         ]);

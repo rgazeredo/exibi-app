@@ -169,15 +169,6 @@ export default function ReportsIndex({ filters }: ReportsIndexProps) {
                 header: t('reports.duration'),
                 cell: ({ row }) => formatDuration(row.getValue('duration_seconds')),
             },
-            {
-                accessorKey: 'completed',
-                header: t('reports.completed'),
-                cell: ({ row }) => (
-                    <Badge variant={row.getValue('completed') ? 'default' : 'secondary'}>
-                        {row.getValue('completed') ? t('common.yes') : t('common.no')}
-                    </Badge>
-                ),
-            },
         ],
         [t],
     );
@@ -216,7 +207,6 @@ export default function ReportsIndex({ filters }: ReportsIndexProps) {
                             <SelectItem value="today">{t('reports.today')}</SelectItem>
                             <SelectItem value="7d">{t('reports.last7days')}</SelectItem>
                             <SelectItem value="30d">{t('reports.last30days')}</SelectItem>
-                            <SelectItem value="90d">{t('reports.last90days')}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>

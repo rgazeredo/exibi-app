@@ -55,7 +55,7 @@ export function AppSidebar() {
 
     // Menus when a tenant is selected
     // Order based on workflow: Content → Organization → Distribution → Monitoring → Admin
-    const tenantNavItems: NavItem[] = useMemo(() => {
+    const tenantNavItems: NavItem[] = (() => {
         const items: NavItem[] = [
             {
                 title: t('nav.dashboard'),
@@ -72,19 +72,19 @@ export function AppSidebar() {
             });
         }
 
-        if (canViewModule('tags')) {
-            items.push({
-                title: t('nav.tags'),
-                href: '/tags',
-                icon: Tags,
-            });
-        }
-
         if (canViewModule('playlists')) {
             items.push({
                 title: t('nav.playlists'),
                 href: '/playlists',
                 icon: ListVideo,
+            });
+        }
+
+        if (canViewModule('players')) {
+            items.push({
+                title: t('nav.players'),
+                href: '/players',
+                icon: MonitorPlay,
             });
         }
 
@@ -96,11 +96,11 @@ export function AppSidebar() {
             });
         }
 
-        if (canViewModule('players')) {
+        if (canViewModule('tags')) {
             items.push({
-                title: t('nav.players'),
-                href: '/players',
-                icon: MonitorPlay,
+                title: t('nav.tags'),
+                href: '/tags',
+                icon: Tags,
             });
         }
 
@@ -113,9 +113,9 @@ export function AppSidebar() {
         }
 
         return items;
-    }, [t, permissions, isSuperAdmin]);
+    })();
 
-    const tenantAdminNavItems: NavItem[] = useMemo(() => {
+    const tenantAdminNavItems: NavItem[] = (() => {
         const items: NavItem[] = [];
 
         if (hasPermission('settings.manage')) {
@@ -127,7 +127,7 @@ export function AppSidebar() {
         }
 
         return items;
-    }, [t, permissions, isSuperAdmin]);
+    })();
 
     // Menus for super admin without tenant context
     const superAdminNavItems: NavItem[] = useMemo(

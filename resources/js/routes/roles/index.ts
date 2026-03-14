@@ -82,7 +82,7 @@ search.form = searchForm
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 export const list = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +97,7 @@ list.definition = {
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 list.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ list.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 list.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -116,7 +116,7 @@ list.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 list.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -126,7 +126,7 @@ list.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 const listForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -136,7 +136,7 @@ const listForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 listForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -146,7 +146,7 @@ listForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\TenantRoleController::list
-* @see app/Http/Controllers/TenantRoleController.php:211
+* @see app/Http/Controllers/TenantRoleController.php:218
 * @route '/api/roles'
 */
 listForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

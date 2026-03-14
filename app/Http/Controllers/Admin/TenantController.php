@@ -311,16 +311,13 @@ class TenantController extends Controller
             // 12. Delete players (player_layouts, player_region_playlists cascade automatically)
             $tenant->players()->delete();
 
-            // 13. Delete player groups (player_group_layouts, player_group_region_playlists cascade automatically)
-            $tenant->playerGroups()->delete();
-
-            // 14. Delete widgets (only tenant-owned, not global)
+            // 13. Delete widgets (only tenant-owned, not global)
             Widget::withoutGlobalScopes()->where('tenant_id', $tenant->id)->delete();
 
-            // 15. Delete tags
+            // 14. Delete tags
             Tag::withoutGlobalScopes()->where('tenant_id', $tenant->id)->delete();
 
-            // 16. Delete tenant roles (tenant_role_permissions cascade automatically)
+            // 15. Delete tenant roles (tenant_role_permissions cascade automatically)
             $tenant->roles()->delete();
 
             // 18. Get users that ONLY belong to this tenant (to delete them)

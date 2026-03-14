@@ -103,7 +103,6 @@ interface LogsPageProps {
         player_id?: string;
         media_id?: string;
         tag_id?: string;
-        completed?: string;
         date_from?: string;
         date_to?: string;
     };
@@ -125,7 +124,6 @@ export default function LogsPage({
     const [playerId, setPlayerId] = useState(filters.player_id || '_all');
     const [mediaId, setMediaId] = useState(filters.media_id || '_all');
     const [tagId, setTagId] = useState(filters.tag_id || '_all');
-    const [completed, setCompleted] = useState(filters.completed || 'all');
     const [dateFrom, setDateFrom] = useState(filters.date_from || '');
     const [dateTo, setDateTo] = useState(filters.date_to || '');
 
@@ -175,7 +173,6 @@ export default function LogsPage({
                 if (mediaId && mediaId !== '_all')
                     params.set('media_id', mediaId);
                 if (tagId && tagId !== '_all') params.set('tag_id', tagId);
-                if (completed !== 'all') params.set('completed', completed);
 
                 if (sorting.length > 0) {
                     params.set('sort', sorting[0].id);
@@ -207,7 +204,6 @@ export default function LogsPage({
             playerId,
             mediaId,
             tagId,
-            completed,
             sorting,
         ],
     );
@@ -221,7 +217,6 @@ export default function LogsPage({
         playerId,
         mediaId,
         tagId,
-        completed,
         sorting,
     ]);
 
@@ -246,7 +241,6 @@ export default function LogsPage({
         setPlayerId('_all');
         setMediaId('_all');
         setTagId('_all');
-        setCompleted('all');
         setDateFrom('');
         setDateTo('');
     };
@@ -255,7 +249,6 @@ export default function LogsPage({
         (playerId && playerId !== '_all') ||
         (mediaId && mediaId !== '_all') ||
         (tagId && tagId !== '_all') ||
-        completed !== 'all' ||
         dateRange === 'custom';
 
     // Helper to get selected item names
@@ -358,21 +351,6 @@ export default function LogsPage({
                     </span>
                 ),
             },
-            {
-                accessorKey: 'completed',
-                header: t('reports.completed'),
-                cell: ({ row }) => (
-                    <Badge
-                        variant={
-                            row.getValue('completed') ? 'default' : 'secondary'
-                        }
-                    >
-                        {row.getValue('completed')
-                            ? t('common.yes')
-                            : t('common.no')}
-                    </Badge>
-                ),
-            },
         ],
         [t],
     );
@@ -449,9 +427,6 @@ export default function LogsPage({
                                         </SelectItem>
                                         <SelectItem value="30d">
                                             {t('reports.last30days')}
-                                        </SelectItem>
-                                        <SelectItem value="90d">
-                                            {t('reports.last90days')}
                                         </SelectItem>
                                         <SelectItem value="custom">
                                             {t('reports.customRange')}
@@ -779,30 +754,6 @@ export default function LogsPage({
                                         </Command>
                                     </PopoverContent>
                                 </Popover>
-                            </div>
-
-                            {/* Completion Status */}
-                            <div className="space-y-2">
-                                <Label>{t('reports.completionStatus')}</Label>
-                                <Select
-                                    value={completed}
-                                    onValueChange={setCompleted}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="all">
-                                            {t('common.all')}
-                                        </SelectItem>
-                                        <SelectItem value="yes">
-                                            {t('reports.completedOnly')}
-                                        </SelectItem>
-                                        <SelectItem value="no">
-                                            {t('reports.incompleteOnly')}
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
                             </div>
                         </div>
                     </CardContent>

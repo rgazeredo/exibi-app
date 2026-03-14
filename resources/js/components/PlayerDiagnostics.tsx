@@ -1,12 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
-import { Link } from '@inertiajs/react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Dialog,
     DialogContent,
@@ -25,6 +19,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { useT } from '@/hooks/use-translations';
+import { Link } from '@inertiajs/react';
 import {
     Activity,
     Cpu,
@@ -34,10 +29,8 @@ import {
     Map,
     MapPin,
     MemoryStick,
-    Monitor,
     Network,
     Smartphone,
-    Thermometer,
 } from 'lucide-react';
 
 interface SystemInfo {
@@ -105,6 +98,11 @@ interface PlayerDiagnosticsProps {
     geolocation: GeoLocation | null;
     deviceInfo: DeviceInfo | null;
     diagnostics: Diagnostics | null;
+    // Player info props
+    lastSeenAt?: string | null;
+    orientation?: string;
+    updateIntervalMinutes?: number;
+    createdAt?: string;
 }
 
 export function PlayerDiagnostics({
@@ -115,6 +113,10 @@ export function PlayerDiagnostics({
     geolocation,
     deviceInfo,
     diagnostics,
+    lastSeenAt,
+    orientation,
+    updateIntervalMinutes,
+    createdAt,
 }: PlayerDiagnosticsProps) {
     const { t } = useT();
 
@@ -182,98 +184,196 @@ export function PlayerDiagnostics({
 
     return (
         <div className="space-y-4">
-            {/* Row 1: Device Info + System Resources */}
+            {/* Row 1: Player Details (with divider) + System Resources */}
             <div className="grid gap-4 md:grid-cols-2">
-                {/* Device Info Card */}
+                {/* Player Details Card (divided in two sections) */}
                 <Card>
                     <CardHeader className="pb-3">
                         <CardTitle className="flex items-center gap-2 text-base">
                             <Smartphone className="h-4 w-4" />
-                            {t('players.diagnostics.device') || 'Dispositivo'}
+                            {t('players.playerDetails') || 'Detalhes do Player'}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-2">
-                            {deviceInfo?.manufacturer && (
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">
-                                        {t('players.diagnostics.manufacturer') ||
-                                            'Fabricante'}
-                                    </span>
-                                    <span className="font-medium">
-                                        {deviceInfo.manufacturer}
-                                    </span>
-                                </div>
-                            )}
-                            {deviceInfo?.model && (
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">
-                                        {t('players.diagnostics.model') ||
-                                            'Modelo'}
-                                    </span>
-                                    <span className="font-medium">
-                                        {deviceInfo.model}
-                                    </span>
-                                </div>
-                            )}
-                            {deviceInfo?.android_version && (
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">
-                                        {t('players.diagnostics.androidVersion') ||
-                                            'Android'}
-                                    </span>
-                                    <span className="font-medium">
-                                        {deviceInfo.android_version}
-                                        {deviceInfo.sdk_version &&
-                                            ` (SDK ${deviceInfo.sdk_version})`}
-                                    </span>
-                                </div>
-                            )}
-                            {deviceInfo?.screen_resolution && (
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">
-                                        <Monitor className="mr-1 inline h-3 w-3" />
-                                        {t('players.diagnostics.resolution') ||
-                                            'Resolução'}
-                                    </span>
-                                    <span className="font-medium">
-                                        {deviceInfo.screen_resolution}
-                                    </span>
-                                </div>
-                            )}
-                            {deviceId && (
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">
-                                        Device ID
-                                    </span>
-                                    <span className="font-mono text-xs">
-                                        {deviceId.length > 16
-                                            ? `${deviceId.slice(0, 8)}...${deviceId.slice(-8)}`
-                                            : deviceId}
-                                    </span>
-                                </div>
-                            )}
-                            {macAddress && (
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">
-                                        MAC Address
-                                    </span>
-                                    <span className="font-mono text-xs">
-                                        {macAddress}
-                                    </span>
-                                </div>
-                            )}
-                            {diagnostics?.app_version && (
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">
-                                        {t('players.diagnostics.appVersion') ||
-                                            'Versão do App'}
-                                    </span>
-                                    <Badge variant="secondary">
-                                        v{diagnostics.app_version}
-                                    </Badge>
-                                </div>
-                            )}
+                        <div className="grid grid-cols-2 gap-4">
+                            {/* Left side - Player info */}
+                            <div className="space-y-2">
+                                {lastSeenAt !== undefined && (
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted-foreground">
+                                            {t('players.lastSeen') ||
+                                                'Última conexão'}
+                                        </span>
+                                        <span className="font-medium">
+                                            {lastSeenAt ||
+                                                t('common.never') ||
+                                                'Nunca'}
+                                        </span>
+                                    </div>
+                                )}
+                                {orientation && (
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted-foreground">
+                                            {t('players.orientation') ||
+                                                'Orientação'}
+                                        </span>
+                                        <span className="font-medium">
+                                            {(() => {
+                                                switch (orientation) {
+                                                    case 'landscape':
+                                                        return (
+                                                            t(
+                                                                'players.landscape',
+                                                            ) || 'Paisagem'
+                                                        );
+                                                    case 'landscape_inverted':
+                                                        return (
+                                                            t(
+                                                                'players.landscape_inverted',
+                                                            ) ||
+                                                            'Paisagem Invertida'
+                                                        );
+                                                    case 'portrait_left':
+                                                        return (
+                                                            t(
+                                                                'players.portrait_left',
+                                                            ) ||
+                                                            'Retrato (Esquerda)'
+                                                        );
+                                                    case 'portrait_right':
+                                                        return (
+                                                            t(
+                                                                'players.portrait_right',
+                                                            ) ||
+                                                            'Retrato (Direita)'
+                                                        );
+                                                    case 'portrait':
+                                                        return (
+                                                            t(
+                                                                'players.portrait_left',
+                                                            ) || 'Retrato'
+                                                        );
+                                                    default:
+                                                        return (
+                                                            t(
+                                                                'players.landscape',
+                                                            ) || 'Paisagem'
+                                                        );
+                                                }
+                                            })()}
+                                        </span>
+                                    </div>
+                                )}
+                                {updateIntervalMinutes !== undefined && (
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted-foreground">
+                                            {t('players.updateInterval') ||
+                                                'Intervalo'}
+                                        </span>
+                                        <span className="font-medium">
+                                            {updateIntervalMinutes}{' '}
+                                            {t('players.minutes') || 'min'}
+                                        </span>
+                                    </div>
+                                )}
+                                {createdAt && (
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted-foreground">
+                                            {t('players.created') ||
+                                                'Criado em'}
+                                        </span>
+                                        <span className="font-medium">
+                                            {(() => {
+                                                const date = new Date(
+                                                    createdAt,
+                                                );
+                                                const day = String(
+                                                    date.getDate(),
+                                                ).padStart(2, '0');
+                                                const month = String(
+                                                    date.getMonth() + 1,
+                                                ).padStart(2, '0');
+                                                const year = date.getFullYear();
+                                                return `${day}/${month}/${year}`;
+                                            })()}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Vertical Divider */}
+                            <div className="space-y-2 border-l pl-4">
+                                {/* Right side - Device info */}
+                                {deviceInfo?.manufacturer && (
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted-foreground">
+                                            {t(
+                                                'players.diagnostics.manufacturer',
+                                            ) || 'Fabricante'}
+                                        </span>
+                                        <span className="font-medium">
+                                            {deviceInfo.manufacturer}
+                                        </span>
+                                    </div>
+                                )}
+                                {deviceInfo?.model && (
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted-foreground">
+                                            {t('players.diagnostics.model') ||
+                                                'Modelo'}
+                                        </span>
+                                        <span className="font-medium">
+                                            {deviceInfo.model}
+                                        </span>
+                                    </div>
+                                )}
+                                {deviceInfo?.android_version && (
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted-foreground">
+                                            Android
+                                        </span>
+                                        <span className="font-medium">
+                                            {deviceInfo.android_version}
+                                            {deviceInfo.sdk_version &&
+                                                ` (${deviceInfo.sdk_version})`}
+                                        </span>
+                                    </div>
+                                )}
+                                {deviceInfo?.screen_resolution && (
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted-foreground">
+                                            {t(
+                                                'players.diagnostics.resolution',
+                                            ) || 'Resolução'}
+                                        </span>
+                                        <span className="font-medium">
+                                            {deviceInfo.screen_resolution}
+                                        </span>
+                                    </div>
+                                )}
+                                {diagnostics?.app_version && (
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted-foreground">
+                                            {t(
+                                                'players.diagnostics.appVersion',
+                                            ) || 'Versão'}
+                                        </span>
+                                        <Badge variant="secondary">
+                                            v{diagnostics.app_version}
+                                        </Badge>
+                                    </div>
+                                )}
+                                {!deviceInfo?.manufacturer &&
+                                    !deviceInfo?.model &&
+                                    !deviceInfo?.android_version &&
+                                    !diagnostics?.app_version && (
+                                        <p className="text-sm text-muted-foreground">
+                                            {t(
+                                                'players.diagnostics.noDeviceInfo',
+                                            ) || 'Aguardando dados...'}
+                                        </p>
+                                    )}
+                            </div>
                         </div>
                     </CardContent>
                 </Card>
@@ -287,10 +387,8 @@ export function PlayerDiagnostics({
                                 {t('players.diagnostics.system') ||
                                     'Recursos do Sistema'}
                                 {diagnostics?.last_update_human && (
-                                    <span className="text-xs text-muted-foreground font-normal">
-                                        • {t('players.diagnostics.updated') ||
-                                            'Atualizado'}{' '}
-                                        {diagnostics.last_update_human}
+                                    <span className="text-xs font-normal text-muted-foreground">
+                                        • {diagnostics.last_update_human}
                                     </span>
                                 )}
                             </CardTitle>
@@ -304,23 +402,29 @@ export function PlayerDiagnostics({
                     </CardHeader>
                     <CardContent>
                         {hasSystemInfo ? (
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-3 gap-3">
                                 {/* CPU */}
                                 {systemInfo.cpu_usage !== undefined && (
                                     <StatCard
                                         value={`${systemInfo.cpu_usage.toFixed(0)}%`}
                                         label="CPU"
                                         icon={<Cpu className="h-4 w-4" />}
-                                        colorClass={getCpuColor(systemInfo.cpu_usage)}
+                                        colorClass={getCpuColor(
+                                            systemInfo.cpu_usage,
+                                        )}
                                         percentage={systemInfo.cpu_usage}
                                     />
                                 )}
 
                                 {/* Memory */}
-                                {systemInfo.memory_used_percent !== undefined && (
+                                {systemInfo.memory_used_percent !==
+                                    undefined && (
                                     <StatCard
                                         value={`${systemInfo.memory_used_percent.toFixed(0)}%`}
-                                        label={t('players.diagnostics.memory') || 'Memória'}
+                                        label={
+                                            t('players.diagnostics.memory') ||
+                                            'Memória'
+                                        }
                                         sublabel={`${formatBytes(
                                             systemInfo.memory_total_mb &&
                                                 systemInfo.memory_available_mb
@@ -328,35 +432,41 @@ export function PlayerDiagnostics({
                                                       systemInfo.memory_available_mb
                                                 : undefined,
                                         )} / ${formatBytes(systemInfo.memory_total_mb)}`}
-                                        icon={<MemoryStick className="h-4 w-4" />}
-                                        colorClass={getMemoryColor(systemInfo.memory_used_percent)}
-                                        percentage={systemInfo.memory_used_percent}
+                                        icon={
+                                            <MemoryStick className="h-4 w-4" />
+                                        }
+                                        colorClass={getMemoryColor(
+                                            systemInfo.memory_used_percent,
+                                        )}
+                                        percentage={
+                                            systemInfo.memory_used_percent
+                                        }
                                     />
                                 )}
 
                                 {/* Storage */}
-                                {systemInfo.storage_used_percent !== undefined && (
+                                {systemInfo.storage_used_percent !==
+                                    undefined && (
                                     <StatCard
                                         value={`${systemInfo.storage_used_percent.toFixed(0)}%`}
-                                        label={t('players.diagnostics.storage') || 'Armazenamento'}
+                                        label={
+                                            t('players.diagnostics.storage') ||
+                                            'Armazenamento'
+                                        }
                                         sublabel={`${(
                                             (systemInfo.storage_total_gb || 0) -
-                                            (systemInfo.storage_available_gb || 0)
-                                        ).toFixed(1)} / ${systemInfo.storage_total_gb?.toFixed(0)} GB`}
+                                            (systemInfo.storage_available_gb ||
+                                                0)
+                                        ).toFixed(
+                                            1,
+                                        )} / ${systemInfo.storage_total_gb?.toFixed(0)} GB`}
                                         icon={<HardDrive className="h-4 w-4" />}
-                                        colorClass={getStorageColor(systemInfo.storage_used_percent)}
-                                        percentage={systemInfo.storage_used_percent}
-                                    />
-                                )}
-
-                                {/* Temperature */}
-                                {systemInfo.temperature !== undefined && (
-                                    <StatCard
-                                        value={`${systemInfo.temperature.toFixed(0)}°C`}
-                                        label={t('players.diagnostics.temperature') || 'Temperatura'}
-                                        icon={<Thermometer className="h-4 w-4" />}
-                                        colorClass={getTemperatureGaugeColor(systemInfo.temperature)}
-                                        percentage={(systemInfo.temperature / 80) * 100}
+                                        colorClass={getStorageColor(
+                                            systemInfo.storage_used_percent,
+                                        )}
+                                        percentage={
+                                            systemInfo.storage_used_percent
+                                        }
                                     />
                                 )}
                             </div>
@@ -370,7 +480,7 @@ export function PlayerDiagnostics({
                 </Card>
             </div>
 
-            {/* Row 2: Network + Map */}
+            {/* Row 3: Network + Map */}
             {(publicIp || diagnostics?.ip_address) && (
                 <div className="grid gap-4 md:grid-cols-2">
                     {/* Network / Location Card */}
@@ -378,7 +488,8 @@ export function PlayerDiagnostics({
                         <CardHeader className="pb-3">
                             <CardTitle className="flex items-center gap-2 text-base">
                                 <Network className="h-4 w-4" />
-                                {t('players.diagnostics.network') || 'Rede e Localização'}
+                                {t('players.diagnostics.network') ||
+                                    'Rede e Localização'}
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
@@ -388,26 +499,28 @@ export function PlayerDiagnostics({
                                     <div className="flex justify-between text-sm">
                                         <span className="flex items-center gap-1 text-muted-foreground">
                                             <Globe className="h-3 w-3" />
-                                            {t('players.diagnostics.ipAddress') ||
-                                                'IP Público'}
+                                            {t(
+                                                'players.diagnostics.ipAddress',
+                                            ) || 'IP Público'}
                                         </span>
                                         <span className="font-mono">
                                             {publicIp}
                                         </span>
                                     </div>
                                 )}
-                                {diagnostics?.ip_address && diagnostics.ip_address !== publicIp && (
-                                    <div className="flex justify-between text-sm">
-                                        <span className="flex items-center gap-1 text-muted-foreground">
-                                            <Network className="h-3 w-3" />
-                                            {t('players.diagnostics.localIp') ||
-                                                'IP Local'}
-                                        </span>
-                                        <span className="font-mono text-muted-foreground">
-                                            {diagnostics.ip_address}
-                                        </span>
-                                    </div>
-                                )}
+                                {diagnostics?.ip_address &&
+                                    diagnostics.ip_address !== publicIp && (
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-muted-foreground">
+                                                {t(
+                                                    'players.diagnostics.localIp',
+                                                ) || 'IP Local'}
+                                            </span>
+                                            <span className="font-mono text-muted-foreground">
+                                                {diagnostics.ip_address}
+                                            </span>
+                                        </div>
+                                    )}
                                 {systemInfo?.network_type && (
                                     <div className="flex justify-between text-sm">
                                         <span className="text-muted-foreground">
@@ -420,7 +533,8 @@ export function PlayerDiagnostics({
                                         </Badge>
                                     </div>
                                 )}
-                                {systemInfo?.wifi_signal_strength !== undefined && (
+                                {systemInfo?.wifi_signal_strength !==
+                                    undefined && (
                                     <div className="flex justify-between text-sm">
                                         <span className="text-muted-foreground">
                                             {t(
@@ -428,7 +542,8 @@ export function PlayerDiagnostics({
                                             ) || 'Sinal WiFi'}
                                         </span>
                                         <span className="font-medium">
-                                            {systemInfo.wifi_signal_strength} dBm
+                                            {systemInfo.wifi_signal_strength}{' '}
+                                            dBm
                                         </span>
                                     </div>
                                 )}
@@ -438,7 +553,9 @@ export function PlayerDiagnostics({
                                     <div className="flex justify-between text-sm">
                                         <span className="flex items-center gap-1 text-muted-foreground">
                                             <MapPin className="h-3 w-3" />
-                                            {t('players.diagnostics.locationLabel') || 'Localização'}
+                                            {t(
+                                                'players.diagnostics.locationLabel',
+                                            ) || 'Localização'}
                                         </span>
                                         <Skeleton className="h-4 w-32" />
                                     </div>
@@ -447,17 +564,23 @@ export function PlayerDiagnostics({
                                         <div className="flex justify-between text-sm">
                                             <span className="flex items-center gap-1 text-muted-foreground">
                                                 <MapPin className="h-3 w-3" />
-                                                {t('players.diagnostics.locationLabel') || 'Localização'}
+                                                {t(
+                                                    'players.diagnostics.locationLabel',
+                                                ) || 'Localização'}
                                             </span>
                                             <span className="text-right">
                                                 <span className="font-medium">
-                                                    {[geoLocation.city, geoLocation.region]
+                                                    {[
+                                                        geoLocation.city,
+                                                        geoLocation.region,
+                                                    ]
                                                         .filter(Boolean)
                                                         .join(', ')}
                                                 </span>
                                                 {geoLocation.country && (
                                                     <span className="text-muted-foreground">
-                                                        {' '}({geoLocation.country})
+                                                        {' '}
+                                                        ({geoLocation.country})
                                                     </span>
                                                 )}
                                             </span>
@@ -497,7 +620,8 @@ export function PlayerDiagnostics({
                                 <div className="flex items-center justify-between">
                                     <CardTitle className="flex items-center gap-2 text-base">
                                         <Map className="h-4 w-4" />
-                                        {t('players.diagnostics.location') || 'Localização'}
+                                        {t('players.diagnostics.location') ||
+                                            'Localização'}
                                     </CardTitle>
                                     <a
                                         href={`https://www.google.com/maps?q=${geoLocation.lat},${geoLocation.lon}`}
@@ -505,7 +629,8 @@ export function PlayerDiagnostics({
                                         rel="noopener noreferrer"
                                         className="flex items-center gap-1 text-xs text-primary hover:underline"
                                     >
-                                        {t('players.diagnostics.openInMaps') || 'Abrir no Google Maps'}
+                                        {t('players.diagnostics.openInMaps') ||
+                                            'Abrir no Google Maps'}
                                         <ExternalLink className="h-3 w-3" />
                                     </a>
                                 </div>
@@ -523,7 +648,9 @@ export function PlayerDiagnostics({
                                     />
                                 </div>
                                 <p className="mt-2 text-xs text-muted-foreground">
-                                    {t('players.diagnostics.locationDisclaimer') ||
+                                    {t(
+                                        'players.diagnostics.locationDisclaimer',
+                                    ) ||
                                         'Localização aproximada baseada no IP público.'}
                                 </p>
                             </CardContent>
@@ -533,14 +660,18 @@ export function PlayerDiagnostics({
                             <CardHeader className="pb-3">
                                 <CardTitle className="flex items-center gap-2 text-base">
                                     <Map className="h-4 w-4" />
-                                    {t('players.diagnostics.location') || 'Localização'}
+                                    {t('players.diagnostics.location') ||
+                                        'Localização'}
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <p className="text-sm text-muted-foreground">
                                     {geoLoading
-                                        ? t('players.diagnostics.loadingLocation') || 'Carregando localização...'
-                                        : t('players.diagnostics.noLocation') || 'Localização não disponível'}
+                                        ? t(
+                                              'players.diagnostics.loadingLocation',
+                                          ) || 'Carregando localização...'
+                                        : t('players.diagnostics.noLocation') ||
+                                          'Localização não disponível'}
                                 </p>
                             </CardContent>
                         </Card>
@@ -570,7 +701,8 @@ export function HeartbeatHistoryModal({
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <Activity className="h-5 w-5" />
-                        {t('players.diagnostics.heartbeatHistory') || 'Histórico de Conexão'}
+                        {t('players.diagnostics.heartbeatHistory') ||
+                            'Histórico de Conexão'}
                     </DialogTitle>
                 </DialogHeader>
                 <div className="max-h-96 overflow-auto rounded-md border">
@@ -582,7 +714,8 @@ export function HeartbeatHistoryModal({
                                 </TableHead>
                                 <TableHead>IP</TableHead>
                                 <TableHead>
-                                    {t('players.diagnostics.version') || 'Versão'}
+                                    {t('players.diagnostics.version') ||
+                                        'Versão'}
                                 </TableHead>
                                 <TableHead>Status</TableHead>
                             </TableRow>
@@ -622,8 +755,9 @@ export function HeartbeatHistoryModal({
                                         colSpan={4}
                                         className="text-center text-muted-foreground"
                                     >
-                                        {t('players.diagnostics.noHeartbeats') ||
-                                            'Nenhuma conexão registrada'}
+                                        {t(
+                                            'players.diagnostics.noHeartbeats',
+                                        ) || 'Nenhuma conexão registrada'}
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -633,7 +767,8 @@ export function HeartbeatHistoryModal({
                 <p className="text-xs text-muted-foreground">
                     {t('players.diagnostics.lastHeartbeats', {
                         count: heartbeatHistory.length,
-                    }) || `Exibindo as últimas ${heartbeatHistory.length} conexões`}
+                    }) ||
+                        `Exibindo as últimas ${heartbeatHistory.length} conexões`}
                 </p>
             </DialogContent>
         </Dialog>

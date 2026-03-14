@@ -611,7 +611,7 @@ search.form = searchForm
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::toggleStatus
-* @see app/Http/Controllers/Admin/TenantController.php:366
+* @see app/Http/Controllers/Admin/TenantController.php:363
 * @route '/admin/tenants/{tenant}/toggle-status'
 */
 export const toggleStatus = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -626,7 +626,7 @@ toggleStatus.definition = {
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::toggleStatus
-* @see app/Http/Controllers/Admin/TenantController.php:366
+* @see app/Http/Controllers/Admin/TenantController.php:363
 * @route '/admin/tenants/{tenant}/toggle-status'
 */
 toggleStatus.url = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions) => {
@@ -659,7 +659,7 @@ toggleStatus.url = (args: { tenant: string | { id: string } } | [tenant: string 
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::toggleStatus
-* @see app/Http/Controllers/Admin/TenantController.php:366
+* @see app/Http/Controllers/Admin/TenantController.php:363
 * @route '/admin/tenants/{tenant}/toggle-status'
 */
 toggleStatus.post = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -669,7 +669,7 @@ toggleStatus.post = (args: { tenant: string | { id: string } } | [tenant: string
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::toggleStatus
-* @see app/Http/Controllers/Admin/TenantController.php:366
+* @see app/Http/Controllers/Admin/TenantController.php:363
 * @route '/admin/tenants/{tenant}/toggle-status'
 */
 const toggleStatusForm = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -679,7 +679,7 @@ const toggleStatusForm = (args: { tenant: string | { id: string } } | [tenant: s
 
 /**
 * @see \App\Http\Controllers\Admin\TenantController::toggleStatus
-* @see app/Http/Controllers/Admin/TenantController.php:366
+* @see app/Http/Controllers/Admin/TenantController.php:363
 * @route '/admin/tenants/{tenant}/toggle-status'
 */
 toggleStatusForm.post = (args: { tenant: string | { id: string } } | [tenant: string | { id: string } ] | string | { id: string }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

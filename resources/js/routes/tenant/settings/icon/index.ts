@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteMethod
-* @see app/Http/Controllers/TenantSettingsController.php:113
+* @see app/Http/Controllers/TenantSettingsController.php:110
 * @route '/tenant/settings/icon'
 */
 export const deleteMethod = (options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -16,7 +16,7 @@ deleteMethod.definition = {
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteMethod
-* @see app/Http/Controllers/TenantSettingsController.php:113
+* @see app/Http/Controllers/TenantSettingsController.php:110
 * @route '/tenant/settings/icon'
 */
 deleteMethod.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ deleteMethod.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteMethod
-* @see app/Http/Controllers/TenantSettingsController.php:113
+* @see app/Http/Controllers/TenantSettingsController.php:110
 * @route '/tenant/settings/icon'
 */
 deleteMethod.delete = (options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -35,7 +35,7 @@ deleteMethod.delete = (options?: RouteQueryOptions): RouteDefinition<'delete'> =
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteMethod
-* @see app/Http/Controllers/TenantSettingsController.php:113
+* @see app/Http/Controllers/TenantSettingsController.php:110
 * @route '/tenant/settings/icon'
 */
 const deleteMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -50,7 +50,7 @@ const deleteMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'pos
 
 /**
 * @see \App\Http\Controllers\TenantSettingsController::deleteMethod
-* @see app/Http/Controllers/TenantSettingsController.php:113
+* @see app/Http/Controllers/TenantSettingsController.php:110
 * @route '/tenant/settings/icon'
 */
 deleteMethodForm.delete = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

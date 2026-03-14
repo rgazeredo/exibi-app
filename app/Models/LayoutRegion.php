@@ -44,14 +44,6 @@ class LayoutRegion extends Model
     }
 
     /**
-     * Get player group playlist assignments for this region.
-     */
-    public function playerGroupRegionPlaylists(): HasMany
-    {
-        return $this->hasMany(PlayerGroupRegionPlaylist::class);
-    }
-
-    /**
      * Get player playlist assignments for this region.
      */
     public function playerRegionPlaylists(): HasMany

@@ -18,7 +18,6 @@ import {
     LayoutGrid,
     ListVideo,
     MonitorPlay,
-    Tag,
     Wifi,
     WifiOff,
 } from 'lucide-react';
@@ -261,50 +260,6 @@ export default function Dashboard({
                                 </p>
                                 <p className="text-xs text-muted-foreground">
                                     {t('dashboard.totalUsed')}
-                                </p>
-                            </div>
-                        </div>
-                    </Card>
-                </div>
-
-                {/* Stats Cards Row 2 */}
-                <div className="grid gap-4 md:grid-cols-3">
-                    {/* Tags */}
-                    <Card className="overflow-hidden">
-                        <div className="flex items-center gap-4 p-4">
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-rose-500/10">
-                                <Tag className="h-5 w-5 text-rose-500" />
-                            </div>
-                            <div>
-                                <p className="text-sm text-muted-foreground">
-                                    {t('dashboard.tags')}
-                                </p>
-                                <p className="text-xl font-bold">
-                                    {stats.tags.total}
-                                </p>
-                            </div>
-                        </div>
-                    </Card>
-
-                    {/* Online Rate */}
-                    <Card className="overflow-hidden">
-                        <div className="flex items-center gap-4 p-4">
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10">
-                                <Wifi className="h-5 w-5 text-emerald-500" />
-                            </div>
-                            <div>
-                                <p className="text-sm text-muted-foreground">
-                                    {t('dashboard.onlineRate')}
-                                </p>
-                                <p className="text-xl font-bold">
-                                    {stats.players.total > 0
-                                        ? Math.round(
-                                              (stats.players.online /
-                                                  stats.players.total) *
-                                                  100,
-                                          )
-                                        : 0}
-                                    %
                                 </p>
                             </div>
                         </div>

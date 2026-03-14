@@ -78,11 +78,10 @@ class MediaController extends Controller
             $media->syncTags($validated['tags']);
         }
 
-        // Dispatch job for video processing (metadata + thumbnail via FFmpeg)
+        // Dispatch job for video processing (metadata + thumbnail + transcoding)
+        // Videos are always transcoded for TV box compatibility
         if ($media->isVideo()) {
-            $tenant = auth()->user()->currentTenant();
-            $shouldTranscode = $tenant?->shouldAutoOptimizeVideos() ?? true;
-            ProcessVideoMedia::dispatch($media, $shouldTranscode);
+            ProcessVideoMedia::dispatch($media, true);
         }
 
         // Return JSON for AJAX requests (e.g., modal uploads)
@@ -411,11 +410,10 @@ class MediaController extends Controller
             $validated['title'] ?? null
         );
 
-        // Dispatch job for video processing (metadata + thumbnail via FFmpeg)
+        // Dispatch job for video processing (metadata + thumbnail + transcoding)
+        // Videos are always transcoded for TV box compatibility
         if ($media->isVideo()) {
-            $tenant = auth()->user()->currentTenant();
-            $shouldTranscode = $tenant?->shouldAutoOptimizeVideos() ?? true;
-            ProcessVideoMedia::dispatch($media, $shouldTranscode);
+            ProcessVideoMedia::dispatch($media, true);
         }
 
         // Notify players using playlists that contain this media

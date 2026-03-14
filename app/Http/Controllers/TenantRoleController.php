@@ -65,7 +65,9 @@ class TenantRoleController extends Controller
 
     public function create(): Response
     {
-        $permissions = Permission::orderBy('sort_order')->get();
+        $permissions = Permission::where('module', '!=', 'player_groups')
+            ->orderBy('sort_order')
+            ->get();
 
         return Inertia::render('roles/form', [
             'role' => null,
@@ -116,8 +118,13 @@ class TenantRoleController extends Controller
 
     public function edit(TenantRole $role): Response
     {
-        $permissions = Permission::orderBy('sort_order')->get();
-        $rolePermissionIds = $role->permissions()->pluck('permissions.id')->toArray();
+        $permissions = Permission::where('module', '!=', 'player_groups')
+            ->orderBy('sort_order')
+            ->get();
+        $rolePermissionIds = $role->permissions()
+            ->where('module', '!=', 'player_groups')
+            ->pluck('permissions.id')
+            ->toArray();
 
         return Inertia::render('roles/form', [
             'role' => [
