@@ -572,7 +572,7 @@ export default function PlaylistShow({
                         widgets={availableWidgets}
                         tabs={{
                             media: true,
-                            playlists: playlist.can_contain_subplaylists,
+                            playlists: true,
                             widgets: true,
                         }}
                         rightPanelTitle={t('playlists.playlistItems')}

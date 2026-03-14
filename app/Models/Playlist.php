@@ -21,6 +21,7 @@ class Playlist extends Model
         'description',
         'is_active',
         'is_default',
+        'content_updated_at',
     ];
 
     protected function casts(): array
@@ -28,6 +29,7 @@ class Playlist extends Model
         return [
             'is_active' => 'boolean',
             'is_default' => 'boolean',
+            'content_updated_at' => 'datetime',
         ];
     }
 
@@ -145,6 +147,19 @@ class Playlist extends Model
     public function scopeDefault($query)
     {
         return $query->where('is_default', true);
+    }
+
+    // ============================================
+    // Content update tracking
+    // ============================================
+
+    /**
+     * Update the content_updated_at timestamp.
+     * Call this when playlist items are modified.
+     */
+    public function touchContentUpdatedAt(): void
+    {
+        $this->update(['content_updated_at' => now()]);
     }
 
     // ============================================

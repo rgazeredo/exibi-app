@@ -575,6 +575,9 @@ export function ContentSourcePanel({
         initialMedia || [],
     );
     const [mediaLoading, setMediaLoading] = useState(false);
+    const [sortOrder, setSortOrder] = useState<
+        'title_asc' | 'title_desc' | 'created_asc' | 'created_desc'
+    >('title_asc');
 
     // Fetch media when tab changes to media or on refresh
     useEffect(() => {
@@ -623,14 +626,29 @@ export function ContentSourcePanel({
         return mediaList.filter((m) => m.title.toLowerCase().includes(lower));
     }, [mediaList, search, tabs.media]);
 
-    // Sort media: not yet added first
+    // Sort media based on sortOrder
     const sortedMedia = useMemo(() => {
         return [...filteredMedia].sort((a, b) => {
-            const aCount = itemAddedCounts.get(a.id) || 0;
-            const bCount = itemAddedCounts.get(b.id) || 0;
-            return aCount - bCount;
+            switch (sortOrder) {
+                case 'title_asc':
+                    return a.title.localeCompare(b.title);
+                case 'title_desc':
+                    return b.title.localeCompare(a.title);
+                case 'created_asc':
+                    return (
+                        new Date(a.created_at || 0).getTime() -
+                        new Date(b.created_at || 0).getTime()
+                    );
+                case 'created_desc':
+                    return (
+                        new Date(b.created_at || 0).getTime() -
+                        new Date(a.created_at || 0).getTime()
+                    );
+                default:
+                    return 0;
+            }
         });
-    }, [filteredMedia, itemAddedCounts]);
+    }, [filteredMedia, sortOrder]);
 
     // Filter items by search
     const filteredPlaylists = useMemo(() => {
@@ -651,22 +669,52 @@ export function ContentSourcePanel({
         );
     }, [widgets, search, tabs.widgets]);
 
-    // Sort items: not yet added first
+    // Sort items based on sortOrder
     const sortedPlaylists = useMemo(() => {
         return [...filteredPlaylists].sort((a, b) => {
-            const aCount = itemAddedCounts.get(a.id) || 0;
-            const bCount = itemAddedCounts.get(b.id) || 0;
-            return aCount - bCount;
+            switch (sortOrder) {
+                case 'title_asc':
+                    return a.name.localeCompare(b.name);
+                case 'title_desc':
+                    return b.name.localeCompare(a.name);
+                case 'created_asc':
+                    return (
+                        new Date(a.created_at || 0).getTime() -
+                        new Date(b.created_at || 0).getTime()
+                    );
+                case 'created_desc':
+                    return (
+                        new Date(b.created_at || 0).getTime() -
+                        new Date(a.created_at || 0).getTime()
+                    );
+                default:
+                    return 0;
+            }
         });
-    }, [filteredPlaylists, itemAddedCounts]);
+    }, [filteredPlaylists, sortOrder]);
 
     const sortedWidgets = useMemo(() => {
         return [...filteredWidgets].sort((a, b) => {
-            const aCount = itemAddedCounts.get(a.id) || 0;
-            const bCount = itemAddedCounts.get(b.id) || 0;
-            return aCount - bCount;
+            switch (sortOrder) {
+                case 'title_asc':
+                    return a.name.localeCompare(b.name);
+                case 'title_desc':
+                    return b.name.localeCompare(a.name);
+                case 'created_asc':
+                    return (
+                        new Date(a.created_at || 0).getTime() -
+                        new Date(b.created_at || 0).getTime()
+                    );
+                case 'created_desc':
+                    return (
+                        new Date(b.created_at || 0).getTime() -
+                        new Date(a.created_at || 0).getTime()
+                    );
+                default:
+                    return 0;
+            }
         });
-    }, [filteredWidgets, itemAddedCounts]);
+    }, [filteredWidgets, sortOrder]);
 
     // // For media tab, use MediaBrowser
     // if (activeTab === 'media' && tabs.media) {
@@ -794,7 +842,32 @@ export function ContentSourcePanel({
 
             {/* Selection controls */}
             {hasItems && (
-                <div className="flex shrink-0 items-center justify-end gap-2 border-b bg-muted/30 px-3 py-1.5">
+                <div className="flex shrink-0 items-center gap-2 border-b bg-muted/30 px-3 py-1.5">
+                    {/* Sort select - aligned left */}
+                    <select
+                        value={sortOrder}
+                        onChange={(e) =>
+                            setSortOrder(e.target.value as typeof sortOrder)
+                        }
+                        className="h-8 rounded-md border bg-background px-2 text-sm"
+                    >
+                        <option value="title_asc">
+                            {t('common.title')} ↑
+                        </option>
+                        <option value="title_desc">
+                            {t('common.title')} ↓
+                        </option>
+                        <option value="created_desc">
+                            {t('common.created')} ↓
+                        </option>
+                        <option value="created_asc">
+                            {t('common.created')} ↑
+                        </option>
+                    </select>
+
+                    {/* Spacer to push buttons to the right */}
+                    <div className="flex-1" />
+
                     <Button variant="ghost" size="sm" onClick={selectAll}>
                         <CheckCheck className="mr-1 h-4 w-4" />
                         {t('common.selectAll')}

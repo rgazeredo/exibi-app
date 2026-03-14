@@ -38,6 +38,7 @@ import {
     Loader2,
     MonitorPlay,
     Power,
+    RefreshCw,
     Replace,
     Trash2,
     Wifi,
@@ -114,6 +115,8 @@ interface Player {
     description: string | null;
     api_token: string;
     is_online: boolean;
+    is_outdated: boolean;
+    content_synced_at: string | null;
     last_seen_at: string | null;
     last_seen_at_full: string | null;
     effective_layout: {
@@ -510,6 +513,15 @@ export default function PlayerShow({
                                         ? t('players.status.online')
                                         : t('players.status.offline')}
                                 </Badge>
+                                {player.is_outdated && (
+                                    <Badge
+                                        variant="outline"
+                                        className="border-amber-500 bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400"
+                                    >
+                                        <RefreshCw className="mr-1 h-3 w-3" />
+                                        {t('players.status.outdated')}
+                                    </Badge>
+                                )}
                             </div>
                             {player.description && (
                                 <p className="text-muted-foreground">

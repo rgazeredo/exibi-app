@@ -24,10 +24,8 @@ import {
     Activity,
     Cpu,
     ExternalLink,
-    Globe,
     HardDrive,
     Map,
-    MapPin,
     MemoryStick,
     Network,
     Smartphone,
@@ -493,122 +491,115 @@ export function PlayerDiagnostics({
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="space-y-3">
-                                {/* IP Info */}
-                                {publicIp && (
-                                    <div className="flex justify-between text-sm">
-                                        <span className="flex items-center gap-1 text-muted-foreground">
-                                            <Globe className="h-3 w-3" />
-                                            {t(
-                                                'players.diagnostics.ipAddress',
-                                            ) || 'IP Público'}
-                                        </span>
-                                        <span className="font-mono">
-                                            {publicIp}
-                                        </span>
-                                    </div>
-                                )}
-                                {diagnostics?.ip_address &&
-                                    diagnostics.ip_address !== publicIp && (
+                            <div className="grid grid-cols-2 gap-4">
+                                {/* Left side - Network info */}
+                                <div className="space-y-2">
+                                    {publicIp && (
                                         <div className="flex justify-between text-sm">
                                             <span className="text-muted-foreground">
                                                 {t(
                                                     'players.diagnostics.localIp',
                                                 ) || 'IP Local'}
                                             </span>
-                                            <span className="font-mono text-muted-foreground">
-                                                {diagnostics.ip_address}
+                                            <span className="font-mono">
+                                                {publicIp}
                                             </span>
                                         </div>
                                     )}
-                                {systemInfo?.network_type && (
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-muted-foreground">
-                                            {t(
-                                                'players.diagnostics.connectionType',
-                                            ) || 'Tipo de Conexão'}
-                                        </span>
-                                        <Badge variant="outline">
-                                            {systemInfo.network_type}
-                                        </Badge>
-                                    </div>
-                                )}
-                                {systemInfo?.wifi_signal_strength !==
-                                    undefined && (
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-muted-foreground">
-                                            {t(
-                                                'players.diagnostics.signalStrength',
-                                            ) || 'Sinal WiFi'}
-                                        </span>
-                                        <span className="font-medium">
-                                            {systemInfo.wifi_signal_strength}{' '}
-                                            dBm
-                                        </span>
-                                    </div>
-                                )}
-
-                                {/* Geolocation */}
-                                {geoLoading ? (
-                                    <div className="flex justify-between text-sm">
-                                        <span className="flex items-center gap-1 text-muted-foreground">
-                                            <MapPin className="h-3 w-3" />
-                                            {t(
-                                                'players.diagnostics.locationLabel',
-                                            ) || 'Localização'}
-                                        </span>
-                                        <Skeleton className="h-4 w-32" />
-                                    </div>
-                                ) : geoLocation ? (
-                                    <>
+                                    {systemInfo?.network_type && (
                                         <div className="flex justify-between text-sm">
-                                            <span className="flex items-center gap-1 text-muted-foreground">
-                                                <MapPin className="h-3 w-3" />
+                                            <span className="text-muted-foreground">
+                                                {t(
+                                                    'players.diagnostics.connectionType',
+                                                ) || 'Tipo de Conexão'}
+                                            </span>
+                                            <Badge variant="outline">
+                                                {systemInfo.network_type}
+                                            </Badge>
+                                        </div>
+                                    )}
+                                    {systemInfo?.wifi_signal_strength !==
+                                        undefined && (
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-muted-foreground">
+                                                {t(
+                                                    'players.diagnostics.signalStrength',
+                                                ) || 'Sinal WiFi'}
+                                            </span>
+                                            <span className="font-medium">
+                                                {systemInfo.wifi_signal_strength}{' '}
+                                                dBm
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Right side - Geolocation */}
+                                <div className="space-y-2 border-l pl-4">
+                                    {geoLoading ? (
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-muted-foreground">
                                                 {t(
                                                     'players.diagnostics.locationLabel',
                                                 ) || 'Localização'}
                                             </span>
-                                            <span className="text-right">
-                                                <span className="font-medium">
-                                                    {[
-                                                        geoLocation.city,
-                                                        geoLocation.region,
-                                                    ]
-                                                        .filter(Boolean)
-                                                        .join(', ')}
-                                                </span>
-                                                {geoLocation.country && (
-                                                    <span className="text-muted-foreground">
-                                                        {' '}
-                                                        ({geoLocation.country})
-                                                    </span>
-                                                )}
-                                            </span>
+                                            <Skeleton className="h-4 w-32" />
                                         </div>
-                                        {geoLocation.isp && (
-                                            <div className="flex justify-between text-sm">
-                                                <span className="text-muted-foreground">
-                                                    ISP
-                                                </span>
-                                                <span className="text-right">
-                                                    {geoLocation.isp}
-                                                </span>
-                                            </div>
-                                        )}
-                                        {geoLocation.timezone && (
+                                    ) : geoLocation ? (
+                                        <>
                                             <div className="flex justify-between text-sm">
                                                 <span className="text-muted-foreground">
                                                     {t(
-                                                        'players.diagnostics.timezone',
-                                                    ) || 'Fuso Horário'}
+                                                        'players.diagnostics.locationLabel',
+                                                    ) || 'Localização'}
                                                 </span>
-                                                <span>
-                                                    {geoLocation.timezone}
+                                                <span className="text-right">
+                                                    <span className="font-medium">
+                                                        {[
+                                                            geoLocation.city,
+                                                            geoLocation.region,
+                                                        ]
+                                                            .filter(Boolean)
+                                                            .join(', ')}
+                                                    </span>
+                                                    {geoLocation.country && (
+                                                        <span className="text-muted-foreground">
+                                                            {' '}
+                                                            ({geoLocation.country})
+                                                        </span>
+                                                    )}
                                                 </span>
                                             </div>
-                                        )}
-                                    </>
-                                ) : null}
+                                            {geoLocation.isp && (
+                                                <div className="flex justify-between text-sm">
+                                                    <span className="text-muted-foreground">
+                                                        ISP
+                                                    </span>
+                                                    <span className="text-right">
+                                                        {geoLocation.isp}
+                                                    </span>
+                                                </div>
+                                            )}
+                                            {geoLocation.timezone && (
+                                                <div className="flex justify-between text-sm">
+                                                    <span className="text-muted-foreground">
+                                                        {t(
+                                                            'players.diagnostics.timezone',
+                                                        ) || 'Fuso Horário'}
+                                                    </span>
+                                                    <span>
+                                                        {geoLocation.timezone}
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <p className="text-sm text-muted-foreground">
+                                            {t('players.diagnostics.noLocation') ||
+                                                'Localização não disponível'}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                         </CardContent>
                     </Card>

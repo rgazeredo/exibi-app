@@ -135,6 +135,9 @@ class PlayerActivationController extends Controller
         // Get player's assigned layout (always required)
         $layout = $player->getEffectiveLayout();
 
+        // Mark player as synced (for outdated status detection)
+        $player->update(['content_synced_at' => now()]);
+
         return $this->buildLayoutResponse($player, $layout, $playlistService, $splashScreenUrl, $webSocketConfig, $request);
     }
 

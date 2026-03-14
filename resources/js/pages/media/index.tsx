@@ -84,6 +84,7 @@ import {
     Search,
     Smartphone,
     Trash2,
+    Upload,
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -920,7 +921,7 @@ export default function MediaIndex({
                                 className="ml-auto"
                                 onClick={() => setUploadDialogOpen(true)}
                             >
-                                <Plus className="mr-2 h-4 w-4" />
+                                <Upload className="h-4 w-4" />
                                 {t('media.uploadMedia')}
                             </Button>
                         </div>

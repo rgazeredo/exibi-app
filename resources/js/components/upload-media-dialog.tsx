@@ -59,6 +59,7 @@ interface UploadMediaDialogProps {
     folderId?: string | null;
     folderName?: string | null;
     onUploadComplete: () => void;
+    onFileUploaded?: (mediaId: string) => void;
 }
 
 function generateId(): string {
@@ -103,6 +104,7 @@ export function UploadMediaDialog({
     folderId,
     folderName,
     onUploadComplete,
+    onFileUploaded,
 }: UploadMediaDialogProps) {
     const { t } = useT();
     const [dragActive, setDragActive] = useState(false);
@@ -217,77 +219,97 @@ export function UploadMediaDialog({
         );
     };
 
-    const uploadFile = (item: FileItem): Promise<boolean> => {
-        return new Promise((resolve) => {
-            const formData = new FormData();
-            formData.append('file', item.file);
-            if (item.title) {
-                formData.append('title', item.title);
-            }
-            if (folderId) {
-                formData.append('folder_id', folderId);
-            }
-            if (item.tags.length > 0) {
-                item.tags.forEach((tag) => formData.append('tags[]', tag.id));
-            }
-
-            const xhr = new XMLHttpRequest();
-
-            xhr.upload.addEventListener('progress', (event) => {
-                if (event.lengthComputable) {
-                    const percent = Math.round(
-                        (event.loaded / event.total) * 100,
-                    );
-                    updateFile(item.id, { progress: percent });
+    const uploadFile = useCallback(
+        (item: FileItem): Promise<boolean> => {
+            return new Promise((resolve) => {
+                const formData = new FormData();
+                formData.append('file', item.file);
+                if (item.title) {
+                    formData.append('title', item.title);
                 }
-            });
-
-            xhr.addEventListener('load', () => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    updateFile(item.id, { status: 'completed', progress: 100 });
-                    resolve(true);
-                } else if (isCsrfError(xhr.status)) {
-                    setGlobalError(
-                        t('errors.sessionExpired') ||
-                            'Your session has expired. The page will reload.',
+                if (folderId) {
+                    formData.append('folder_id', folderId);
+                }
+                if (item.tags.length > 0) {
+                    item.tags.forEach((tag) =>
+                        formData.append('tags[]', tag.id),
                     );
-                    setTimeout(() => window.location.reload(), 2000);
-                    resolve(false);
-                } else {
-                    let errorMsg = t('media.uploadFailed') || 'Upload failed';
-                    try {
-                        const response = JSON.parse(xhr.responseText);
-                        if (response.errors?.file) {
-                            errorMsg = Array.isArray(response.errors.file)
-                                ? response.errors.file[0]
-                                : response.errors.file;
-                        } else if (response.message) {
-                            errorMsg = response.message;
-                        }
-                    } catch {
-                        // Use default error message
+                }
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.upload.addEventListener('progress', (event) => {
+                    if (event.lengthComputable) {
+                        const percent = Math.round(
+                            (event.loaded / event.total) * 100,
+                        );
+                        updateFile(item.id, { progress: percent });
                     }
-                    updateFile(item.id, { status: 'error', error: errorMsg });
-                    resolve(false);
-                }
-            });
-
-            xhr.addEventListener('error', () => {
-                updateFile(item.id, {
-                    status: 'error',
-                    error: t('media.uploadFailed') || 'Upload failed',
                 });
-                resolve(false);
+
+                xhr.addEventListener('load', () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        updateFile(item.id, {
+                            status: 'completed',
+                            progress: 100,
+                        });
+
+                        // Extract media ID from response and notify
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.id && onFileUploaded) {
+                                onFileUploaded(response.id);
+                            }
+                        } catch {
+                            // Ignore parse errors
+                        }
+
+                        resolve(true);
+                    } else if (isCsrfError(xhr.status)) {
+                        setGlobalError(
+                            t('errors.sessionExpired') ||
+                                'Your session has expired. The page will reload.',
+                        );
+                        setTimeout(() => window.location.reload(), 2000);
+                        resolve(false);
+                    } else {
+                        let errorMsg =
+                            t('media.uploadFailed') || 'Upload failed';
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.errors?.file) {
+                                errorMsg = Array.isArray(response.errors.file)
+                                    ? response.errors.file[0]
+                                    : response.errors.file;
+                            } else if (response.message) {
+                                errorMsg = response.message;
+                            }
+                        } catch {
+                            // Use default error message
+                        }
+                        updateFile(item.id, { status: 'error', error: errorMsg });
+                        resolve(false);
+                    }
+                });
+
+                xhr.addEventListener('error', () => {
+                    updateFile(item.id, {
+                        status: 'error',
+                        error: t('media.uploadFailed') || 'Upload failed',
+                    });
+                    resolve(false);
+                });
+
+                xhr.open('POST', '/media');
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                xhr.setRequestHeader('X-CSRF-TOKEN', getCsrfToken());
+
+                updateFile(item.id, { status: 'uploading', progress: 0 });
+                xhr.send(formData);
             });
-
-            xhr.open('POST', '/media');
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            xhr.setRequestHeader('X-CSRF-TOKEN', getCsrfToken());
-
-            updateFile(item.id, { status: 'uploading', progress: 0 });
-            xhr.send(formData);
-        });
-    };
+        },
+        [folderId, onFileUploaded, t],
+    );
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

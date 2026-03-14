@@ -298,6 +298,9 @@ class PlaylistController extends Controller
             }
         }
 
+        // Mark playlist content as updated
+        $playlist->touchContentUpdatedAt();
+
         return redirect()->route('playlists.show', $playlist)
             ->with('success', 'Playlist items updated successfully.');
     }
@@ -336,6 +339,9 @@ class PlaylistController extends Controller
                 'position' => $position,
             ]);
         }
+
+        // Mark playlist content as updated
+        $playlist->touchContentUpdatedAt();
 
         return response()->json(['success' => true]);
     }
@@ -398,6 +404,9 @@ class PlaylistController extends Controller
             ]);
         }
 
+        // Mark playlist content as updated
+        $playlist->touchContentUpdatedAt();
+
         return response()->json(['success' => true, 'item' => $item]);
     }
 
@@ -417,6 +426,9 @@ class PlaylistController extends Controller
 
         $item->delete();
         $playlist->reorderItems();
+
+        // Mark playlist content as updated
+        $playlist->touchContentUpdatedAt();
 
         return response()->json(['success' => true]);
     }

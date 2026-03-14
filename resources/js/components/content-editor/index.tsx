@@ -5,7 +5,14 @@
 import { type ScheduleData } from '@/components/schedule-editor';
 import { ScheduleModal } from '@/components/schedule-modal';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { UploadMediaDialog } from '@/components/upload-media-dialog';
 import {
     closestCenter,
@@ -19,7 +26,14 @@ import {
     useSensors,
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { AlertTriangle, Cloud, Film, Image, LayoutList } from 'lucide-react';
+import {
+    AlertTriangle,
+    Cloud,
+    Film,
+    Image,
+    LayoutList,
+    Upload,
+} from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ContentItemsPanel } from './content-items-panel';
 import { ContentSourcePanel } from './content-source-panel';
@@ -296,21 +310,25 @@ export function ContentEditor({
                     mediaList = data;
                 }
 
-                const newItems: ContentItem[] = mediaList.map((media, idx) =>
-                    createContentItem(
-                        'media',
-                        media.id,
-                        media,
-                        items.length + idx,
-                    ),
-                );
-
-                handleItemsChange([...items, ...newItems]);
+                // Use functional update to avoid stale closure issues
+                setItems((prevItems) => {
+                    const newItems: ContentItem[] = mediaList.map((media, idx) =>
+                        createContentItem(
+                            'media',
+                            media.id,
+                            media,
+                            prevItems.length + idx,
+                        ),
+                    );
+                    const updatedItems = [...prevItems, ...newItems];
+                    onItemsChange(updatedItems);
+                    return updatedItems;
+                });
             } catch (error) {
                 console.error('Failed to fetch media details:', error);
             }
         },
-        [items, handleItemsChange],
+        [onItemsChange],
     );
 
     const handleAddItems = useCallback(
@@ -366,6 +384,14 @@ export function ContentEditor({
         setMediaRefreshKey((prev) => prev + 1);
         onUploadComplete?.();
     }, [onUploadComplete]);
+
+    const handleFileUploaded = useCallback(
+        (mediaId: string) => {
+            // Auto-add uploaded media to playlist
+            addMediaItems([mediaId]);
+        },
+        [addMediaItems],
+    );
 
     const handleReorder = useCallback(
         (newItems: ContentItem[]) => {
@@ -514,16 +540,37 @@ export function ContentEditor({
                                             {t('playlists.mediaTab')}
                                         </TabsTrigger>
                                     )}
-                                    {tabsConfig.playlists &&
-                                        canContainSubplaylists && (
-                                            <TabsTrigger
-                                                value="playlist"
-                                                className="gap-2 px-3 text-sm"
-                                            >
-                                                <LayoutList className="h-4 w-4" />
-                                                {t('playlists.playlistsTab')}
-                                            </TabsTrigger>
-                                        )}
+                                    {tabsConfig.playlists && (
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <span>
+                                                        <TabsTrigger
+                                                            value="playlist"
+                                                            className="gap-2 px-3 text-sm"
+                                                            disabled={
+                                                                !canContainSubplaylists
+                                                            }
+                                                        >
+                                                            <LayoutList className="h-4 w-4" />
+                                                            {t(
+                                                                'playlists.playlistsTab',
+                                                            )}
+                                                        </TabsTrigger>
+                                                    </span>
+                                                </TooltipTrigger>
+                                                {!canContainSubplaylists && (
+                                                    <TooltipContent>
+                                                        <p>
+                                                            {t(
+                                                                'playlists.cannotContainSubplaylistsTooltip',
+                                                            )}
+                                                        </p>
+                                                    </TooltipContent>
+                                                )}
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                    )}
                                     {tabsConfig.widgets && (
                                         <TabsTrigger
                                             value="widget"
@@ -535,6 +582,15 @@ export function ContentEditor({
                                     )}
                                 </TabsList>
                             </Tabs>
+                            {tabsConfig.media && (
+                                <Button
+                                    size="sm"
+                                    onClick={() => setUploadDialogOpen(true)}
+                                >
+                                    <Upload className="h-4 w-4" />
+                                    {t('media.uploadMedia')}
+                                </Button>
+                            )}
                         </div>
 
                         {/* Content Source Panel */}
@@ -737,6 +793,7 @@ export function ContentEditor({
                     folderId={null}
                     folderName={null}
                     onUploadComplete={handleUploadComplete}
+                    onFileUploaded={handleFileUploaded}
                 />
             )}
         </div>

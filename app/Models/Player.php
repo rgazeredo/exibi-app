@@ -28,6 +28,7 @@ class Player extends Model
         'config',
         'downloads_status',
         'last_seen_at',
+        'content_synced_at',
         'last_screenshot_url',
         'last_screenshot_at',
         'layout_id',
@@ -41,6 +42,7 @@ class Player extends Model
             'geolocation' => 'array',
             'downloads_status' => 'array',
             'last_seen_at' => 'datetime',
+            'content_synced_at' => 'datetime',
             'last_screenshot_at' => 'datetime',
         ];
     }
@@ -504,5 +506,28 @@ class Player extends Model
             'media' => $flattenedMedia->first()['media'],
             'position' => 0,
         ];
+    }
+
+    /**
+     * Check if the player is outdated (hasn't synced latest playlist changes).
+     */
+    public function isOutdated(): bool
+    {
+        // Get the max content_updated_at from all playlists assigned to this player
+        $maxPlaylistUpdate = $this->regionPlaylists()
+            ->join('playlists', 'player_region_playlists.playlist_id', '=', 'playlists.id')
+            ->max('playlists.content_updated_at');
+
+        // If no playlists assigned or no content_updated_at, not outdated
+        if (! $maxPlaylistUpdate) {
+            return false;
+        }
+
+        // If player has never synced but has playlists, it's outdated
+        if (! $this->content_synced_at) {
+            return true;
+        }
+
+        return Carbon::parse($maxPlaylistUpdate)->gt($this->content_synced_at);
     }
 }

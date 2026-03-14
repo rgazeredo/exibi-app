@@ -37,6 +37,7 @@ import { useT } from '@/hooks/use-translations';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
+import axios from 'axios';
 import {
     type ColumnDef,
     type SortingState,
@@ -52,11 +53,13 @@ import {
     ChevronsLeft,
     ChevronsRight,
     Eye,
+    ListRestart,
     Loader2,
     MonitorPlay,
     MoreHorizontal,
     Pencil,
     Plus,
+    RefreshCw,
     Search,
     Trash2,
     Wifi,
@@ -94,6 +97,7 @@ interface Player {
     name: string;
     description: string | null;
     is_online: boolean;
+    is_outdated: boolean;
     last_seen_at: string | null;
     effective_layout: {
         id: string;
@@ -150,6 +154,7 @@ export default function PlayersIndex({
     });
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [playerToDelete, setPlayerToDelete] = useState<Player | null>(null);
+    const [refreshingPlayerId, setRefreshingPlayerId] = useState<string | null>(null);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: t('nav.dashboard'), href: '/dashboard' },
@@ -244,6 +249,18 @@ export default function PlayersIndex({
         }
     };
 
+    const handleRefreshPlayer = async (player: Player) => {
+        if (!player.is_online) return;
+        setRefreshingPlayerId(player.id);
+        try {
+            await axios.post(`/players/${player.id}/refresh-playlist`);
+        } catch (error) {
+            console.error('Failed to refresh player:', error);
+        } finally {
+            setRefreshingPlayerId(null);
+        }
+    };
+
     // Column definitions
     const columns: ColumnDef<Player>[] = useMemo(
         () => [
@@ -297,13 +314,23 @@ export default function PlayersIndex({
                 cell: ({ row }) => {
                     const player = row.original;
                     return (
-                        <div
-                            className={`flex h-8 w-8 items-center justify-center rounded-lg ${player.is_online ? 'bg-green-100 dark:bg-green-900' : 'bg-gray-100 dark:bg-gray-800'}`}
-                        >
-                            {player.is_online ? (
-                                <Wifi className="h-4 w-4 text-green-600" />
-                            ) : (
-                                <WifiOff className="h-4 w-4 text-gray-400" />
+                        <div className="flex items-center gap-1.5">
+                            <div
+                                className={`flex h-8 w-8 items-center justify-center rounded-lg ${player.is_online ? 'bg-green-100 dark:bg-green-900' : 'bg-gray-100 dark:bg-gray-800'}`}
+                            >
+                                {player.is_online ? (
+                                    <Wifi className="h-4 w-4 text-green-600" />
+                                ) : (
+                                    <WifiOff className="h-4 w-4 text-gray-400" />
+                                )}
+                            </div>
+                            {player.is_outdated && (
+                                <div
+                                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-900"
+                                    title={t('players.outdatedTooltip')}
+                                >
+                                    <RefreshCw className="h-4 w-4 text-amber-600" />
+                                </div>
                             )}
                         </div>
                     );
@@ -407,6 +434,17 @@ export default function PlayersIndex({
                                         <Eye className="mr-2 h-4 w-4" />
                                         {t('players.view')}
                                     </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => handleRefreshPlayer(player)}
+                                    disabled={!player.is_online || refreshingPlayerId === player.id}
+                                >
+                                    {refreshingPlayerId === player.id ? (
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    ) : (
+                                        <ListRestart className="mr-2 h-4 w-4" />
+                                    )}
+                                    {t('players.refreshPlayer')}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild>
                                     <Link href={`/players/${player.id}/edit`}>

@@ -63,6 +63,7 @@ class PlayerController extends Controller
                 'name' => $player->name,
                 'description' => $player->description,
                 'is_online' => $player->isOnline(),
+                'is_outdated' => $player->isOutdated(),
                 'last_seen_at' => $player->last_seen_at?->diffForHumans(),
                 'effective_layout' => $this->getEffectiveLayoutInfo($player),
                 'tags' => $player->tags->map(fn($tag) => [
@@ -215,6 +216,8 @@ class PlayerController extends Controller
                 'description' => $player->description,
                 'api_token' => $player->api_token,
                 'is_online' => $player->isOnline(),
+                'is_outdated' => $player->isOutdated(),
+                'content_synced_at' => $player->content_synced_at?->diffForHumans(),
                 'last_seen_at' => $player->last_seen_at?->diffForHumans(),
                 'last_seen_at_full' => $player->last_seen_at?->toIso8601String(),
                 'effective_layout' => $this->getEffectiveLayoutData($player),

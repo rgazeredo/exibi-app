@@ -95,6 +95,7 @@ export interface AvailablePlaylist {
     media_count: number;
     total_duration: number;
     items?: PlaylistNestedItem[] | null;
+    created_at?: string;
 }
 
 export interface AvailableWidget {
@@ -104,6 +105,7 @@ export interface AvailableWidget {
     widget_type_label?: string;
     duration_seconds: number;
     thumbnail_url?: string | null;
+    created_at?: string;
 }
 
 export interface AvailableMedia {
@@ -113,6 +115,7 @@ export interface AvailableMedia {
     thumbnail_url: string | null;
     duration_seconds: number | null;
     formatted_duration: string | null;
+    created_at?: string;
 }
 
 // ============================================================================

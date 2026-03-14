@@ -187,7 +187,8 @@
             "online": "Online",
             "offline": "Offline",
             "active": "Ativo",
-            "inactive": "Inativo"
+            "inactive": "Inativo",
+            "outdated": "Desatualizado"
         },
         "allStatus": "Todos os Status",
         "allTags": "Todas as Tags",
@@ -251,6 +252,8 @@
         "showToastOnPlayerDesc": "Quando marcado, o player exibirá uma mensagem confirmando que a playlist foi atualizada.",
         "remoteShortcuts": "Atalhos do Controle",
         "remoteShortcutsDesc": "Lista de comandos disponíveis no controle remoto do player Android TV.",
+        "outdatedTooltip": "Player não sincronizou as últimas alterações da playlist",
+        "lastSync": "Última sincronização",
         "screenshot": "Capturar Tela",
         "storage": "Armazenamento",
         "screenshotTitle": "Screenshot do Player",
@@ -567,7 +570,8 @@
         "typeVideo": "Vídeo",
         "typeImage": "Imagem",
         "typePlaylist": "Playlist",
-        "typeWidget": "Widget"
+        "typeWidget": "Widget",
+        "cannotContainSubplaylistsTooltip": "Esta playlist já está sendo usada dentro de outra playlist"
     },
     "widgets": {
         "title": "Widgets",
