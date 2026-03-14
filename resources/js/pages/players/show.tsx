@@ -291,6 +291,8 @@ export default function PlayerShow({
                         label: t('players.refreshPlayer'),
                     }),
                 });
+                // Reload player data to update is_outdated status
+                router.reload({ only: ['player'] });
             } else {
                 setCommandFeedback({
                     type: 'error',
