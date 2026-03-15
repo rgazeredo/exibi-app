@@ -233,6 +233,8 @@ export default function PlayerShow({
     const [refreshDialogOpen, setRefreshDialogOpen] = useState(false);
     const [shortcutsDialogOpen, setShortcutsDialogOpen] = useState(false);
     const [showToast, setShowToast] = useState(false);
+    // Local state to hide outdated badge after refresh command sent
+    const [hideOutdatedBadge, setHideOutdatedBadge] = useState(false);
 
     const formatDate = (dateString: string) => {
         // Parse date and convert to local timezone
@@ -291,8 +293,8 @@ export default function PlayerShow({
                         label: t('players.refreshPlayer'),
                     }),
                 });
-                // Reload player data to update is_outdated status
-                router.reload({ only: ['player'] });
+                // Hide outdated badge optimistically (player will sync shortly)
+                setHideOutdatedBadge(true);
             } else {
                 setCommandFeedback({
                     type: 'error',
@@ -515,7 +517,7 @@ export default function PlayerShow({
                                         ? t('players.status.online')
                                         : t('players.status.offline')}
                                 </Badge>
-                                {player.is_outdated && (
+                                {player.is_outdated && !hideOutdatedBadge && (
                                     <Badge
                                         variant="outline"
                                         className="border-amber-500 bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400"

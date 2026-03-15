@@ -415,32 +415,27 @@ export function PlayerDiagnostics({
                                 )}
 
                                 {/* Memory */}
-                                {systemInfo.memory_used_percent !==
-                                    undefined && (
-                                    <StatCard
-                                        value={`${systemInfo.memory_used_percent.toFixed(0)}%`}
-                                        label={
-                                            t('players.diagnostics.memory') ||
-                                            'Memória'
-                                        }
-                                        sublabel={`${formatBytes(
-                                            systemInfo.memory_total_mb &&
-                                                systemInfo.memory_available_mb
-                                                ? systemInfo.memory_total_mb -
-                                                      systemInfo.memory_available_mb
-                                                : undefined,
-                                        )} / ${formatBytes(systemInfo.memory_total_mb)}`}
-                                        icon={
-                                            <MemoryStick className="h-4 w-4" />
-                                        }
-                                        colorClass={getMemoryColor(
-                                            systemInfo.memory_used_percent,
-                                        )}
-                                        percentage={
-                                            systemInfo.memory_used_percent
-                                        }
-                                    />
-                                )}
+                                {(systemInfo.memory_total_mb != null &&
+                                    systemInfo.memory_available_mb != null) &&
+                                    (() => {
+                                        const total = Number(systemInfo.memory_total_mb);
+                                        const available = Number(systemInfo.memory_available_mb);
+                                        const used = total - available;
+                                        const percent = total > 0 ? (used / total) * 100 : 0;
+                                        return (
+                                            <StatCard
+                                                value={`${Math.round(percent)}%`}
+                                                label={
+                                                    t('players.diagnostics.memory') ||
+                                                    'Memória'
+                                                }
+                                                sublabel={`${formatBytes(used)} / ${formatBytes(total)}`}
+                                                icon={<MemoryStick className="h-4 w-4" />}
+                                                colorClass={getMemoryColor(percent)}
+                                                percentage={percent}
+                                            />
+                                        );
+                                    })()}
 
                                 {/* Storage */}
                                 {systemInfo.storage_used_percent !==

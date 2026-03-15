@@ -114,6 +114,29 @@ interface StatCardProps {
     className?: string;
 }
 
+// Map text colors to background colors for Tailwind JIT
+const colorToBg: Record<string, string> = {
+    'text-primary': 'bg-primary',
+    'text-muted': 'bg-muted',
+    'text-red-500': 'bg-red-500',
+    'text-amber-500': 'bg-amber-500',
+    'text-green-500': 'bg-green-500',
+    'text-blue-500': 'bg-blue-500',
+    'text-purple-500': 'bg-purple-500',
+    'text-orange-500': 'bg-orange-500',
+};
+
+const colorToBgLight: Record<string, string> = {
+    'text-primary': 'bg-primary/10',
+    'text-muted': 'bg-muted/10',
+    'text-red-500': 'bg-red-500/10',
+    'text-amber-500': 'bg-amber-500/10',
+    'text-green-500': 'bg-green-500/10',
+    'text-blue-500': 'bg-blue-500/10',
+    'text-purple-500': 'bg-purple-500/10',
+    'text-orange-500': 'bg-orange-500/10',
+};
+
 export function StatCard({
     value,
     label,
@@ -123,6 +146,9 @@ export function StatCard({
     percentage,
     className,
 }: StatCardProps) {
+    const bgClass = colorToBg[colorClass] || 'bg-primary';
+    const bgLightClass = colorToBgLight[colorClass] || 'bg-primary/10';
+
     return (
         <div className={cn(
             'relative overflow-hidden rounded-xl border bg-card p-4 transition-all hover:shadow-md',
@@ -131,14 +157,14 @@ export function StatCard({
             {/* Background gradient based on percentage */}
             {percentage !== undefined && (
                 <div
-                    className={cn('absolute inset-0 opacity-10', colorClass.replace('text-', 'bg-'))}
+                    className={cn('absolute inset-0 opacity-10', bgClass)}
                     style={{
                         clipPath: `inset(${100 - percentage}% 0 0 0)`,
                     }}
                 />
             )}
             <div className="relative flex items-center gap-3">
-                <div className={cn('rounded-lg p-2', colorClass.replace('text-', 'bg-') + '/10')}>
+                <div className={cn('rounded-lg p-2', bgLightClass)}>
                     <div className={colorClass}>{icon}</div>
                 </div>
                 <div className="flex-1 min-w-0">
@@ -155,7 +181,7 @@ export function StatCard({
             {percentage !== undefined && (
                 <div className="mt-3 h-1.5 w-full rounded-full bg-muted/30 overflow-hidden">
                     <div
-                        className={cn('h-full rounded-full transition-all duration-500', colorClass.replace('text-', 'bg-'))}
+                        className={cn('h-full rounded-full transition-all duration-500', bgClass)}
                         style={{ width: `${percentage}%` }}
                     />
                 </div>
