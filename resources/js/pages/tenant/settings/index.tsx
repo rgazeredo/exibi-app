@@ -480,12 +480,11 @@ export default function TenantSettings({
                                 </h3>
                                 <div className="space-y-2">
                                     <ShortcutRow
-                                        keys={['BACK', '×5']}
+                                        keys={['BACK', '×3']}
                                         description="Sair do modo kiosk"
-                                        note="Requer senha de 6 dígitos"
                                     />
                                     <ShortcutRow
-                                        keys={['◀', '×5', '+', 'OK']}
+                                        keys={['◀', '×3', '+', 'OK']}
                                         description="Resetar dispositivo"
                                         note="Remove ativação e configurações locais"
                                     />
